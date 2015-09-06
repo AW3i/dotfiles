@@ -1,0 +1,25 @@
+XXkb.mainwindow.enable: yes
+XXkb.mainwindow.in_tray: yes
+XXkb.mainwindow.geometry:   12x12+0+0
+XXkb.mainwindow.border.color: black
+XXkb.mainwindow.border.width: 1
+XXkb.mainwindow.label.enable: yes 
+XXkb.mainwindow.label.text.1: US
+XXkb.mainwindow.label.text.2: EL
+XXkb.mainwindow.label.background: #1A1A1A
+XXkb.mainwindow.label.foreground: #BFBFBF
+XXkb.mainwindow.label.font: -misc-*-r-*-18-*
+XXkb.controls.add_when_start: yes
+XXkb.controls.add_when_create: yes
+XXkb.controls.add_when_change: no
+XXkb.controls.focusout: no
+XXkb.controls.button_delete: yes
+XXkb.controls.button_delete_and_forget: yes
+XXkb.controls.two_state: yes
+XXkb.group.base:   1
+XXkb.group.alt:    2
+XXkb.button.enable: no
+XXkb.bell.enable: no
+XXkb.bell.percent: -50
+XXkb.app_list.wm_name.ignore: 
+XXkb.mainwindow.type: tray
