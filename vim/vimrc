@@ -48,7 +48,10 @@ set timeout timeoutlen=1000 ttimeoutlen=100
 set list listchars=tab:»-,trail:·,extends:»,precedes:«
 set encoding=utf-8
 scriptencoding utf-8
+set complete+=i,kspell
 set omnifunc=syntaxcomplete#Complete
+set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
+set wildignore+=*.swp,*.tmp
 
 colorscheme apprentice
 
@@ -83,6 +86,7 @@ Plug 'joequery/Stupid-EasyMotion'
 Plug 'pangloss/vim-javascript'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'matthewsimo/angular-vim-snippets'
+Plug 'blindFS/vim-taskwarrior'
 call plug#end()
 
 "Highlight in red when a line has more than 81 characters
@@ -117,26 +121,30 @@ vnoremap <C-V>   v
 nmap <leader>r :reg<CR>
 nmap <silent> <leader>h :nohls<CR>
 nmap <leader>y "+y
+nmap <leader>p "+p
 
 nmap <silent> gn :bnext<CR>
 nmap <silent> gN :bprevious<CR>
-nmap <silent> gc :bp<bar>sp<bar>bn<bar>bd<CR>
+nmap <silent> gc :close<CR>
 nmap <silent> gf <C-^>
 nmap <silent> gb :ls<CR>:b<Space>
-
-nnoremap <silent> <C-k> :wincmd k<CR>
-nnoremap <silent> <C-j> :wincmd j<CR>
-nnoremap <silent> <C-h> :wincmd h<CR>
-nnoremap <silent> <C-l> :wincmd l<CR>
 
 nmap <silent> <F1>  :TagbarToggle<CR>
 nmap <silent> <F2>  :GundoToggle<CR>
 nmap <silent> <F3>  :NERDTreeToggle<CR>
-nmap <silent> <F4>  :!gcc -std=c99 % && ./a.out<CR>
-nmap <silent> <F5>  :!perl %<CR>
-nmap <silent> <F6>  :GoRun<CR>
-nmap <silent> <F7>  :!javac % && java %:r<CR>
+nmap <silent> <F6>  :20split<CR>:terminal gcc -std=c99 % && ./a.out<CR>
+nmap <silent> <F5>  :20split<CR>:terminal perl %<CR>
+nmap <silent> <F6>  :20split<CR>:terminal go run %<CR>
+nmap <silent> <F7>  :20split<CR>:terminal javac % && java %:r<CR>
 nmap   Q gq<CR>
+
+tnoremap <esc><esc> <C-\><C-n>
+
+nnoremap <silent> <C-k> :wincmd k<CR>
+nnoremap <silent> <C-j> :wincmd j<CR>
+"Temporary workaround as C-h is intepreted as <BS> in xterm-256 for neovim
+nnoremap <silent> <BS> :wincmd h<CR>
+nnoremap <silent> <C-l> :wincmd l<CR>
 
 cnoreabbrev csa cs add
 cnoreabbrev csf cs find
@@ -148,8 +156,6 @@ cnoreabbrev csh cs help
 " Use <leader>t to open ctrlp
 let g:ctrlp_map = '<leader>t'
 
-" Ignore these directories
-set wildignore+=*/build/**
 " disable caching
 let g:ctrlp_use_caching=0
 
@@ -188,3 +194,4 @@ let java_highlight_java_lang_ids=1
 let java_highlight_java_io=1
 let java_highlight_functions="style"
 
+let g:task_rc_override = 'rc.defaultwidth=0'

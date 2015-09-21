@@ -2,7 +2,7 @@
 urxvt.scrollBar_right: false
 urxvt.scrollBar: false
 urxvt.borderLess: false
-URxvt.perl-lib: $HOME/Documents/git/urxvt-perls/
+URxvt.perl-lib: /home/aw3i/Documents/git/urxvt-perls/
 
 !transparency
 !urxvt.inheritPixmap: true

@@ -14,12 +14,13 @@ bindkey -a u undo
 bindkey -a '^R' redo
 eval `keychain --eval --agents ssh id_rsa`
 
-plugins=(git vi-mode)
+plugins=(git vi-mode autojump)
 
 source $ZSH/oh-my-zsh.sh
-
+export GOPATH=$HOME/Documents/programming/go
+export GOBIN=$GOPATH/bin
 export LANG=en_US.UTF-8
 export LESSCHARSET=utf-8
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
-export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:$HOME/.bin:/opt/bin
+export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:$HOME/.bin:/opt/bin:$GOBIN
