@@ -52,6 +52,8 @@ set complete+=i,kspell
 set omnifunc=syntaxcomplete#Complete
 set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
 set wildignore+=*.swp,*.tmp
+set spelllang=de
+set nrformats=
 
 colorscheme apprentice
 
@@ -72,21 +74,22 @@ Plug 'c9s/perlomni.vim', {'for': 'perl'}
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
-Plug 'AW3i/aftersyntaxc.vim'
+Plug 'AW3i/aftersyntaxc.vim', {'for': 'c'}
 Plug 'tommcdo/vim-exchange'
-Plug 'bronson/vim-visual-star-search'
 Plug 'honza/vim-snippets'
-Plug 'vim-pandoc/vim-pandoc',
-Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'scrooloose/nerdcommenter'
 Plug 'Valloric/YouCompleteMe', {'do': './install.sh --system-libclang --clang-completer'}
-Plug 'sjl/gundo.vim', {'on': 'GundoToggle'}
+Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+Plug 'simnalamburt/vim-mundo', {'on': 'GundoToggle'}
 Plug 'vim-scripts/a.vim', {'for': 'c'}
 Plug 'joequery/Stupid-EasyMotion'
-Plug 'pangloss/vim-javascript'
-Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'matthewsimo/angular-vim-snippets'
+Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+Plug 'othree/javascript-libraries-syntax.vim', {'for': 'javascript'}
+Plug 'matthewsimo/angular-vim-snippets', {'for': 'javascript'}
 Plug 'blindFS/vim-taskwarrior'
+Plug 'lervag/vimtex'
 call plug#end()
 
 "Highlight in red when a line has more than 81 characters
@@ -95,25 +98,25 @@ call matchadd('ColorColumn', '\%81v', 100)
 
 function s:MDSettings()
     inoremap <buffer> <Leader>n \note[item]{}<Esc>i
-    noremap <buffer> <Leader>b :! pandoc -t beamer % -o %<.pdf<CR>
-    noremap <buffer> <Leader>l :! pandoc --toc --include-in-header titlesec.tex -t latex % -o %<.pdf --latex-engine=xelatex --variable mainfont="DejaVu Serif"<CR>
+    noremap <buffer> <Leader>b :! pandoc --latex-engine=xelatex -t beamer % -o %<.pdf<CR>
+    noremap <buffer> <Leader>l :! pandoc  --include-in-header titlesec.tex --toc  -t latex % -o %<.pdf --latex-engine=xelatex --variable mainfont="DejaVu Serif"<CR>
     noremap <buffer> <Leader>v :! zathura %<.pdf 2>&1 >/dev/null &<CR>
 
-    " adjust syntax highlighting for LaTeX parts
-    "   inline formulas:
+    "adjust syntax highlighting for LaTeX parts
+    "inline formulas:
     syntax region Statement oneline matchgroup=Delimiter start="\$" end="\$"
-    "   environments:
+    "environments:
     syntax region Statement matchgroup=Delimiter start="\\begin{.*}" end="\\end{.*}" contains=Statement
-    "   commands:
+    "commands:
     syntax region Statement matchgroup=Delimiter start="{" end="}" contains=Statement
 endfunction
 
 autocmd BufRead,BufNewFile *.md setfiletype markdown
 autocmd FileType markdown :call <SID>MDSettings()
 autocmd FileType mail set spell
-set spelllang=de_de
 
 let mapleader = ","
+let maplocalleader = "\\"
 
 noremap v   <C-V>
 noremap <C-V>   v
@@ -125,40 +128,32 @@ nmap <silent> <leader>h :nohls<CR>
 nmap <leader>y "+y
 nmap <leader>p "+p
 
-nmap <silent> gn :bnext<CR>
-nmap <silent> gN :bprevious<CR>
-nmap <silent> gc :close<CR>
-nmap <silent> gf <C-^>
-nmap <silent> gb :ls<CR>:b<Space>
+nmap <silent> <leader>n :bnext<CR>
+nmap <silent> <leader>N :bprevious<CR>
+nmap <silent> <leader>c :bp<bar>sp<bar>bn<bar>bd<CR>
+nmap <silent> <leader>b :ls<CR>:b<Space>
 
-nmap <silent> <F1>  :TagbarToggle<CR>
-nmap <silent> <F2>  :GundoToggle<CR>
+nmap <silent> <F1>  :UndotreeToggle<CR>
+nmap <silent> <F2>  :TagbarToggle<CR>
 nmap <silent> <F3>  :NERDTreeToggle<CR>
-nmap <silent> <F6>  :20split<CR>:terminal gcc -std=c99 % && ./a.out<CR>
+nmap <silent> <F5>  :20split<CR>:terminal perl6 %<CR>
 nmap <silent> <F5>  :20split<CR>:terminal perl %<CR>
-nmap <silent> <F6>  :20split<CR>:terminal go run %<CR>
-nmap <silent> <F7>  :20split<CR>:terminal javac % && java %:r<CR>
+nmap <silent> <F6>  :20split<CR>:terminal gcc -std=c99 % && ./a.out<CR>
+nmap <silent> <F7>  :20split<CR>:terminal go run %<CR>
+nmap <silent> <F8>  :20split<CR>:terminal javac % && java %:r<CR>
 nmap   Q gq<CR>
 
-tnoremap <esc><esc> <C-\><C-n>
 
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
+nnoremap <silent> <C-l> :wincmd l<CR>
 "Temporary workaround as C-h is intepreted as <BS> in xterm-256 for neovim
 nnoremap <silent> <BS> :wincmd h<CR>
-nnoremap <silent> <C-l> :wincmd l<CR>
 
-cnoreabbrev csa cs add
-cnoreabbrev csf cs find
-cnoreabbrev csk cs kill
-cnoreabbrev csr cs reset
-cnoreabbrev css cs show
-cnoreabbrev csh cs help
+tnoremap <esc><esc> <C-\><C-n>
 
 " Use <leader>t to open ctrlp
-let g:ctrlp_map = '<leader>t'
-
-" disable caching
+let g:ctrlp_map = '<leader>f'
 let g:ctrlp_use_caching=0
 
 let delimitMate_matchpairs = "(:),[:],{:}"
@@ -173,8 +168,8 @@ let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsJumpForwardTrigger="<C-n>"
 let g:UltiSnipsJumpBackwardTrigger="<C-b>"
 let g:UltiSnipsUsePythonVersion = 2
-"
 let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsSnippetDirectories=["UltiSnips","othersnippets"]
 
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'  "where to search for .ycm_extra_conf.py if not found
 let g:ycm_confirm_extra_conf = 0
@@ -182,6 +177,7 @@ let g:ycm_key_invoke_completion = '<C-Space>'
 let g:ycm_use_ultisnips_completer = 1
 
 let g:syntastic_always_populate_loc_list = 1
+
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_detect_modified=1
@@ -197,3 +193,4 @@ let java_highlight_java_io=1
 let java_highlight_functions="style"
 
 let g:task_rc_override = 'rc.defaultwidth=0'
+let g:task_rc_override = 'rc.defaultheight=0'
