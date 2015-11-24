@@ -262,6 +262,8 @@ autocmd BufRead,BufNewFile *.md setfiletype markdown
 autocmd FileType markdown :call <SID>MDSettings()
 autocmd FileType mail set spell
 
+nnoremap <leader>w :w<CR>
+
 noremap v   <C-V>
 noremap <C-V>   v
 vnoremap v   <C-V>
@@ -288,3 +290,12 @@ nnoremap <silent> <BS> :wincmd h<CR>
 
 " Switch back to normal mode from terminal mode
 tnoremap <esc><esc> <C-\><C-n>
+"
+" Keep search results at the center of screen
+nmap n nzz
+nmap N Nzz
+nmap * *zz
+nmap # #zz
+nmap g* g*zz
+nmap g# g#zz
+

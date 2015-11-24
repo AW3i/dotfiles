@@ -24,3 +24,5 @@ export LESSCHARSET=utf-8
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
 export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:$HOME/.bin:/opt/bin:$GOBIN
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
