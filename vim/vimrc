@@ -54,42 +54,189 @@ set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
 set wildignore+=*.swp,*.tmp
 set spelllang=de
 set nrformats=
+let mapleader = ","
+let maplocalleader = "\\"
 
-colorscheme apprentice
+colorscheme jellybeans
 
 filetype plugin indent  on
 filetype off
 
-call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
-Plug 'scrooloose/syntastic'
-Plug 'mhinz/vim-signify'
-Plug 'majutsushi/tagbar'
+" Auto Installs vim-plugged if it doesn't exist
+if empty(glob('~/.nvim/autoload/plug.vim'))
+      silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall
+endif
+
+call plug#begin('~/.nvim/plugged')
+
+" Text Manipulation
+" ================================================================
 Plug 'Raimondi/delimitMate'
-Plug 'kien/ctrlp.vim'
-Plug 'bling/vim-airline'
-Plug 'fatih/vim-go', {'for': 'go'}
-Plug 'SirVer/UltiSnips'
-Plug 'c9s/perlomni.vim', {'for': 'perl'}
+    let delimitMate_jump_expansion = 1
+    let delimitMate_expand_cr = 2
+    let delimitMate_expand_space = 1 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-fugitive'
-Plug 'AW3i/aftersyntaxc.vim', {'for': 'c'}
-Plug 'tommcdo/vim-exchange'
+Plug 'scrooloose/nerdcommenter'
+
+" Completion
+" ================================================================
+Plug 'Valloric/YouCompleteMe', {'do': './install.sh --system-libclang --clang-completer'}
+    let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+    let g:ycm_confirm_extra_conf = 0
+    let g:ycm_key_invoke_completion = '<C-Space>'
+    let g:ycm_use_ultisnips_completer = 1
+Plug 'SirVer/UltiSnips'
+    let g:UltiSnipsExpandTrigger="<C-j>"
+    let g:UltiSnipsJumpForwardTrigger="<C-n>"
+    let g:UltiSnipsJumpBackwardTrigger="<C-b>"
+    let g:UltiSnipsUsePythonVersion = 2
+    let g:UltiSnipsEditSplit="vertical"
+    let g:UltiSnipsSnippetDirectories=["UltiSnips","othersnippets"]
 Plug 'honza/vim-snippets'
+
+" Ultility
+" ================================================================
+Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+Plug 'tpope/vim-eunuch'
+Plug 'jamessan/vim-gnupg'
+Plug 'joequery/Stupid-EasyMotion'
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/syntastic'
+    let g:syntastic_always_populate_loc_list = 1
+Plug 'blindFS/vim-taskwarrior'
+    let g:task_rc_override = 'rc.defaultwidth=0'
+    let g:task_rc_override = 'rc.defaultheight=0'
+    let g:task_rc_override = 'rc.defaultheight=0'
+Plug 'junegunn/vim-peekaboo'
+  let g:peekaboo_delay = 400
+Plug 'kassio/neoterm'
+    let g:neoterm_position = 'horizontal'
+    let g:neoterm_automap_keys = ',tt'
+    let g:neoterm_size = '30'
+
+    nnoremap <silent> <f10> :TREPLSendFile<cr>
+    nnoremap <silent> <f9> :TREPLSend<cr>
+    vnoremap <silent> <f9> :TREPLSend<cr>
+
+    " run set test lib
+    nnoremap <silent> ,rt :call neoterm#test#run('all')<cr>
+    nnoremap <silent> ,rf :call neoterm#test#run('file')<cr>
+    nnoremap <silent> ,rn :call neoterm#test#run('current')<cr>
+    nnoremap <silent> ,rr :call neoterm#test#rerun()<cr>
+
+    " Useful maps
+    " hide/close terminal
+    nnoremap <silent> ,th :call neoterm#close()<cr>
+    " clear terminal
+    nnoremap <silent> ,tl :call neoterm#clear()<cr>
+    " kills the current job (send a <c-c>)
+    nnoremap <silent> ,tc :call neoterm#kill()<cr>
+    "
+    " Git commands
+    command! -nargs=+ Tg :T git <args>
+
+" File Navigation
+" ================================================================
+Plug 'zenbro/mirror.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+  let g:fzf_nvim_statusline = 0 " disable statusline overwriting
+
+  nnoremap <silent> <leader><space> :Files<CR>
+  nnoremap <silent> <leader>a :Buffers<CR>
+  nnoremap <silent> <leader>; :BLines<CR>
+  nnoremap <silent> <leader>. :Lines<CR>
+  nnoremap <silent> <leader>o :BTags<CR>
+  nnoremap <silent> <leader>O :Tags<CR>
+  nnoremap <silent> <leader>? :History<CR>
+  nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+  nnoremap <silent> K :call SearchWordWithAg()<CR>
+  vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+  nnoremap <silent> <leader>gl :Commits<CR>
+  nnoremap <silent> <leader>ga :BCommits<CR>
+
+  imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+  imap <C-x><C-l> <plug>(fzf-complete-line)
+
+  function! SearchWordWithAg()
+    execute 'Ag' expand('<cword>')
+  endfunction
+
+  function! SearchVisualSelectionWithAg() range
+    let old_reg = getreg('"')
+    let old_regtype = getregtype('"')
+    let old_clipboard = &clipboard
+    set clipboard&
+    normal! ""gvy
+    let selection = getreg('"')
+    call setreg('"', old_reg, old_regtype)
+    let &clipboard = old_clipboard
+    execute 'Ag' selection
+  endfunction
+
+" Appearance
+" ================================================================
+Plug 'mhinz/vim-startify'
+  let g:startify_session_dir = '~/.config/nvim/session'
+  let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions']
+  let g:startify_session_persistence = 1
+  let g:startify_session_delete_buffers = 1
+  let g:startify_change_to_dir = 1
+  let g:startify_change_to_vcs_root = 1
+  let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
+  nnoremap <F12> :Startify<CR>
+  autocmd! User Startified setlocal colorcolumn=0
+Plug 'junegunn/limelight.vim'
+  let g:limelight_default_coefficient = 0.7
+  let g:limelight_conceal_ctermfg = 238
+  nmap <silent> gl :Limelight!!<CR>
+  xmap gl <Plug>(Limelight)
+Plug 'bling/vim-airline'
+    let g:airline_powerline_fonts = 1
+    let g:airline_detect_modified=1
+    let g:airline_theme="tomorrow"
+    let g:airline_left_sep  = '▓▒░'
+    let g:airline_right_sep = '░▒▓'
+    let g:airline_section_z = '%2p%% %2l/%L:%2v'
+    let g:airline#extensions#syntastic#enabled = 0
+    let g:airline#extensions#whitespace#enabled = 0
+    let g:airline_exclude_preview = 1
+    "
+    " Tabline
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#show_buffers = 1
+    let g:airline#extensions#tabline#show_tabs = 0
+    let g:airline#extensions#tabline#buffer_idx_mode = 1
+    let g:airline#extensions#tabline#fnamecollapse = 1
+    let g:airline#extensions#tabline#show_close_button = 0
+    let g:airline#extensions#tabline#show_tab_type = 0
+    let g:airline#extensions#tabline#buffer_min_count = 2
+
+" VCS
+" ================================================================
+Plug 'tpope/vim-fugitive'
+Plug 'idanarye/vim-merginal'
+Plug 'esneider/YUNOcommit.vim'
+Plug 'mhinz/vim-signify'
+
+" Languages
+" ================================================================
+Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
-Plug 'scrooloose/nerdcommenter'
-Plug 'Valloric/YouCompleteMe', {'do': './install.sh --system-libclang --clang-completer'}
-Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-Plug 'simnalamburt/vim-mundo', {'on': 'GundoToggle'}
-Plug 'vim-scripts/a.vim', {'for': 'c'}
-Plug 'joequery/Stupid-EasyMotion'
 Plug 'pangloss/vim-javascript', {'for': 'javascript'}
 Plug 'othree/javascript-libraries-syntax.vim', {'for': 'javascript'}
 Plug 'matthewsimo/angular-vim-snippets', {'for': 'javascript'}
-Plug 'blindFS/vim-taskwarrior'
+Plug 'c9s/perlomni.vim', {'for': 'perl'}
+Plug 'vim-scripts/a.vim', {'for': 'c'}
+Plug 'AW3i/aftersyntaxc.vim', {'for': 'c'}
 Plug 'lervag/vimtex'
+    let g:tex_flavor='latex'
+    let g:Tex_DefaultTargetFormat = 'pdf'
+    let g:tex_MultipleCompileFormats = 'pdf,aux'
 call plug#end()
 
 "Highlight in red when a line has more than 81 characters
@@ -115,15 +262,11 @@ autocmd BufRead,BufNewFile *.md setfiletype markdown
 autocmd FileType markdown :call <SID>MDSettings()
 autocmd FileType mail set spell
 
-let mapleader = ","
-let maplocalleader = "\\"
-
 noremap v   <C-V>
 noremap <C-V>   v
 vnoremap v   <C-V>
 vnoremap <C-V>   v
 
-nmap <leader>r :reg<CR>
 nmap <silent> <leader>h :nohls<CR>
 nmap <leader>y "+y
 nmap <leader>p "+p
@@ -135,14 +278,7 @@ nmap <silent> <leader>b :ls<CR>:b<Space>
 
 nmap <silent> <F1>  :UndotreeToggle<CR>
 nmap <silent> <F2>  :TagbarToggle<CR>
-nmap <silent> <F3>  :NERDTreeToggle<CR>
-nmap <silent> <F5>  :20split<CR>:terminal perl6 %<CR>
-nmap <silent> <F5>  :20split<CR>:terminal perl %<CR>
-nmap <silent> <F6>  :20split<CR>:terminal gcc -std=c99 % && ./a.out<CR>
-nmap <silent> <F7>  :20split<CR>:terminal go run %<CR>
-nmap <silent> <F8>  :20split<CR>:terminal javac % && java %:r<CR>
 nmap   Q gq<CR>
-
 
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
@@ -150,47 +286,5 @@ nnoremap <silent> <C-l> :wincmd l<CR>
 "Temporary workaround as C-h is intepreted as <BS> in xterm-256 for neovim
 nnoremap <silent> <BS> :wincmd h<CR>
 
+" Switch back to normal mode from terminal mode
 tnoremap <esc><esc> <C-\><C-n>
-
-" Use <leader>t to open ctrlp
-let g:ctrlp_map = '<leader>f'
-let g:ctrlp_use_caching=0
-
-let delimitMate_matchpairs = "(:),[:],{:}"
-let delimitMate_jump_expansion = 1
-let delimitMate_expand_cr = 1
-
-let g:tex_flavor='latex'
-let g:Tex_DefaultTargetFormat = 'pdf'
-let g:tex_MultipleCompileFormats = 'pdf,aux'
-
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger="<C-n>"
-let g:UltiSnipsJumpBackwardTrigger="<C-b>"
-let g:UltiSnipsUsePythonVersion = 2
-let g:UltiSnipsEditSplit="vertical"
-let g:UltiSnipsSnippetDirectories=["UltiSnips","othersnippets"]
-
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'  "where to search for .ycm_extra_conf.py if not found
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_key_invoke_completion = '<C-Space>'
-let g:ycm_use_ultisnips_completer = 1
-
-let g:syntastic_always_populate_loc_list = 1
-
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_detect_modified=1
-let g:airline_theme="tomorrow"
-
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-  autocmd Filetype java setlocal omnifunc=javacomplete#Complete
-endif "
-setlocal completefunc=javacomplete#CompleteParamsInfo
-let java_highlight_java_lang_ids=1
-let java_highlight_java_io=1
-let java_highlight_functions="style"
-
-let g:task_rc_override = 'rc.defaultwidth=0'
-let g:task_rc_override = 'rc.defaultheight=0'
