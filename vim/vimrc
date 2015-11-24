@@ -179,6 +179,7 @@ Plug 'junegunn/fzf.vim'
 
 " Appearance
 " ================================================================
+Plug 'nanotech/jellybeans.vim'
 Plug 'mhinz/vim-startify'
   let g:startify_session_dir = '~/.config/nvim/session'
   let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions']
