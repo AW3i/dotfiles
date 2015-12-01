@@ -101,6 +101,7 @@ Plug 'honza/vim-snippets'
 " ================================================================
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-unimpaired'
 Plug 'jamessan/vim-gnupg'
 Plug 'joequery/Stupid-EasyMotion'
 Plug 'majutsushi/tagbar'
@@ -198,7 +199,7 @@ Plug 'junegunn/limelight.vim'
 Plug 'bling/vim-airline'
     let g:airline_powerline_fonts = 1
     let g:airline_detect_modified=1
-    let g:airline_theme="tomorrow"
+    let g:airline_theme="jellybeans"
     let g:airline_left_sep  = '▓▒░'
     let g:airline_right_sep = '░▒▓'
     let g:airline_section_z = '%2p%% %2l/%L:%2v'
@@ -219,6 +220,8 @@ Plug 'bling/vim-airline'
 " VCS
 " ================================================================
 Plug 'tpope/vim-fugitive'
+    autocmd BufReadPost fugitive://*
+      \ set bufhidden=delete
 Plug 'idanarye/vim-merginal'
 Plug 'esneider/YUNOcommit.vim'
 Plug 'mhinz/vim-signify'
@@ -274,8 +277,6 @@ nmap <silent> <leader>h :nohls<CR>
 nmap <leader>y "+y
 nmap <leader>p "+p
 
-nmap <silent> <leader>n :bnext<CR>
-nmap <silent> <leader>N :bprevious<CR>
 nmap <silent> <leader>c :bp<bar>sp<bar>bn<bar>bd<CR>
 nmap <silent> <leader>b :ls<CR>:b<Space>
 
@@ -299,4 +300,3 @@ nmap * *zz
 nmap # #zz
 nmap g* g*zz
 nmap g# g#zz
-
