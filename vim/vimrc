@@ -80,6 +80,8 @@ Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'tpope/vim-speeddating'
 
 " Completion
 " ================================================================
@@ -99,13 +101,13 @@ Plug 'honza/vim-snippets'
 
 " Ultility
 " ================================================================
+Plug 'tpope/vim-dispatch'
+Plug 'janko-m/vim-test'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-eunuch'
 Plug 'jamessan/vim-gnupg'
 Plug 'joequery/Stupid-EasyMotion'
 Plug 'majutsushi/tagbar'
-Plug 'scrooloose/syntastic'
-    let g:syntastic_always_populate_loc_list = 1
 Plug 'blindFS/vim-taskwarrior'
     let g:task_rc_override = 'rc.defaultwidth=0'
     let g:task_rc_override = 'rc.defaultheight=0'
@@ -182,7 +184,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'mhinz/vim-startify'
   let g:startify_session_dir = '~/.config/nvim/session'
-  let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions']
+  let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/Documents/owncloud/documents/fh', '~/Documents/owncloud/documents/programming' ]
+  let g:startify_list_order = [ 'sessions', 'bookmarks', 'files', 'dir']
   let g:startify_session_persistence = 1
   let g:startify_session_delete_buffers = 1
   let g:startify_change_to_dir = 1
@@ -198,7 +201,7 @@ Plug 'junegunn/limelight.vim'
 Plug 'bling/vim-airline'
     let g:airline_powerline_fonts = 1
     let g:airline_detect_modified=1
-    let g:airline_theme="tomorrow"
+    let g:airline_theme="jellybeans"
     let g:airline_left_sep  = '▓▒░'
     let g:airline_right_sep = '░▒▓'
     let g:airline_section_z = '%2p%% %2l/%L:%2v'
@@ -216,6 +219,11 @@ Plug 'bling/vim-airline'
     let g:airline#extensions#tabline#show_tab_type = 0
     let g:airline#extensions#tabline#buffer_min_count = 2
 
+Plug 't9md/vim-choosewin'
+  nmap <leader>' <Plug>(choosewin)
+  let g:choosewin_blink_on_land = 0
+  let g:choosewin_tabline_replace = 0
+
 " VCS
 " ================================================================
 Plug 'tpope/vim-fugitive'
@@ -228,16 +236,28 @@ Plug 'mhinz/vim-signify'
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
-Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-Plug 'othree/javascript-libraries-syntax.vim', {'for': 'javascript'}
-Plug 'matthewsimo/angular-vim-snippets', {'for': 'javascript'}
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
 Plug 'vim-scripts/a.vim', {'for': 'c'}
 Plug 'AW3i/aftersyntaxc.vim', {'for': 'c'}
+Plug 'Valloric/MatchTagAlways'
+Plug 'mattn/emmet-vim'
+Plug 'ap/vim-css-color'
+Plug 'tpope/vim-ragtag'
+Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+Plug 'othree/javascript-libraries-syntax.vim', {'for': 'javascript'}
+Plug 'matthewsimo/angular-vim-snippets', {'for': 'javascript'}
 Plug 'lervag/vimtex'
     let g:tex_flavor='latex'
     let g:Tex_DefaultTargetFormat = 'pdf'
     let g:tex_MultipleCompileFormats = 'pdf,aux'
+Plug 'benekastah/neomake'
+  autocmd! BufWritePost * Neomake
+  let g:neomake_airline = 1
+  let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
+  let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
+
+  map <F4> :lopen<CR>
+  map <F5> :Neomake<CR>
 call plug#end()
 
 "Highlight in red when a line has more than 81 characters
@@ -262,6 +282,10 @@ endfunction
 autocmd BufRead,BufNewFile *.md setfiletype markdown
 autocmd FileType markdown :call <SID>MDSettings()
 autocmd FileType mail set spell
+
+highlight! ErrorSign guifg=black guibg=#E01600 ctermfg=16 ctermbg=160
+highlight! WarningSign guifg=black guibg=#FFED26 ctermfg=16 ctermbg=11
+
 
 nnoremap <leader>w :w<CR>
 
@@ -299,4 +323,3 @@ nmap * *zz
 nmap # #zz
 nmap g* g*zz
 nmap g# g#zz
-
