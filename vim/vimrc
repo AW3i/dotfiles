@@ -101,7 +101,6 @@ Plug 'honza/vim-snippets'
 
 " Ultility
 " ================================================================
-Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-eunuch'
@@ -113,8 +112,22 @@ Plug 'blindFS/vim-taskwarrior'
     let g:task_rc_override = 'rc.defaultwidth=0'
     let g:task_rc_override = 'rc.defaultheight=0'
     let g:task_rc_override = 'rc.defaultheight=0'
+Plug 'ludovicchabant/vim-gutentags'
+    let g:gutentags_exclude = [
+      \ '*.min.js',
+      \ '*html*',
+      \ 'jquery*.js',
+      \ '*/vendor/*',
+      \ '*/node_modules/*',
+      \ '*/migrate/*.rb'
+      \ ]
+    set statusline+=%{gutentags#statusline()}
+    let g:gutentags_generate_on_missing = 0
+    let g:gutentags_generate_on_write = 0
+    let g:gutentags_generate_on_new = 0
+    nnoremap <leader>gt :GutentagsUpdate!<CR>
 Plug 'junegunn/vim-peekaboo'
-  let g:peekaboo_delay = 400
+    let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
     let g:neoterm_position = 'horizontal'
     let g:neoterm_automap_keys = ',tt'
@@ -146,23 +159,23 @@ Plug 'kassio/neoterm'
 Plug 'zenbro/mirror.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-  let g:fzf_nvim_statusline = 0 " disable statusline overwriting
+    let g:fzf_nvim_statusline = 0 " disable statusline overwriting
 
-  nnoremap <silent> <leader><space> :Files<CR>
-  nnoremap <silent> <leader>a :Buffers<CR>
-  nnoremap <silent> <leader>; :BLines<CR>
-  nnoremap <silent> <leader>. :Lines<CR>
-  nnoremap <silent> <leader>o :BTags<CR>
-  nnoremap <silent> <leader>O :Tags<CR>
-  nnoremap <silent> <leader>? :History<CR>
-  nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
-  nnoremap <silent> K :call SearchWordWithAg()<CR>
-  vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
-  nnoremap <silent> <leader>gl :Commits<CR>
-  nnoremap <silent> <leader>ga :BCommits<CR>
+    nnoremap <silent> <leader><space> :Files<CR>
+    nnoremap <silent> <leader>a :Buffers<CR>
+    nnoremap <silent> <leader>; :BLines<CR>
+    nnoremap <silent> <leader>. :Lines<CR>
+    nnoremap <silent> <leader>o :BTags<CR>
+    nnoremap <silent> <leader>O :Tags<CR>
+    nnoremap <silent> <leader>? :History<CR>
+    nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+    nnoremap <silent> K :call SearchWordWithAg()<CR>
+    vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+    nnoremap <silent> <leader>gl :Commits<CR>
+    nnoremap <silent> <leader>ga :BCommits<CR>
 
-  imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-  imap <C-x><C-l> <plug>(fzf-complete-line)
+    imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+    imap <C-x><C-l> <plug>(fzf-complete-line)
 
   function! SearchWordWithAg()
     execute 'Ag' expand('<cword>')
@@ -184,21 +197,21 @@ Plug 'junegunn/fzf.vim'
 " ================================================================
 Plug 'nanotech/jellybeans.vim'
 Plug 'mhinz/vim-startify'
-  let g:startify_session_dir = '~/.config/nvim/session'
-  let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/Documents/owncloud/documents/fh', '~/Documents/owncloud/documents/programming' ]
-  let g:startify_list_order = [ 'sessions', 'bookmarks', 'files', 'dir']
-  let g:startify_session_persistence = 1
-  let g:startify_session_delete_buffers = 1
-  let g:startify_change_to_dir = 1
-  let g:startify_change_to_vcs_root = 1
-  let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
-  nnoremap <F12> :Startify<CR>
-  autocmd! User Startified setlocal colorcolumn=0
+   let g:startify_session_dir = '~/.config/nvim/session'
+   let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/Documents/owncloud/documents/fh', '~/Documents/owncloud/documents/programming' ]
+   let g:startify_list_order = [ 'sessions', 'bookmarks', 'files', 'dir']
+   let g:startify_session_persistence = 1
+   let g:startify_session_delete_buffers = 1
+   let g:startify_change_to_dir = 1
+   let g:startify_change_to_vcs_root = 1
+   let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
+   nnoremap <F12> :Startify<CR>
+   autocmd! User Startified setlocal colorcolumn=0
 Plug 'junegunn/limelight.vim'
-  let g:limelight_default_coefficient = 0.7
-  let g:limelight_conceal_ctermfg = 238
-  nmap <silent> gl :Limelight!!<CR>
-  xmap gl <Plug>(Limelight)
+   let g:limelight_default_coefficient = 0.7
+   let g:limelight_conceal_ctermfg = 238
+   nmap <silent> gl :Limelight!!<CR>
+   xmap gl <Plug>(Limelight)
 Plug 'bling/vim-airline'
     let g:airline_powerline_fonts = 1
     let g:airline_detect_modified=1
@@ -221,9 +234,9 @@ Plug 'bling/vim-airline'
     let g:airline#extensions#tabline#buffer_min_count = 2
 
 Plug 't9md/vim-choosewin'
-  nmap <leader>' <Plug>(choosewin)
-  let g:choosewin_blink_on_land = 0
-  let g:choosewin_tabline_replace = 0
+    nmap <leader>' <Plug>(choosewin)
+    let g:choosewin_blink_on_land = 0
+    let g:choosewin_tabline_replace = 0
 
 " VCS
 " ================================================================
@@ -254,13 +267,13 @@ Plug 'lervag/vimtex'
     let g:Tex_DefaultTargetFormat = 'pdf'
     let g:tex_MultipleCompileFormats = 'pdf,aux'
 Plug 'benekastah/neomake'
-  autocmd! BufWritePost * Neomake
-  let g:neomake_airline = 1
-  let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
-  let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
+    autocmd! BufWritePost * Neomake
+    let g:neomake_airline = 1
+    let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
+    let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
 
-  map <F4> :lopen<CR>
-  map <F5> :Neomake<CR>
+    map <F4> :lopen<CR>
+    map <F5> :Neomake<CR>
 call plug#end()
 
 "Highlight in red when a line has more than 81 characters
@@ -327,7 +340,7 @@ nmap g# g#zz
 
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
 " and a blinking underline in replace mode
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-  let &t_SI = "\<Esc>[5 q"
-  let &t_SR = "\<Esc>[3 q"
-  let &t_EI = "\<Esc>[2 q"
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+let &t_SI = "\<Esc>[5 q"
+let &t_SR = "\<Esc>[3 q"
+let &t_EI = "\<Esc>[2 q"
