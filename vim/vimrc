@@ -91,13 +91,17 @@ Plug 'Valloric/YouCompleteMe', {'do': './install.sh --system-libclang --clang-co
     let g:ycm_confirm_extra_conf = 0
     let g:ycm_key_invoke_completion = '<C-Space>'
     let g:ycm_use_ultisnips_completer = 1
+    let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+    let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 Plug 'SirVer/UltiSnips'
-    let g:UltiSnipsExpandTrigger="<C-j>"
-    let g:UltiSnipsJumpForwardTrigger="<C-n>"
-    let g:UltiSnipsJumpBackwardTrigger="<C-b>"
+    let g:UltiSnipsExpandTrigger = "<tab>"
+    let g:UltiSnipsJumpForwardTrigger = "<tab>"
+    let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
     let g:UltiSnipsUsePythonVersion = 2
     let g:UltiSnipsEditSplit="vertical"
-    let g:UltiSnipsSnippetDirectories=["UltiSnips","othersnippets"]
+    let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+Plug 'ervandew/supertab'
+let g:SuperTabDefaultCompletionType = '<C-n>'
 Plug 'honza/vim-snippets'
 
 " Ultility
