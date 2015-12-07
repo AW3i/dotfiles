@@ -54,6 +54,7 @@ set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
 set wildignore+=*.swp,*.tmp
 set spelllang=de
 set nrformats=
+let &showbreak='↪ '
 let mapleader = ","
 let maplocalleader = "\\"
 
