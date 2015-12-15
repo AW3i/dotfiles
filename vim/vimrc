@@ -239,7 +239,9 @@ Plug 'junegunn/fzf.vim'
 
 " Appearance
 " ================================================================
+Plug 'junegunn/goyo.vim'
 Plug 'nanotech/jellybeans.vim'
+  let g:jellybeans_background_color_256=234
 Plug 'mhinz/vim-startify'
    let g:startify_session_dir = '~/.config/nvim/session'
    let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/Documents/owncloud/documents/fh', '~/Documents/owncloud/documents/programming' ]
