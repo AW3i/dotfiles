@@ -58,6 +58,9 @@ set grepprg=ag\ --nogroup\ --nocolor
 let &showbreak='↪ '
 let mapleader = ","
 let maplocalleader = "\\"
+let g:netrw_liststyle=3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
 
 colorscheme jellybeans
 
@@ -108,8 +111,9 @@ Plug 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = '<C-n>'
 Plug 'honza/vim-snippets'
 
-" Ultility
+" Utility
 " ================================================================
+Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-eunuch'
@@ -315,6 +319,7 @@ Plug 'lervag/vimtex'
     let g:tex_MultipleCompileFormats = 'pdf,aux'
 Plug 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
+    let g:neomake_open_list = 2
     let g:neomake_airline = 1
     let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
     let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
@@ -366,6 +371,7 @@ nmap <silent> <leader>b :ls<CR>:b<Space>
 
 nmap <silent> <F1>  :UndotreeToggle<CR>
 nmap <silent> <F2>  :TagbarToggle<CR>
+nmap <silent> <F3>  :25Vexplore<CR>
 nmap   Q gq<CR>
 
 nnoremap <silent> <C-k> :wincmd k<CR>
