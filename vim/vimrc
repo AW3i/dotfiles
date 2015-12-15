@@ -54,6 +54,7 @@ set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
 set wildignore+=*.swp,*.tmp
 set spelllang=de
 set nrformats=
+set grepprg=ag\ --nogroup\ --nocolor
 let &showbreak='↪ '
 let mapleader = ","
 let maplocalleader = "\\"
@@ -77,12 +78,15 @@ call plug#begin('~/.nvim/plugged')
 Plug 'Raimondi/delimitMate'
     let delimitMate_jump_expansion = 1
     let delimitMate_expand_cr = 2
-    let delimitMate_expand_space = 1 
+    let delimitMate_expand_space = 1
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-abolish'
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'godlygeek/tabular'
 
 " Completion
 " ================================================================
@@ -150,11 +154,12 @@ Plug 'kassio/neoterm'
 
     " Useful maps
     " hide/close terminal
-    nnoremap <silent> ,th :call neoterm#close()<cr>
+    nnoremap <silent> <leader>th :call neoterm#close()<cr>
     " clear terminal
-    nnoremap <silent> ,tl :call neoterm#clear()<cr>
+    nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
     " kills the current job (send a <c-c>)
-    nnoremap <silent> ,tc :call neoterm#kill()<cr>
+    nnoremap <silent> <leader>tc :call neoterm#kill()<cr>
+    nnoremap <leader>tr :T
     "
     " Git commands
     command! -nargs=+ Tg :T git <args>
@@ -248,6 +253,7 @@ Plug 't9md/vim-choosewin'
 Plug 'tpope/vim-fugitive'
     autocmd BufReadPost fugitive://*
       \ set bufhidden=delete
+Plug 'tommcdo/vim-fugitive-blame-ext'
 Plug 'idanarye/vim-merginal'
 Plug 'esneider/YUNOcommit.vim'
 Plug 'mhinz/vim-signify'
@@ -255,6 +261,7 @@ Plug 'mhinz/vim-signify'
 " Languages
 " ================================================================
 Plug 'fatih/vim-go', {'for': 'go'}
+Plug 'alvan/vim-closetag'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
@@ -329,8 +336,7 @@ nmap   Q gq<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
-"Temporary workaround as C-h is intepreted as <BS> in xterm-256 for neovim
-nnoremap <silent> <BS> :wincmd h<CR>
+nnoremap <silent> <C-h> :wincmd h<CR>
 
 " Switch back to normal mode from terminal mode
 tnoremap <esc><esc> <C-\><C-n>
