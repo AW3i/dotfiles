@@ -123,7 +123,7 @@ Plug 'osyo-manga/vim-over'
 Plug 'nathanaelkane/vim-indent-guides'
     let g:indent_guides_guide_size = 1
     let g:indent_guides_auto_colors = 0
-    let g:indent_guides_enable_on_vim_startup = 0
+    let g:indent_guides_enable_on_vim_startup = 1
     hi IndentGuidesEven ctermbg=237
     hi IndentGuidesOdd ctermbg=239
 Plug 'inside/vim-search-pulse'
