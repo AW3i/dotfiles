@@ -55,11 +55,11 @@ set wildignore+=*.swp,*.tmp
 set spelllang=de
 set nrformats=
 set grepprg=ag\ --nogroup\ --nocolor
+set cursorline
 let &showbreak='↪ '
 let mapleader = ","
 let maplocalleader = "\\"
-let g:netrw_liststyle=3
-let g:netrw_browse_split = 4
+let g:netrw_liststyle=2
 let g:netrw_altv = 1
 
 colorscheme jellybeans
@@ -119,8 +119,9 @@ Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-unimpaired'
 Plug 'jamessan/vim-gnupg'
-Plug 'joequery/Stupid-EasyMotion'
 Plug 'majutsushi/tagbar'
+Plug 'justinmk/vim-sneak'
+    let g:sneak#streak = 1
 Plug 'blindFS/vim-taskwarrior'
     let g:task_rc_override = 'rc.defaultwidth=0'
     let g:task_rc_override = 'rc.defaultheight=0'
