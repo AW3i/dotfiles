@@ -55,7 +55,6 @@ set wildignore+=*.swp,*.tmp
 set spelllang=de
 set nrformats=
 set grepprg=ag\ --nogroup\ --nocolor
-set cursorline
 let &showbreak='↪ '
 let mapleader = ","
 let maplocalleader = "\\"
@@ -120,6 +119,10 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-unimpaired'
 Plug 'jamessan/vim-gnupg'
 Plug 'majutsushi/tagbar'
+Plug 'osyo-manga/vim-over'
+Plug 'Yggdroot/indentLine'
+Plug 'inside/vim-search-pulse'
+    let g:vim_search_pulse_mode = 'pattern'
 Plug 'justinmk/vim-sneak'
     let g:sneak#streak = 1
 Plug 'blindFS/vim-taskwarrior'
