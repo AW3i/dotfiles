@@ -21,7 +21,7 @@ set foldmethod=indent
 set foldnestmax=3
 set nofoldenable
 
-set scrolloff=3
+set scrolloff=999
 set sidescrolloff=7
 set sidescroll=1
 
@@ -45,7 +45,7 @@ set splitbelow
 set splitright
 set undolevels=500
 set timeout timeoutlen=1000 ttimeoutlen=100
-set list listchars=tab:»-,trail:·,extends:»,precedes:«
+"set list listchars=tab:»-,trail:·,extends:»,precedes:«
 set encoding=utf-8
 scriptencoding utf-8
 set complete+=i,kspell
@@ -81,6 +81,9 @@ Plug 'Raimondi/delimitMate'
     let delimitMate_jump_expansion = 1
     let delimitMate_expand_cr = 2
     let delimitMate_expand_space = 1
+Plug 'junegunn/vim-easy-align'
+    xmap ga <Plug>(EasyAlign)
+    nmap ga <Plug>(EasyAlign)
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
