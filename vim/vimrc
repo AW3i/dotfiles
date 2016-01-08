@@ -21,7 +21,7 @@ set foldmethod=indent
 set foldnestmax=3
 set nofoldenable
 
-set scrolloff=999
+set scrolloff=10
 set sidescrolloff=7
 set sidescroll=1
 
@@ -92,16 +92,10 @@ Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-abolish'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'godlygeek/tabular'
+Plug 'terryma/vim-multiple-cursors'
 
 " Completion
 " ================================================================
-Plug 'Valloric/YouCompleteMe', {'do': './install.sh --system-libclang --clang-completer'}
-    let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-    let g:ycm_confirm_extra_conf = 0
-    let g:ycm_key_invoke_completion = '<C-Space>'
-    let g:ycm_use_ultisnips_completer = 1
-    let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-    let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 Plug 'SirVer/UltiSnips'
     let g:UltiSnipsExpandTrigger = "<tab>"
     let g:UltiSnipsJumpForwardTrigger = "<tab>"
@@ -109,8 +103,11 @@ Plug 'SirVer/UltiSnips'
     let g:UltiSnipsUsePythonVersion = 2
     let g:UltiSnipsEditSplit="vertical"
     let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+Plug 'Shougo/deoplete.nvim'
+    let g:deoplete#enable_at_startup = 1
 Plug 'ervandew/supertab'
-let g:SuperTabDefaultCompletionType = '<C-n>'
+    let g:SuperTabDefaultCompletionType = '<C-n>'
+Plug 'Shougo/neoinclude.vim'
 Plug 'honza/vim-snippets'
 
 " Utility
@@ -176,6 +173,7 @@ Plug 'kassio/neoterm'
     " kills the current job (send a <c-c>)
     nnoremap <silent> <leader>tc :call neoterm#kill()<cr>
     nnoremap <leader>tr :T 
+    nnoremap <leader>tt :Ttoggle<CR>
     "
     " Git commands
     command! -nargs=+ Tg :T git <args>
