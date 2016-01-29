@@ -14,6 +14,7 @@ alias nvim='nvim-remote.py --remote'
 bindkey -a u undo
 bindkey -a '^R' redo
 eval `keychain --eval --agents ssh id_rsa`
+alias ssh='TERM=xterm-256color ssh'
 
 plugins=(git vi-mode autojump)
 

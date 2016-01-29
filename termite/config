@@ -1,0 +1,124 @@
+[options]
+scroll_on_output = false
+scroll_on_keystroke = true
+audible_bell = false
+mouse_autohide = true
+allow_bold = false
+dynamic_title = true
+urgent_on_bell = true
+clickable_url = true
+font = Inconsolata 13
+scrollback_lines = 1000
+search_wrap = true
+#icon_name = terminal
+
+# "system", "on" or "off"
+cursor_blink = off
+
+# "block", "underline" or "ibeam"
+cursor_shape = block
+
+# $BROWSER is used by default
+browser = firefox-bin
+
+# set size hints for the window
+size_hints = false
+
+# emit escape sequences for other keys modified by Control
+modify_other_keys = false
+
+[colors]
+cursor = #2F2F2F
+foreground = #D2C5BC
+foreground_bold = #eee8d5
+background = #101010
+
+# 20% background transparency (requires a compositor)
+# background = rgba(63, 63, 63, 0.8)
+
+# if unset, will reverse foreground and background
+highlight = #2f2f2f
+color0 =   #1a1a1a
+# 64 64 64
+color8 =   #404040
+# red
+# 215 95 95
+color1 =   #81000B
+# 234 132 132
+color9 =   #EA8484
+# green
+# 135 175 95
+color2 =   #87af5f
+# 199 240 159
+color10 =  #C7F09F
+# yellow
+# 255 175 95
+color3 =   #ffaf5f
+# 255 204 154
+color11 =  #FFCC9A
+# blue
+# 135 175 215
+color4 =   #87afd7
+# 165 202 239
+color12 =  #a5caef
+# magenta
+# 135 135 175
+color5 =   #8787af
+# 166 166 222
+color13 =  #6030A1
+# cyan
+# 95 135 135
+color6 =   #5f8787
+# 105 178 178
+color14 =  #69b2b2
+# white
+# 128 128 128
+color7 =   #808080
+# 215 215 215
+color15 =  #d7d7d7
+
+## black
+#color0 = #1F1F1F
+## red
+#color1 = #81000B
+## green
+#color2 = #3b6837
+## yellow
+#color3 = #686437
+## blue
+#color4 = #373b68
+## magenta
+#color5 = #52357A
+## cyan
+#color6 = #376864
+## white
+#color7 = #663a42
+## bright_black
+#color8 = #2F2F2F
+## bright_red
+#color9 = #E03341
+## bright_green
+#color10 = #91c28c
+## bright_yellow
+#color11 = #c2be8c
+## bright_blue
+#color12 = #8c91c2
+## bright_magenta
+#color13 = #6030A1
+## bright_cyan
+#color14 = #8cc2be
+## bright_white
+#color15 = #6f434b
+
+[hints]
+#font = Monospace 12
+#foreground = #dcdccc
+#background = #3f3f3f
+#active_foreground = #e68080
+#active_background = #3f3f3f
+#padding = 2
+#border = #3f3f3f
+#border_width = 0.5
+#roundness = 2.0
+
+# vim =  ft=dosini cms=#%s

@@ -1,6 +1,6 @@
 # The prompt
 
-PROMPT='%{$fg[red]%}%m♠%{$reset_color%}%{$fg[black]%} %c%{$reset_color%}%{$fg_bold[red]%} ➜ %{$reset_color%}'
+PROMPT='%{$fg[red]%}%m♠%{$reset_color%}%{$fg[white]%} %c%{$reset_color%}%{$fg_bold[red]%} ➜ %{$reset_color%}'
 
 # The right-hand prompt
 

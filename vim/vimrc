@@ -14,12 +14,10 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set shiftround
-set textwidth=80
 set matchpairs+=<:>
 
 set foldmethod=indent
 set foldnestmax=3
-set nofoldenable
 
 set scrolloff=10
 set sidescrolloff=7
@@ -60,6 +58,7 @@ let mapleader = ","
 let maplocalleader = "\\"
 let g:netrw_liststyle=2
 let g:netrw_altv = 1
+set cursorline
 
 colorscheme jellybeans
 
@@ -87,11 +86,8 @@ Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
-Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-abolish'
-Plug 'bronson/vim-trailing-whitespace'
-Plug 'godlygeek/tabular'
 Plug 'terryma/vim-multiple-cursors'
 
 " Completion
@@ -105,34 +101,41 @@ Plug 'SirVer/UltiSnips'
     let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 Plug 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
-Plug 'ervandew/supertab'
-    let g:SuperTabDefaultCompletionType = '<C-n>'
-Plug 'Shougo/neoinclude.vim'
 Plug 'honza/vim-snippets'
 
 " Utility
 " ================================================================
+Plug 'vimwiki/vimwiki'
 Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-unimpaired'
-Plug 'jamessan/vim-gnupg'
 Plug 'majutsushi/tagbar'
-Plug 'osyo-manga/vim-over'
 Plug 'nathanaelkane/vim-indent-guides'
     let g:indent_guides_guide_size = 1
-    let g:indent_guides_auto_colors = 0
     let g:indent_guides_enable_on_vim_startup = 1
-    hi IndentGuidesEven ctermbg=237
-    hi IndentGuidesOdd ctermbg=239
-Plug 'inside/vim-search-pulse'
-    let g:vim_search_pulse_mode = 'pattern'
+Plug 'benekastah/neomake'
+    autocmd! BufWritePost * Neomake
+    let g:neomake_open_list = 2
+    let g:neomake_airline = 1
+    let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
+    let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
+
+    map <F4> :lopen<CR>
+    map <F5> :Neomake<CR>
+    
 Plug 'justinmk/vim-sneak'
     let g:sneak#streak = 1
+       augroup SneakPluginColors
+           autocmd!
+           autocmd ColorScheme * hi SneakPluginTarget guifg=black guibg=red ctermfg=black ctermbg=red
+           autocmd ColorScheme * hi SneakPluginScope  guifg=black guibg=yellow ctermfg=black ctermbg=yellow
+           autocmd ColorScheme * hi SneakStreakTarget guifg=black guibg=red ctermfg=black ctermbg=red
+           autocmd ColorScheme * hi SneakStreakMask guifg=black guibg=red ctermfg=black ctermbg=red
+       augroup END
 Plug 'blindFS/vim-taskwarrior'
     let g:task_rc_override = 'rc.defaultwidth=0'
-    let g:task_rc_override = 'rc.defaultheight=0'
     let g:task_rc_override = 'rc.defaultheight=0'
 Plug 'ludovicchabant/vim-gutentags'
     let g:gutentags_exclude = [
@@ -239,8 +242,7 @@ Plug 'junegunn/fzf.vim'
         if len(list) > 1
             call setqflist(list)
             copen
-            wincmd p
-        endif
+            wincmd p endif
     endfunction
 
     command! -nargs=* Ag call fzf#run({
@@ -274,7 +276,7 @@ Plug 'junegunn/limelight.vim'
 Plug 'bling/vim-airline'
     let g:airline_powerline_fonts = 1
     let g:airline_detect_modified=1
-    let g:airline_theme="jellybeans"
+    let g:airline_theme='jellybeans'
     let g:airline_left_sep  = '▓▒░'
     let g:airline_right_sep = '░▒▓'
     let g:airline_section_z = '%2p%% %2l/%L:%2v'
@@ -292,50 +294,39 @@ Plug 'bling/vim-airline'
     let g:airline#extensions#tabline#show_tab_type = 0
     let g:airline#extensions#tabline#buffer_min_count = 2
 
-Plug 't9md/vim-choosewin'
-    nmap <leader>' <Plug>(choosewin)
-    let g:choosewin_blink_on_land = 0
-    let g:choosewin_tabline_replace = 0
-
 " VCS
 " ================================================================
 Plug 'tpope/vim-fugitive'
     autocmd BufReadPost fugitive://*
       \ set bufhidden=delete
 Plug 'tommcdo/vim-fugitive-blame-ext'
-Plug 'idanarye/vim-merginal'
-Plug 'esneider/YUNOcommit.vim'
 Plug 'mhinz/vim-signify'
 
 " Languages
 " ================================================================
+Plug 'elixir-lang/vim-elixir'
 Plug 'fatih/vim-go', {'for': 'go'}
-Plug 'alvan/vim-closetag'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
 Plug 'vim-scripts/a.vim', {'for': 'c'}
 Plug 'AW3i/aftersyntaxc.vim', {'for': 'c'}
 Plug 'Valloric/MatchTagAlways'
+    let g:mta_filetypes = {
+        \ 'html' : 1,
+        \ 'xhtml' : 1,
+        \ 'xml' : 1,
+        \ 'phtml' : 1,
+        \}
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
-Plug 'tpope/vim-ragtag'
 Plug 'pangloss/vim-javascript', {'for': 'javascript'}
 Plug 'othree/javascript-libraries-syntax.vim', {'for': 'javascript'}
 Plug 'matthewsimo/angular-vim-snippets', {'for': 'javascript'}
-Plug 'lervag/vimtex'
-    let g:tex_flavor='latex'
-    let g:Tex_DefaultTargetFormat = 'pdf'
-    let g:tex_MultipleCompileFormats = 'pdf,aux'
-Plug 'benekastah/neomake'
-    autocmd! BufWritePost * Neomake
-    let g:neomake_open_list = 2
-    let g:neomake_airline = 1
-    let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
-    let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
-
-    map <F4> :lopen<CR>
-    map <F5> :Neomake<CR>
+"Plug 'lervag/vimtex'
+    "let g:tex_flavor='latex'
+    "let g:Tex_DefaultTargetFormat = 'pdf'
+    "let g:tex_MultipleCompileFormats = 'pdf,aux'
 call plug#end()
 
 "Highlight in red when a line has more than 81 characters
