@@ -12,12 +12,11 @@ set laststatus=2
 set smartindent
 set tabstop=4
 set shiftwidth=4
-set expandtab
 set shiftround
 set matchpairs+=<:>
 
 set foldmethod=indent
-set foldnestmax=3
+set foldnestmax=0
 
 set scrolloff=10
 set sidescrolloff=7
@@ -54,7 +53,7 @@ set spelllang=de
 set nrformats=
 set grepprg=ag\ --nogroup\ --nocolor
 let &showbreak='↪ '
-let mapleader = ","
+let mapleader = " "
 let maplocalleader = "\\"
 let g:netrw_liststyle=2
 let g:netrw_altv = 1
@@ -273,7 +272,8 @@ Plug 'junegunn/limelight.vim'
    let g:limelight_conceal_ctermfg = 238
    nmap <silent> gl :Limelight!!<CR>
    xmap gl <Plug>(Limelight)
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
     let g:airline_powerline_fonts = 1
     let g:airline_detect_modified=1
     let g:airline_theme='jellybeans'
@@ -365,6 +365,7 @@ vnoremap <C-V>   v
 
 nmap <silent> <leader>h :nohls<CR>
 nmap <leader>y "+y
+vmap <leader>y "+y
 nmap <leader>p "+p
 
 nmap <silent> <leader>c :bp<bar>sp<bar>bn<bar>bd<CR>
