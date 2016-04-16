@@ -74,7 +74,6 @@ endif
 call plug#begin('~/.config/nvim/plugged')
 
 " Text Manipulation
-" ================================================================
 Plug 'Raimondi/delimitMate'
 	let delimitMate_jump_expansion = 1
 	let delimitMate_expand_cr = 2
@@ -90,7 +89,6 @@ Plug 'tpope/vim-abolish'
 Plug 'terryma/vim-multiple-cursors'
 
 " Completion
-" ================================================================
 Plug 'SirVer/UltiSnips'
 	let g:UltiSnipsExpandTrigger = "<tab>"
 	let g:UltiSnipsJumpForwardTrigger = "<tab>"
@@ -105,7 +103,6 @@ Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 
 " Utility
-" ================================================================
 Plug 'vimwiki/vimwiki'
 	let wiki = {}
 	let wiki.path = '~/vimwiki/'
@@ -185,9 +182,9 @@ Plug 'kassio/neoterm'
 	"
 	" Git commands
 	command! -nargs=+ Tg :T git <args>
+Plug 'ryanss/vim-hackernews'
 
 " File Navigation
-" ================================================================
 Plug 'zenbro/mirror.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -258,7 +255,6 @@ Plug 'junegunn/fzf.vim'
 	\ })
 
 " Appearance
-" ================================================================
 Plug 'junegunn/goyo.vim'
 Plug 'nanotech/jellybeans.vim'
 	let g:jellybeans_background_color_256=234
@@ -301,7 +297,6 @@ Plug 'vim-airline/vim-airline'
 	let g:airline#extensions#tabline#buffer_min_count = 2
 
 " VCS
-" ================================================================
 Plug 'tpope/vim-fugitive'
 	autocmd BufReadPost fugitive://*
 	\ set bufhidden=delete
@@ -309,11 +304,12 @@ Plug 'tommcdo/vim-fugitive-blame-ext'
 Plug 'mhinz/vim-signify'
 
 " Languages
-" ================================================================
 Plug 'elixir-lang/vim-elixir'
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
 Plug 'zchee/deoplete-clang', {'for': 'c'}
+Plug 'Shougo/vimproc', {'do': 'make -f make_unix.mak'}
+Plug 'm2mdas/phpcomplete-extended'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
