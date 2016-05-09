@@ -55,7 +55,8 @@ set grepprg=ag\ --nogroup\ --nocolor
 let &showbreak='↪ '
 let mapleader = " "
 let maplocalleader = "\\"
-let g:netrw_liststyle=2
+let g:netrw_liststyle=0
+let g:netrw_browse_split = 4
 let g:netrw_altv = 1
 set cursorline
 
@@ -84,7 +85,6 @@ Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
-Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-abolish'
 Plug 'terryma/vim-multiple-cursors'
 
@@ -98,8 +98,9 @@ Plug 'SirVer/UltiSnips'
 	let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 Plug 'Shougo/deoplete.nvim'
 	let g:deoplete#enable_at_startup = 1
+	autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 Plug 'ervandew/supertab'
-	let g:SuperTabDefaultCompletionType = '<C-n>'
+	let g:SuperTabDefaultCompletionType = '<tab>'
 Plug 'honza/vim-snippets'
 
 " Utility
@@ -111,7 +112,6 @@ Plug 'vimwiki/vimwiki'
 Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-unimpaired'
 Plug 'majutsushi/tagbar'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -126,7 +126,7 @@ Plug 'benekastah/neomake'
 
 	map <F4> :lopen<CR>
 	map <F5> :Neomake<CR>
-	
+
 Plug 'justinmk/vim-sneak'
 	let g:sneak#streak = 1
 	augroup SneakPluginColors
@@ -179,7 +179,7 @@ Plug 'kassio/neoterm'
 	nnoremap <silent> <leader>tc :call neoterm#kill()<cr>
 	nnoremap <leader>tr :T 
 	nnoremap <leader>tt :Ttoggle<CR>
-	"
+
 	" Git commands
 	command! -nargs=+ Tg :T git <args>
 Plug 'ryanss/vim-hackernews'
@@ -274,46 +274,32 @@ Plug 'junegunn/limelight.vim'
 	let g:limelight_conceal_ctermfg = 238
 	nmap <silent> gl :Limelight!!<CR>
 	xmap gl <Plug>(Limelight)
+
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
-	let g:airline_powerline_fonts = 1
-	let g:airline_detect_modified=1
-	let g:airline_theme='jellybeans'
+	let g:airline_theme='raven'
 	let g:airline_left_sep  = '▓▒░'
 	let g:airline_right_sep = '░▒▓'
 	let g:airline_section_z = '%2p%% %2l/%L:%2v'
-	let g:airline#extensions#syntastic#enabled = 0
-	let g:airline#extensions#whitespace#enabled = 0
-	let g:airline_exclude_preview = 1
-	"
+
 	" Tabline
 	let g:airline#extensions#tabline#enabled = 1
-	let g:airline#extensions#tabline#show_buffers = 1
-	let g:airline#extensions#tabline#show_tabs = 0
-	let g:airline#extensions#tabline#buffer_idx_mode = 1
-	let g:airline#extensions#tabline#fnamecollapse = 1
-	let g:airline#extensions#tabline#show_close_button = 0
-	let g:airline#extensions#tabline#show_tab_type = 0
-	let g:airline#extensions#tabline#buffer_min_count = 2
 
 " VCS
-Plug 'tpope/vim-fugitive'
-	autocmd BufReadPost fugitive://*
-	\ set bufhidden=delete
-Plug 'tommcdo/vim-fugitive-blame-ext'
+Plug 'lambdalisue/vim-gita'
+	nnoremap <leader>g :Gita 
+	nnoremap <leader>gs :Gita status<CR>
 Plug 'mhinz/vim-signify'
 
 " Languages
 Plug 'elixir-lang/vim-elixir'
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
-Plug 'zchee/deoplete-clang', {'for': 'c'}
 Plug 'Shougo/vimproc', {'do': 'make -f make_unix.mak'}
 Plug 'm2mdas/phpcomplete-extended'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
-Plug 'vim-scripts/a.vim', {'for': 'c'}
 Plug 'AW3i/aftersyntaxc.vim', {'for': 'c'}
 Plug 'Valloric/MatchTagAlways'
 	let g:mta_filetypes = {
@@ -322,11 +308,7 @@ Plug 'Valloric/MatchTagAlways'
 	\ 'xml' : 1,
 	\ 'phtml' : 1,
 	\}
-Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
-Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-Plug 'othree/javascript-libraries-syntax.vim', {'for': 'javascript'}
-Plug 'matthewsimo/angular-vim-snippets', {'for': 'javascript'}
 Plug 'lervag/vimtex'
 	let g:tex_flavor='latex'
 	let g:Tex_DefaultTargetFormat = 'pdf'
@@ -338,7 +320,7 @@ highlight ColorColumn ctermbg=red
 call matchadd('ColorColumn', '\%81v', 100)
 
 function s:MDSettings()
-	inoremap <buffer> <Leader>n \note[item]{}<Esc>i
+	inoremap <buffer> <Leader>n \note[item]{}<Esc>
 	noremap <buffer> <Leader>b :! pandoc --latex-engine=xelatex -t beamer % -o %<.pdf<CR>
 	noremap <buffer> <Leader>l :! pandoc  --include-in-header titlesec.tex --toc  -t latex % -o %<.pdf --latex-engine=xelatex --variable mainfont="DejaVu Serif"<CR>
 	noremap <buffer> <Leader>v :! zathura %<.pdf 2>&1 >/dev/null &<CR>
@@ -359,7 +341,6 @@ autocmd FileType mail set spell
 highlight! ErrorSign guifg=black guibg=#E01600 ctermfg=16 ctermbg=160
 highlight! WarningSign guifg=black guibg=#FFED26 ctermfg=16 ctermbg=11
 
-
 nnoremap <leader>w :w<CR>
 
 noremap v   <C-V>
@@ -367,18 +348,11 @@ noremap <C-V>   v
 vnoremap v   <C-V>
 vnoremap <C-V>   v
 
-nmap <silent> <leader>h :nohls<CR>
-nmap <leader>y "+y
-vmap <leader>y "+y
-nmap <leader>p "+p
+nnoremap <silent> <leader>h :nohls<CR>
 
-nmap <silent> <leader>c :bp<bar>sp<bar>bn<bar>bd<CR>
-nmap <silent> <leader>b :ls<CR>:b<Space>
-
-nmap <silent> <F1>  :UndotreeToggle<CR>
-nmap <silent> <F2>  :TagbarToggle<CR>
-nmap <silent> <F3>  :25Vexplore<CR>
-nmap   Q gq<CR>
+nnoremap <silent> <F1>  :UndotreeToggle<CR>
+nnoremap <silent> <F2>  :TagbarToggle<CR>
+nnoremap <silent> <F3>  :25Lexplore<CR>
 
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
