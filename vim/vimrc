@@ -126,14 +126,12 @@ Plug 'benekastah/neomake'
     let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
     let g:neomake_php_phpcs_args_standard = 'PSR2'
     let g:neomake_php_phpmd_maker = {
-\ 'args': ['%:p', 'text', '~/.phpmd.xml'],
-\ 'errorformat': '%E%f:%l%\s%m'
-\ }
-let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
-
+    \ 'args': ['%:p', 'text', '~/.phpmd.xml'],
+    \ 'errorformat': '%E%f:%l%\s%m'
+    \ }
+    let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
     map <F4> :lopen<CR>
     map <F5> :Neomake<CR>
-
 Plug 'justinmk/vim-sneak'
     let g:sneak#streak = 1
     augroup SneakPluginColors
@@ -148,7 +146,6 @@ Plug 'ludovicchabant/vim-gutentags'
     \ '*.min.js',
     \ '*html*',
     \ 'jquery*.js',
-    \ 'vendor',
     \ '*/node_modules/*',
     \ '*/migrate/*.rb'
     \ ]
@@ -262,6 +259,7 @@ Plug 'junegunn/fzf.vim'
     \ 'sink*':    function('<sid>ag_handler'),
     \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
     \ })
+
 " Appearance
 Plug 'junegunn/goyo.vim'
     nnoremap <silent> gy :Goyo<CR>
@@ -309,10 +307,9 @@ Plug 'mhinz/vim-signify'
 Plug 'elixir-lang/vim-elixir'
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
-Plug 'Shougo/vimproc', {'do': 'make -f make_unix.mak'}
-Plug 'm2mdas/phpcomplete-extended'
-    let g:phpcomplete_index_composer_command = 'composer'
-Plug 'arnaud-lb/vim-php-namespace'
+Plug 'phpvim/phpcd.vim', { 'for': 'php', 'do': 'composer update' }
+Plug 'phpvim/phpfold.vim', { 'for': 'php', 'do': 'composer update' }
+Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
     function! IPhpInsertUse()
         call PhpInsertUse()
         call feedkeys('a',  'n')
@@ -326,7 +323,7 @@ Plug 'arnaud-lb/vim-php-namespace'
     endfunction
     autocmd FileType php inoremap <Leader><Leader>e <Esc>:call IPhpExpandClass()<CR>
     autocmd FileType php noremap <Leader><Leader>e :call PhpExpandClass()<CR>
-Plug '2072/PHP-Indenting-for-VIm'
+Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
 Plug 'StanAngeloff/php.vim', {'for': 'php'}
     function! PhpSyntaxOverride()
         hi! def link phpDocTags phpDefine
@@ -342,6 +339,7 @@ Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
     nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
 Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
+Plug 'vim-php/vim-php-refactoring', {'for': 'php'}
 Plug 'joonty/vdebug'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
