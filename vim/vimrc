@@ -11,6 +11,8 @@ set laststatus=2
 
 set smartindent
 set tabstop=4
+set expandtab
+set smarttab
 set shiftwidth=4
 set shiftround
 set matchpairs+=<:>
@@ -42,7 +44,7 @@ set splitbelow
 set splitright
 set undolevels=500
 set timeout timeoutlen=1000 ttimeoutlen=100
-"set list listchars=tab:»-,trail:·,extends:»,precedes:«
+set list listchars=tab:»·,trail:·,extends:»,precedes:«
 set encoding=utf-8
 scriptencoding utf-8
 set complete+=i,kspell
@@ -67,21 +69,21 @@ filetype off
 
 " Auto Installs vim-plugged if it doesn't exist
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-	silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	autocmd VimEnter * PlugInstall
+    silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall
 endif
 
 call plug#begin('~/.config/nvim/plugged')
 
 " Text Manipulation
 Plug 'Raimondi/delimitMate'
-	let delimitMate_jump_expansion = 1
-	let delimitMate_expand_cr = 2
-	let delimitMate_expand_space = 1
+    let delimitMate_jump_expansion = 1
+    let delimitMate_expand_cr = 2
+    let delimitMate_expand_space = 1
 Plug 'junegunn/vim-easy-align'
-	xmap ga <Plug>(EasyAlign)
-	nmap ga <Plug>(EasyAlign)
+    xmap ga <Plug>(EasyAlign)
+    nmap ga <Plug>(EasyAlign)
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
@@ -90,205 +92,217 @@ Plug 'terryma/vim-multiple-cursors'
 
 " Completion
 Plug 'SirVer/UltiSnips'
-	let g:UltiSnipsExpandTrigger = "<tab>"
-	let g:UltiSnipsJumpForwardTrigger = "<tab>"
-	let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-	let g:UltiSnipsUsePythonVersion = 2
-	let g:UltiSnipsEditSplit="vertical"
-	let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+    let g:UltiSnipsExpandTrigger = "<tab>"
+    let g:UltiSnipsJumpForwardTrigger = "<tab>"
+    let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+    let g:UltiSnipsUsePythonVersion = 3
+    let g:UltiSnipsEditSplit="vertical"
+    let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 Plug 'Shougo/deoplete.nvim'
-	let g:deoplete#enable_at_startup = 1
-	autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+    let g:deoplete#enable_at_startup = 1
+    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
 Plug 'ervandew/supertab'
-	let g:SuperTabDefaultCompletionType = '<tab>'
+    let g:SuperTabDefaultCompletionType = '<tab>'
 Plug 'honza/vim-snippets'
 
 " Utility
-Plug 'vimwiki/vimwiki'
-	let wiki = {}
-	let wiki.path = '~/vimwiki/'
-	let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'go': 'go','perl': 'perl','c': 'cpp', 'java': 'java'}
-	let g:vimwiki_list = [wiki]
+Plug 'blueyed/vim-diminactive'
+    let g:diminactive_use_syntax = 1
+Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
 Plug 'majutsushi/tagbar'
-Plug 'nathanaelkane/vim-indent-guides'
-	let g:indent_guides_guide_size = 1
-	let g:indent_guides_enable_on_vim_startup = 1
+Plug 'Yggdroot/indentLine'
+    let g:indentLine_color_term = 251
+    let g:indentLine_maxLines = 1000
+    let g:indentLine_char = '┊'
 Plug 'benekastah/neomake'
-	autocmd! BufWritePost * Neomake
-	let g:neomake_open_list = 2
-	let g:neomake_airline = 1
-	let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
-	let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
+    autocmd! BufWritePost * Neomake
+    let g:neomake_open_list = 2
+    let g:neomake_airline = 1
+    let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
+    let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
+    let g:neomake_php_phpcs_args_standard = 'PSR2'
+    let g:neomake_php_phpmd_maker = {
+\ 'args': ['%:p', 'text', '~/.phpmd.xml'],
+\ 'errorformat': '%E%f:%l%\s%m'
+\ }
+let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
 
-	map <F4> :lopen<CR>
-	map <F5> :Neomake<CR>
+    map <F4> :lopen<CR>
+    map <F5> :Neomake<CR>
 
 Plug 'justinmk/vim-sneak'
-	let g:sneak#streak = 1
-	augroup SneakPluginColors
-	autocmd!
-	autocmd ColorScheme * hi SneakPluginTarget guifg=black guibg=red ctermfg=black ctermbg=red
-	autocmd ColorScheme * hi SneakPluginScope  guifg=black guibg=yellow ctermfg=black ctermbg=yellow
-	autocmd ColorScheme * hi SneakStreakTarget guifg=black guibg=red ctermfg=black ctermbg=red
-	autocmd ColorScheme * hi SneakStreakMask guifg=black guibg=red ctermfg=black ctermbg=red
-	augroup END
-Plug 'blindFS/vim-taskwarrior'
-	let g:task_rc_override = 'rc.defaultwidth=0'
-	let g:task_rc_override = 'rc.defaultheight=0'
+    let g:sneak#streak = 1
+    augroup SneakPluginColors
+    autocmd!
+    autocmd ColorScheme * hi SneakPluginTarget guifg=black guibg=red ctermfg=black ctermbg=red
+    autocmd ColorScheme * hi SneakPluginScope  guifg=black guibg=yellow ctermfg=black ctermbg=yellow
+    autocmd ColorScheme * hi SneakStreakTarget guifg=black guibg=red ctermfg=black ctermbg=red
+    autocmd ColorScheme * hi SneakStreakMask guifg=black guibg=red ctermfg=black ctermbg=red
+    augroup END
 Plug 'ludovicchabant/vim-gutentags'
-	let g:gutentags_exclude = [
-	\ '*.min.js',
-	\ '*html*',
-	\ 'jquery*.js',
-	\ '*/vendor/*',
-	\ '*/node_modules/*',
-	\ '*/migrate/*.rb'
-	\ ]
-	set statusline+=%{gutentags#statusline()}
-	let g:gutentags_generate_on_missing = 0
-	let g:gutentags_generate_on_write = 0
-	let g:gutentags_generate_on_new = 0
-	nnoremap <leader>gt :GutentagsUpdate!<CR>
+    let g:gutentags_exclude = [
+    \ '*.min.js',
+    \ '*html*',
+    \ 'jquery*.js',
+    \ 'vendor',
+    \ '*/node_modules/*',
+    \ '*/migrate/*.rb'
+    \ ]
+    set statusline+=%{gutentags#statusline()}
+    let g:gutentags_generate_on_missing = 0
+    let g:gutentags_generate_on_write = 0
+    let g:gutentags_generate_on_new = 0
+    nnoremap <leader>gt :GutentagsUpdate!<CR>
 Plug 'junegunn/vim-peekaboo'
-	let g:peekaboo_delay = 400
+    let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
-	let g:neoterm_position = 'horizontal'
-	let g:neoterm_automap_keys = ',tt'
-	let g:neoterm_size = '30'
+    let g:neoterm_position = 'horizontal'
+    let g:neoterm_automap_keys = ',tt'
+    let g:neoterm_size = '30'
 
-	nnoremap <silent> <f10> :TREPLSendFile<cr>
-	nnoremap <silent> <f9> :TREPLSend<cr>
-	vnoremap <silent> <f9> :TREPLSend<cr>
+    nnoremap <silent> <f10> :TREPLSendFile<cr>
+    nnoremap <silent> <f9> :TREPLSend<cr>
+    vnoremap <silent> <f9> :TREPLSend<cr>
 
-	" run set test lib
-	nnoremap <silent> ,rt :call neoterm#test#run('all')<cr>
-	nnoremap <silent> ,rf :call neoterm#test#run('file')<cr>
-	nnoremap <silent> ,rn :call neoterm#test#run('current')<cr>
-	nnoremap <silent> ,rr :call neoterm#test#rerun()<cr>
+    " run set test lib
+    nnoremap <silent> ,rt :call neoterm#test#run('all')<cr>
+    nnoremap <silent> ,rf :call neoterm#test#run('file')<cr>
+    nnoremap <silent> ,rn :call neoterm#test#run('current')<cr>
+    nnoremap <silent> ,rr :call neoterm#test#rerun()<cr>
 
-	" Useful maps
-	" hide/close terminal
-	nnoremap <silent> <leader>th :call neoterm#close()<cr>
-	" clear terminal
-	nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
-	" kills the current job (send a <c-c>)
-	nnoremap <silent> <leader>tc :call neoterm#kill()<cr>
-	nnoremap <leader>tr :T 
-	nnoremap <leader>tt :Ttoggle<CR>
+    " Useful maps
+    " hide/close terminal
+    nnoremap <silent> <leader>th :call neoterm#close()<cr>
+    " clear terminal
+    nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
+    " kills the current job (send a <c-c>)
+    nnoremap <silent> <leader>tc :call neoterm#kill()<cr>
+    nnoremap <leader>tr :T 
+    nnoremap <leader>tt :Ttoggle<CR>
 
-	" Git commands
-	command! -nargs=+ Tg :T git <args>
+    " Git commands
+    command! -nargs=+ Tg :T git <args>
 Plug 'ryanss/vim-hackernews'
 
 " File Navigation
 Plug 'zenbro/mirror.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-	let g:fzf_nvim_statusline = 0 " disable statusline overwriting
+    let g:fzf_nvim_statusline = 0 " disable statusline overwriting
 
-	nnoremap <silent> <leader><space> :Files<CR>
-	nnoremap <silent> <leader>a :Buffers<CR>
-	nnoremap <silent> <leader>; :BLines<CR>
-	nnoremap <silent> <leader>. :Lines<CR>
-	nnoremap <silent> <leader>o :BTags<CR>
-	nnoremap <silent> <leader>O :Tags<CR>
-	nnoremap <silent> <leader>? :History<CR>
-	nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
-	nnoremap <silent> K :call SearchWordWithAg()<CR>
-	vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
-	nnoremap <silent> <leader>gl :Commits<CR>
-	nnoremap <silent> <leader>ga :BCommits<CR>
+    nnoremap <silent> <leader><space> :Files<CR>
+    nnoremap <silent> <leader>a :Buffers<CR>
+    nnoremap <silent> <leader>; :BLines<CR>
+    nnoremap <silent> <leader>. :Lines<CR>
+    nnoremap <silent> <leader>o :BTags<CR>
+    nnoremap <silent> <leader>O :Tags<CR>
+    nnoremap <silent> <leader>? :History<CR>
+    nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+    "nnoremap <silent> K :call SearchWordWithAg()<CR>
+    "vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+    nnoremap <silent> <leader>gl :Commits<CR>
+    nnoremap <silent> <leader>ga :BCommits<CR>
+    nnoremap <silent> <leader>w :Windows<CR>
+    inoremap <silent> <C-s> <ESC>:Snippets<CR>
 
-	imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-	imap <C-x><C-l> <plug>(fzf-complete-line)
+    imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+    imap <C-x><C-l> <plug>(fzf-complete-line)
 
-	function! SearchWordWithAg()
-		execute 'Ag' expand('<cword>')
-	endfunction
+    let g:fzf_files_options =
+      \ '--preview "(coderay {} ) 2> /dev/null | head -'.&lines.'"'
 
-	function! SearchVisualSelectionWithAg() range
-		let old_reg = getreg('"')
-		let old_regtype = getregtype('"')
-		let old_clipboard = &clipboard
-		set clipboard&
-		normal! ""gvy
-		let selection = getreg('"')
-		call setreg('"', old_reg, old_regtype)
-		let &clipboard = old_clipboard
-		execute 'Ag' selection
-	endfunction
+    function! SearchWordWithAg()
+        execute 'Ag' expand('<cword>')
+    endfunction
 
-	function! s:ag_to_qf(line)
-		let parts = split(a:line, ':')
-		return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
-		\ 'text': join(parts[3:], ':')}
-	endfunction
+    function! SearchVisualSelectionWithAg() range
+        let old_reg = getreg('"')
+        let old_regtype = getregtype('"')
+        let old_clipboard = &clipboard
+        set clipboard&
+        normal! ""gvy
+        let selection = getreg('"')
+        call setreg('"', old_reg, old_regtype)
+        let &clipboard = old_clipboard
+        execute 'Ag' selection
+    endfunction
 
-	function! s:ag_handler(lines)
-		if len(a:lines) < 2 | return | endif
+    function! s:ag_to_qf(line)
+        let parts = split(a:line, ':')
+        return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
+        \ 'text': join(parts[3:], ':')}
+    endfunction
 
-		let cmd = get({'ctrl-x': 'split',
-		\ 'ctrl-v': 'vertical split',
-		\ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
-		let list = map(a:lines[1:], 's:ag_to_qf(v:val)')
+    function! s:ag_handler(lines)
+        if len(a:lines) < 2 | return | endif
 
-		let first = list[0]
-		execute cmd escape(first.filename, ' %#\')
-		execute first.lnum
-		execute 'normal!' first.col.'|zz'
+        let cmd = get({'ctrl-x': 'split',
+        \ 'ctrl-v': 'vertical split',
+        \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
+        let list = map(a:lines[1:], 's:ag_to_qf(v:val)')
 
-		if len(list) > 1
-			call setqflist(list)
-			copen
-		wincmd p endif
-	endfunction
+        let first = list[0]
+        execute cmd escape(first.filename, ' %#\')
+        execute first.lnum
+        execute 'normal!' first.col.'|zz'
 
-	command! -nargs=* Ag call fzf#run({
-	\ 'source':  printf('ag --nogroup --column --color "%s"',
-	\                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
-	\ 'sink*':    function('<sid>ag_handler'),
-	\ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
-	\ })
+        if len(list) > 1
+            call setqflist(list)
+            copen
+        wincmd p endif
+    endfunction
 
+    command! -nargs=* Ag call fzf#run({
+    \ 'source':  printf('ag --nogroup --column --color "%s"',
+    \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
+    \ 'sink*':    function('<sid>ag_handler'),
+    \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
+    \ })
 " Appearance
 Plug 'junegunn/goyo.vim'
+    nnoremap <silent> gy :Goyo<CR>
 Plug 'nanotech/jellybeans.vim'
-	let g:jellybeans_background_color_256=234
+    let g:jellybeans_background_color_256=234
 Plug 'mhinz/vim-startify'
-	let g:startify_session_dir = '~/.config/nvim/session'
-	let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/Documents/owncloud/documents/fh', '~/Documents/owncloud/documents/programming' ]
-	let g:startify_list_order = [ 'sessions', 'bookmarks', 'files', 'dir']
-	let g:startify_session_persistence = 1
-	let g:startify_session_delete_buffers = 1
-	let g:startify_change_to_dir = 1
-	let g:startify_change_to_vcs_root = 1
-	let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
-	nnoremap <F12> :Startify<CR>
-	autocmd! User Startified setlocal colorcolumn=0
+    let g:startify_session_dir = '~/.config/nvim/session'
+    let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/Documents/owncloud/documents/fh', '~/Documents/owncloud/documents/programming' ]
+    let g:startify_list_order = [ 'sessions', 'bookmarks', 'files', 'dir']
+    let g:startify_session_persistence = 1
+    let g:startify_session_delete_buffers = 1
+    let g:startify_change_to_dir = 1
+    let g:startify_change_to_vcs_root = 1
+    let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
+    nnoremap <F12> :Startify<CR>
+    autocmd! User Startified setlocal colorcolumn=0
 Plug 'junegunn/limelight.vim'
-	let g:limelight_default_coefficient = 0.7
-	let g:limelight_conceal_ctermfg = 238
-	nmap <silent> gl :Limelight!!<CR>
-	xmap gl <Plug>(Limelight)
+    let g:limelight_default_coefficient = 0.7
+    let g:limelight_conceal_ctermfg = 238
+    nmap <silent> gl :Limelight!!<CR>
+    xmap gl <Plug>(Limelight)
 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
-	let g:airline_theme='raven'
-	let g:airline_left_sep  = '▓▒░'
-	let g:airline_right_sep = '░▒▓'
-	let g:airline_section_z = '%2p%% %2l/%L:%2v'
+    let g:airline_theme='raven'
+    let g:airline_left_sep  = '▓▒░'
+    let g:airline_right_sep = '░▒▓'
+    let g:airline_section_z = '%2p%% %2l/%L:%2v'
 
-	" Tabline
-	let g:airline#extensions#tabline#enabled = 1
+    " Tabline
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#left_sep = ' '
+    let g:airline#extensions#tabline#left_alt_sep = '|'
+    let g:airline#extensions#tabline#show_close_button = 0
+    let g:airline#extensions#tabline#excludes = []
+    let g:airline#extensions#tabline#exclude_preview = 0
+    let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 
 " VCS
-Plug 'lambdalisue/vim-gita'
-	nnoremap <leader>g :Gita 
-	nnoremap <leader>gs :Gita status<CR>
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
 Plug 'mhinz/vim-signify'
 
 " Languages
@@ -297,22 +311,55 @@ Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
 Plug 'Shougo/vimproc', {'do': 'make -f make_unix.mak'}
 Plug 'm2mdas/phpcomplete-extended'
+    let g:phpcomplete_index_composer_command = 'composer'
+Plug 'arnaud-lb/vim-php-namespace'
+    function! IPhpInsertUse()
+        call PhpInsertUse()
+        call feedkeys('a',  'n')
+    endfunction
+    autocmd FileType php inoremap <Leader><Leader>u <Esc>:call IPhpInsertUse()<CR>
+    autocmd FileType php noremap <Leader><Leader>u :call PhpInsertUse()<CR>
+
+    function! IPhpExpandClass()
+        call PhpExpandClass()
+        call feedkeys('a', 'n')
+    endfunction
+    autocmd FileType php inoremap <Leader><Leader>e <Esc>:call IPhpExpandClass()<CR>
+    autocmd FileType php noremap <Leader><Leader>e :call PhpExpandClass()<CR>
+Plug '2072/PHP-Indenting-for-VIm'
+Plug 'StanAngeloff/php.vim', {'for': 'php'}
+    function! PhpSyntaxOverride()
+        hi! def link phpDocTags phpDefine
+        hi! def link phpDocParam phpType
+    endfunction
+
+    augroup phpSyntaxOverride
+        autocmd!
+        autocmd FileType php call PhpSyntaxOverride()
+    augroup END
+Plug 'tobyS/vmustache', {'for': 'php'}
+Plug 'tobyS/pdv', {'for': 'php'}
+    let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
+    nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
+Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
+Plug 'joonty/vdebug'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
 Plug 'AW3i/aftersyntaxc.vim', {'for': 'c'}
 Plug 'Valloric/MatchTagAlways'
-	let g:mta_filetypes = {
-	\ 'html' : 1,
-	\ 'xhtml' : 1,
-	\ 'xml' : 1,
-	\ 'phtml' : 1,
-	\}
+    let g:mta_filetypes = {
+    \ 'html' : 1,
+    \ 'dhtml' : 1,
+    \ 'xhtml' : 1,
+    \ 'xml' : 1,
+    \ 'phtml' : 1,
+    \}
 Plug 'ap/vim-css-color'
 Plug 'lervag/vimtex'
-	let g:tex_flavor='latex'
-	let g:Tex_DefaultTargetFormat = 'pdf'
-	let g:tex_MultipleCompileFormats = 'pdf,aux'
+    let g:tex_flavor='latex'
+    let g:Tex_DefaultTargetFormat = 'pdf'
+    let g:tex_MultipleCompileFormats = 'pdf,aux'
 call plug#end()
 
 "Highlight in red when a line has more than 81 characters
@@ -320,28 +367,29 @@ highlight ColorColumn ctermbg=red
 call matchadd('ColorColumn', '\%81v', 100)
 
 function s:MDSettings()
-	inoremap <buffer> <Leader>n \note[item]{}<Esc>
-	noremap <buffer> <Leader>b :! pandoc --latex-engine=xelatex -t beamer % -o %<.pdf<CR>
-	noremap <buffer> <Leader>l :! pandoc  --include-in-header titlesec.tex --toc  -t latex % -o %<.pdf --latex-engine=xelatex --variable mainfont="DejaVu Serif"<CR>
-	noremap <buffer> <Leader>v :! zathura %<.pdf 2>&1 >/dev/null &<CR>
+    inoremap <buffer> <Leader><Leader>n \note[item]{}<Esc>
+    noremap <buffer> <Leader>b :! pandoc --latex-engine=xelatex -t beamer % -o %<.pdf<CR>
+    noremap <buffer> <Leader>l :! pandoc  --include-in-header titlesec.tex --toc  -t latex % -o %<.pdf --latex-engine=xelatex --variable mainfont="DejaVu Serif"<CR>
+    noremap <buffer> <Leader>v :! zathura %<.pdf 2>&1 >/dev/null &<CR>
 
-	"adjust syntax highlighting for LaTeX parts
-	"inline formulas:
-	syntax region Statement oneline matchgroup=Delimiter start="\$" end="\$"
-	"environments:
-	syntax region Statement matchgroup=Delimiter start="\\begin{.*}" end="\\end{.*}" contains=Statement
-	"commands:
-	syntax region Statement matchgroup=Delimiter start="{" end="}" contains=Statement
+    "adjust syntax highlighting for LaTeX parts
+    "inline formulas:
+    syntax region Statement oneline matchgroup=Delimiter start="\$" end="\$"
+    "environments:
+    syntax region Statement matchgroup=Delimiter start="\\begin{.*}" end="\\end{.*}" contains=Statement
+    "commands:
+    syntax region Statement matchgroup=Delimiter start="{" end="}" contains=Statement
 endfunction
 
 autocmd BufRead,BufNewFile *.md setfiletype markdown
+autocmd BufRead,BufNewFile *.dhtml setfiletype php
 autocmd FileType markdown :call <SID>MDSettings()
 autocmd FileType mail set spell
 
 highlight! ErrorSign guifg=black guibg=#E01600 ctermfg=16 ctermbg=160
 highlight! WarningSign guifg=black guibg=#FFED26 ctermfg=16 ctermbg=11
 
-nnoremap <leader>w :w<CR>
+nnoremap <leader>s :w<CR>
 
 noremap v   <C-V>
 noremap <C-V>   v
@@ -357,7 +405,15 @@ nnoremap <silent> <F3>  :25Lexplore<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
-nnoremap <silent> <C-h> :wincmd h<CR>
+nnoremap <silent> <bs> :wincmd h<CR>
+nnoremap  <silent> <leader>bc :bp<bar>sp<bar>bn<bar>bd<CR>
+nnoremap <silent>  <leader>bd :bd<CR>
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
 
 " Switch back to normal mode from terminal mode
 tnoremap <esc><esc> <C-\><C-n>
@@ -376,3 +432,11 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>[5 q"
 let &t_SR = "\<Esc>[3 q"
 let &t_EI = "\<Esc>[2 q"
+
+function! CleanEmptyBuffers()
+  let buffers = filter(range(0, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0')
+  if !empty(buffers)
+    exe 'bw '.join(buffers, ' ')
+  endif
+endfunction
+hi ColorColumn ctermbg=236
