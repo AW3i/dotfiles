@@ -100,24 +100,22 @@ Plug 'SirVer/UltiSnips'
     let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 Plug 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
+    let g:deoplete#omni#input_patterns = {}
+    let g:deoplete#omni#input_patterns.php =
+        \ '\w+|[^. \t]->\w*|\w+::\w*'
     autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
 Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = '<tab>'
 Plug 'honza/vim-snippets'
 
 " Utility
-Plug 'blueyed/vim-diminactive'
-    let g:diminactive_use_syntax = 1
+Plug 'jceb/vim-orgmode'
 Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
 Plug 'majutsushi/tagbar'
-Plug 'Yggdroot/indentLine'
-    let g:indentLine_color_term = 251
-    let g:indentLine_maxLines = 1000
-    let g:indentLine_char = '┊'
 Plug 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
     let g:neomake_open_list = 2
@@ -129,7 +127,7 @@ Plug 'benekastah/neomake'
     \ 'args': ['%:p', 'text', '~/.phpmd.xml'],
     \ 'errorformat': '%E%f:%l%\s%m'
     \ }
-    let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
+    "let g:neomake_php_enabled_makers = ['php', 'phpmd', 'phpcs']
     map <F4> :lopen<CR>
     map <F5> :Neomake<CR>
 Plug 'justinmk/vim-sneak'
@@ -153,6 +151,7 @@ Plug 'ludovicchabant/vim-gutentags'
     let g:gutentags_generate_on_missing = 0
     let g:gutentags_generate_on_write = 0
     let g:gutentags_generate_on_new = 0
+    let g:gutentags_ctags_executable_php = 'phpctags --recurse=yes'
     nnoremap <leader>gt :GutentagsUpdate!<CR>
 Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
@@ -160,6 +159,7 @@ Plug 'kassio/neoterm'
     let g:neoterm_position = 'horizontal'
     let g:neoterm_automap_keys = ',tt'
     let g:neoterm_size = '30'
+"    let g:neoterm_autoinsert = 1
 
     nnoremap <silent> <f10> :TREPLSendFile<cr>
     nnoremap <silent> <f9> :TREPLSend<cr>
@@ -307,7 +307,9 @@ Plug 'mhinz/vim-signify'
 Plug 'elixir-lang/vim-elixir'
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
-Plug 'phpvim/phpcd.vim', { 'for': 'php', 'do': 'composer update' }
+Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
+Plug 'mattn/calendar-vim'
+Plug 'Valloric/ListToggle'
 Plug 'phpvim/phpfold.vim', { 'for': 'php', 'do': 'composer update' }
 Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
     function! IPhpInsertUse()
@@ -340,6 +342,7 @@ Plug 'tobyS/pdv', {'for': 'php'}
     nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
 Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
 Plug 'vim-php/vim-php-refactoring', {'for': 'php'}
+Plug 'vim-php/tagbar-phpctags.vim'
 Plug 'joonty/vdebug'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
@@ -353,6 +356,7 @@ Plug 'Valloric/MatchTagAlways'
     \ 'xml' : 1,
     \ 'phtml' : 1,
     \}
+Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
 Plug 'lervag/vimtex'
     let g:tex_flavor='latex'
@@ -397,7 +401,7 @@ vnoremap <C-V>   v
 nnoremap <silent> <leader>h :nohls<CR>
 
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
-nnoremap <silent> <F2>  :TagbarToggle<CR>
+nnoremap <silent> <F2>  :TagbarOpenAutoClose<CR>
 nnoremap <silent> <F3>  :25Lexplore<CR>
 
 nnoremap <silent> <C-k> :wincmd k<CR>
