@@ -100,22 +100,36 @@ Plug 'SirVer/UltiSnips'
     let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 Plug 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
-    let g:deoplete#omni#input_patterns = {}
-    let g:deoplete#omni#input_patterns.php =
-        \ '\w+|[^. \t]->\w*|\w+::\w*'
-    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
+Plug 'pbogut/deoplete-padawan'
+Plug 'c9s/perlomni.vim', {'for': 'perl'}
 Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = '<tab>'
 Plug 'honza/vim-snippets'
 
 " Utility
-Plug 'jceb/vim-orgmode'
-Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
+    let test#strategy = "neoterm"
+    nmap <silent> <leader>rt :TestNearest<CR>
+    nmap <silent> <leader>rT :TestFile<CR>
+    nmap <silent> <leader>ra :TestSuite<CR>
+    nmap <silent> <leader>rl :TestLast<CR>
+    nmap <silent> <leader>rg :TestVisit<CR>
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
 Plug 'majutsushi/tagbar'
+Plug 'mattn/emmet-vim'
+Plug 'ap/vim-css-color'
+Plug 'jceb/vim-orgmode'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-eunuch'
+Plug 'vim-scripts/utl.vim'
+Plug 'kshenoy/vim-signature'
+Plug 'ryanss/vim-hackernews'
+Plug 'joonty/vdebug'
+Plug 'mattn/calendar-vim'
+Plug 'Valloric/ListToggle'
 Plug 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
     let g:neomake_open_list = 2
@@ -127,18 +141,19 @@ Plug 'benekastah/neomake'
     \ 'args': ['%:p', 'text', '~/.phpmd.xml'],
     \ 'errorformat': '%E%f:%l%\s%m'
     \ }
-    "let g:neomake_php_enabled_makers = ['php', 'phpmd', 'phpcs']
+    let g:neomake_php_enabled_makers = ['php']
     map <F4> :lopen<CR>
     map <F5> :Neomake<CR>
 Plug 'justinmk/vim-sneak'
     let g:sneak#streak = 1
-    augroup SneakPluginColors
-    autocmd!
-    autocmd ColorScheme * hi SneakPluginTarget guifg=black guibg=red ctermfg=black ctermbg=red
-    autocmd ColorScheme * hi SneakPluginScope  guifg=black guibg=yellow ctermfg=black ctermbg=yellow
-    autocmd ColorScheme * hi SneakStreakTarget guifg=black guibg=red ctermfg=black ctermbg=red
-    autocmd ColorScheme * hi SneakStreakMask guifg=black guibg=red ctermfg=black ctermbg=red
-    augroup END
+Plug 'Valloric/MatchTagAlways'
+    let g:mta_filetypes = {
+    \ 'html' : 1,
+    \ 'dhtml' : 1,
+    \ 'xhtml' : 1,
+    \ 'xml' : 1,
+    \ 'phtml' : 1,
+    \}
 Plug 'ludovicchabant/vim-gutentags'
     let g:gutentags_exclude = [
     \ '*.min.js',
@@ -157,34 +172,15 @@ Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
     let g:neoterm_position = 'horizontal'
-    let g:neoterm_automap_keys = ',tt'
     let g:neoterm_size = '30'
-"    let g:neoterm_autoinsert = 1
 
-    nnoremap <silent> <f10> :TREPLSendFile<cr>
-    nnoremap <silent> <f9> :TREPLSend<cr>
-    vnoremap <silent> <f9> :TREPLSend<cr>
-
-    " run set test lib
-    nnoremap <silent> ,rt :call neoterm#test#run('all')<cr>
-    nnoremap <silent> ,rf :call neoterm#test#run('file')<cr>
-    nnoremap <silent> ,rn :call neoterm#test#run('current')<cr>
-    nnoremap <silent> ,rr :call neoterm#test#rerun()<cr>
-
-    " Useful maps
-    " hide/close terminal
-    nnoremap <silent> <leader>th :call neoterm#close()<cr>
     " clear terminal
     nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
     " kills the current job (send a <c-c>)
     nnoremap <silent> <leader>tc :call neoterm#kill()<cr>
-    nnoremap <leader>tr :T 
+    " toggle terminal
     nnoremap <leader>tt :Ttoggle<CR>
-
-    " Git commands
-    command! -nargs=+ Tg :T git <args>
-Plug 'ryanss/vim-hackernews'
-
+    nnoremap <leader>tr :T 
 " File Navigation
 Plug 'zenbro/mirror.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -267,7 +263,7 @@ Plug 'nanotech/jellybeans.vim'
     let g:jellybeans_background_color_256=234
 Plug 'mhinz/vim-startify'
     let g:startify_session_dir = '~/.config/nvim/session'
-    let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/Documents/owncloud/documents/fh', '~/Documents/owncloud/documents/programming' ]
+    let g:startify_bookmarks = [ {'v': '~/.vimrc'}, {'o': '~/ownCloud/shared/org/index.org'}]
     let g:startify_list_order = [ 'sessions', 'bookmarks', 'files', 'dir']
     let g:startify_session_persistence = 1
     let g:startify_session_delete_buffers = 1
@@ -291,40 +287,41 @@ Plug 'vim-airline/vim-airline'
 
     " Tabline
     let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#left_sep = ' '
-    let g:airline#extensions#tabline#left_alt_sep = '|'
     let g:airline#extensions#tabline#show_close_button = 0
+    let g:airline#extensions#tabline#show_buffers = 1
+    let g:airline#extensions#tabline#show_splits = 0
     let g:airline#extensions#tabline#excludes = []
     let g:airline#extensions#tabline#exclude_preview = 0
-    let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
+    nmap <M-1> <Plug>AirlineSelectTab1
+    nmap <M-2> <Plug>AirlineSelectTab2
+    nmap <M-3> <Plug>AirlineSelectTab3
+    nmap <M-4> <Plug>AirlineSelectTab4
+    nmap <M-5> <Plug>AirlineSelectTab5
+    nmap <M-6> <Plug>AirlineSelectTab6
+    nmap <M-7> <Plug>AirlineSelectTab7
+    nmap <M-8> <Plug>AirlineSelectTab8
+    nmap <M-9> <Plug>AirlineSelectTab9
 
 " VCS
 Plug 'tpope/vim-fugitive'
-Plug 'junegunn/gv.vim'
 Plug 'mhinz/vim-signify'
 
 " Languages
 Plug 'elixir-lang/vim-elixir'
 Plug 'fatih/vim-go', {'for': 'go'}
-Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
-Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
-Plug 'mattn/calendar-vim'
-Plug 'Valloric/ListToggle'
 Plug 'phpvim/phpfold.vim', { 'for': 'php', 'do': 'composer update' }
 Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
     function! IPhpInsertUse()
         call PhpInsertUse()
         call feedkeys('a',  'n')
     endfunction
-    autocmd FileType php inoremap <Leader><Leader>u <Esc>:call IPhpInsertUse()<CR>
-    autocmd FileType php noremap <Leader><Leader>u :call PhpInsertUse()<CR>
+    autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
 
     function! IPhpExpandClass()
         call PhpExpandClass()
         call feedkeys('a', 'n')
     endfunction
-    autocmd FileType php inoremap <Leader><Leader>e <Esc>:call IPhpExpandClass()<CR>
-    autocmd FileType php noremap <Leader><Leader>e :call PhpExpandClass()<CR>
+    autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
 Plug 'StanAngeloff/php.vim', {'for': 'php'}
     function! PhpSyntaxOverride()
@@ -340,52 +337,18 @@ Plug 'tobyS/vmustache', {'for': 'php'}
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
     nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
-Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
-Plug 'vim-php/vim-php-refactoring', {'for': 'php'}
 Plug 'vim-php/tagbar-phpctags.vim'
-Plug 'joonty/vdebug'
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
-Plug 'c9s/perlomni.vim', {'for': 'perl'}
-Plug 'AW3i/aftersyntaxc.vim', {'for': 'c'}
-Plug 'Valloric/MatchTagAlways'
-    let g:mta_filetypes = {
-    \ 'html' : 1,
-    \ 'dhtml' : 1,
-    \ 'xhtml' : 1,
-    \ 'xml' : 1,
-    \ 'phtml' : 1,
-    \}
-Plug 'mattn/emmet-vim'
-Plug 'ap/vim-css-color'
-Plug 'lervag/vimtex'
-    let g:tex_flavor='latex'
-    let g:Tex_DefaultTargetFormat = 'pdf'
-    let g:tex_MultipleCompileFormats = 'pdf,aux'
+Plug 'adoy/vim-php-refactoring-toolbox'
+Plug 'arakashic/chromatica.nvim'
+    let g:chromatica#highlight_feature_level = 1
+    let g:chromatica#libclang_path = '/usr/lib64'
+    let g:chromatica#responsive_mode=1
 call plug#end()
 
 "Highlight in red when a line has more than 81 characters
 highlight ColorColumn ctermbg=red
 call matchadd('ColorColumn', '\%81v', 100)
 
-function s:MDSettings()
-    inoremap <buffer> <Leader><Leader>n \note[item]{}<Esc>
-    noremap <buffer> <Leader>b :! pandoc --latex-engine=xelatex -t beamer % -o %<.pdf<CR>
-    noremap <buffer> <Leader>l :! pandoc  --include-in-header titlesec.tex --toc  -t latex % -o %<.pdf --latex-engine=xelatex --variable mainfont="DejaVu Serif"<CR>
-    noremap <buffer> <Leader>v :! zathura %<.pdf 2>&1 >/dev/null &<CR>
-
-    "adjust syntax highlighting for LaTeX parts
-    "inline formulas:
-    syntax region Statement oneline matchgroup=Delimiter start="\$" end="\$"
-    "environments:
-    syntax region Statement matchgroup=Delimiter start="\\begin{.*}" end="\\end{.*}" contains=Statement
-    "commands:
-    syntax region Statement matchgroup=Delimiter start="{" end="}" contains=Statement
-endfunction
-
-autocmd BufRead,BufNewFile *.md setfiletype markdown
-autocmd BufRead,BufNewFile *.dhtml setfiletype php
-autocmd FileType markdown :call <SID>MDSettings()
 autocmd FileType mail set spell
 
 highlight! ErrorSign guifg=black guibg=#E01600 ctermfg=16 ctermbg=160
@@ -407,16 +370,9 @@ nnoremap <silent> <F3>  :25Lexplore<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
-nnoremap <silent> <bs> :wincmd h<CR>
+nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap  <silent> <leader>bc :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <silent>  <leader>bd :bd<CR>
-vmap <Leader>y "+y
-vmap <Leader>d "+d
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
-
 " Switch back to normal mode from terminal mode
 tnoremap <esc><esc> <C-\><C-n>
 "
