@@ -111,8 +111,8 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
     let test#strategy = "neoterm"
-    nmap <silent> <leader>rt :TestNearest<CR>
-    nmap <silent> <leader>rT :TestFile<CR>
+    nmap <silent> <leader>rT :TestNearest<CR>
+    nmap <silent> <leader>rt :TestFile<CR>
     nmap <silent> <leader>ra :TestSuite<CR>
     nmap <silent> <leader>rl :TestLast<CR>
     nmap <silent> <leader>rg :TestVisit<CR>
@@ -303,7 +303,13 @@ Plug 'vim-airline/vim-airline'
     nmap <M-9> <Plug>AirlineSelectTab9
 
 " VCS
+"Plug 'jreybert/vimagit'
+    "nmap <leader>m :call magit#show_magit('h')<CR>
 Plug 'tpope/vim-fugitive'
+    nmap gs :Gstatus<CR>
+    nmap <leader>gd :Gdiff :0<CR>
+    nmap gc :Gcommit<CR>
+Plug 'idanarye/vim-merginal'
 Plug 'mhinz/vim-signify'
 
 " Languages
@@ -367,6 +373,7 @@ nnoremap <silent> <F1>  :UndotreeToggle<CR>
 nnoremap <silent> <F2>  :TagbarOpenAutoClose<CR>
 nnoremap <silent> <F3>  :25Lexplore<CR>
 
+nmap <silent> <leader>tn :tabnew<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
@@ -398,3 +405,8 @@ function! CleanEmptyBuffers()
   endif
 endfunction
 hi ColorColumn ctermbg=236
+hi SneakPluginTarget guifg=black guibg=red ctermfg=black ctermbg=red
+hi SneakPluginScope  guifg=black guibg=yellow ctermfg=black ctermbg=yellow
+hi SneakStreakTarget guifg=black guibg=red ctermfg=black ctermbg=blue
+hi SneakStreakMask  guifg=black guibg=yellow ctermfg=blue ctermbg=blue
+
