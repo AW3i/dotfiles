@@ -60,9 +60,10 @@ let maplocalleader = "\\"
 let g:netrw_liststyle=0
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
+set background=dark
 set cursorline
 
-colorscheme jellybeans
+colorscheme despacio
 
 filetype plugin indent  on
 filetype off
@@ -100,6 +101,7 @@ Plug 'SirVer/UltiSnips'
     let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 Plug 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
+    let g:deoplete#tag#cache_limit_size = 50000000
 Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
 Plug 'pbogut/deoplete-padawan'
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
@@ -108,6 +110,8 @@ Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 
 " Utility
+Plug 'bronson/vim-visual-star-search'
+Plug 'diepm/vim-rest-console'
 Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
     let test#strategy = "neoterm"
@@ -141,11 +145,27 @@ Plug 'benekastah/neomake'
     \ 'args': ['%:p', 'text', '~/.phpmd.xml'],
     \ 'errorformat': '%E%f:%l%\s%m'
     \ }
+    "let g:neomake_php_enabled_makers = ['php', 'phpcs']
     let g:neomake_php_enabled_makers = ['php']
     map <F4> :lopen<CR>
     map <F5> :Neomake<CR>
 Plug 'justinmk/vim-sneak'
     let g:sneak#streak = 1
+    "replace 'f' with 1-char Sneak
+    nmap f <Plug>Sneak_f
+    nmap F <Plug>Sneak_F
+    xmap f <Plug>Sneak_f
+    xmap F <Plug>Sneak_F
+    omap f <Plug>Sneak_f
+    omap F <Plug>Sneak_F
+    "replace 't' with 1-char Sneak
+    nmap t <Plug>Sneak_t
+    nmap T <Plug>Sneak_T
+    xmap t <Plug>Sneak_t
+    xmap T <Plug>Sneak_T
+    omap t <Plug>Sneak_t
+    omap T <Plug>Sneak_T
+Plug 'justinmk/vim-dirvish'
 Plug 'Valloric/MatchTagAlways'
     let g:mta_filetypes = {
     \ 'html' : 1,
@@ -162,17 +182,13 @@ Plug 'ludovicchabant/vim-gutentags'
     \ '*/node_modules/*',
     \ '*/migrate/*.rb'
     \ ]
-    set statusline+=%{gutentags#statusline()}
-    let g:gutentags_generate_on_missing = 0
-    let g:gutentags_generate_on_write = 0
-    let g:gutentags_generate_on_new = 0
+    let g:gutentags_cache_dir = '/home/alex/.tags'
     let g:gutentags_ctags_executable_php = 'phpctags --recurse=yes'
-    nnoremap <leader>gt :GutentagsUpdate!<CR>
 Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
     let g:neoterm_position = 'horizontal'
-    let g:neoterm_size = '30'
+    let g:neoterm_size = '15'
 
     " clear terminal
     nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
@@ -264,12 +280,25 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'mhinz/vim-startify'
     let g:startify_session_dir = '~/.config/nvim/session'
     let g:startify_bookmarks = [ {'v': '~/.vimrc'}, {'o': '~/ownCloud/shared/org/index.org'}]
-    let g:startify_list_order = [ 'sessions', 'bookmarks', 'files', 'dir']
+    let g:startify_list_order = [
+                \ ['Sessions:'],
+                \ 'sessions',
+                \ ['Bookmarks:'],
+                \ 'bookmarks',
+                \ ['Files:'],
+                \ 'files',
+                \ ['Dir:'],
+                \ 'dir'
+                \ ]
     let g:startify_session_persistence = 1
     let g:startify_session_delete_buffers = 1
     let g:startify_change_to_dir = 1
     let g:startify_change_to_vcs_root = 1
     let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
+    let g:startify_session_before_save = [
+        \ 'echo "Cleaning up before saving.."',
+        \ 'call CleanEmptyBuffers()',
+        \ ]
     nnoremap <F12> :Startify<CR>
     autocmd! User Startified setlocal colorcolumn=0
 Plug 'junegunn/limelight.vim'
@@ -280,10 +309,22 @@ Plug 'junegunn/limelight.vim'
 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
-    let g:airline_theme='raven'
-    let g:airline_left_sep  = '▓▒░'
-    let g:airline_right_sep = '░▒▓'
-    let g:airline_section_z = '%2p%% %2l/%L:%2v'
+    let g:airline_theme='zenburn'
+    "let g:airline_left_sep  = '▓▒░'
+    "let g:airline_right_sep = '░▒▓'
+    "let g:airline_section_z = '%2p%% %2l/%L:%2v'
+    " airline symbols
+    if !exists('g:airline_symbols')
+        let g:airline_symbols = {}
+    endif
+    let g:airline_left_sep = ''
+    let g:airline_left_alt_sep = ''
+    let g:airline_right_sep = ''
+    let g:airline_right_alt_sep = ''
+    let g:airline_symbols.branch = ''
+    let g:airline_symbols.readonly = ''
+    let g:airline_symbols.linenr = ''
+
 
     " Tabline
     let g:airline#extensions#tabline#enabled = 1
@@ -306,9 +347,13 @@ Plug 'vim-airline/vim-airline'
 "Plug 'jreybert/vimagit'
     "nmap <leader>m :call magit#show_magit('h')<CR>
 Plug 'tpope/vim-fugitive'
-    nmap gs :Gstatus<CR>
-    nmap <leader>gd :Gdiff :0<CR>
-    nmap gc :Gcommit<CR>
+    nmap <leader>ga :Gwrite<CR>
+    nmap <leader>gs :Gstatus<CR>
+    nmap <leader>gt :Gcommit -v -q %:p<CR>
+    nmap <leader>gd :Gdiff<CR>
+    nmap <leader>gc :Gcommit -v -q<CR>
+    nmap <leader>gb :Git branch<Space>
+    nmap <leader>go :Git checkout<Space>
 Plug 'idanarye/vim-merginal'
 Plug 'mhinz/vim-signify'
 
@@ -362,11 +407,6 @@ highlight! WarningSign guifg=black guibg=#FFED26 ctermfg=16 ctermbg=11
 
 nnoremap <leader>s :w<CR>
 
-noremap v   <C-V>
-noremap <C-V>   v
-vnoremap v   <C-V>
-vnoremap <C-V>   v
-
 nnoremap <silent> <leader>h :nohls<CR>
 
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
@@ -404,7 +444,7 @@ function! CleanEmptyBuffers()
     exe 'bw '.join(buffers, ' ')
   endif
 endfunction
-hi ColorColumn ctermbg=236
+"hi ColorColumn ctermbg=124
 hi SneakPluginTarget guifg=black guibg=red ctermfg=black ctermbg=red
 hi SneakPluginScope  guifg=black guibg=yellow ctermfg=black ctermbg=yellow
 hi SneakStreakTarget guifg=black guibg=red ctermfg=black ctermbg=blue
