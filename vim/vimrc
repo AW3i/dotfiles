@@ -89,7 +89,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-abolish'
-Plug 'terryma/vim-multiple-cursors'
 
 " Completion
 Plug 'SirVer/UltiSnips'
@@ -110,7 +109,7 @@ Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 
 " Utility
-Plug 'bronson/vim-visual-star-search'
+Plug 'junegunn/vim-slash'
 Plug 'diepm/vim-rest-console'
 Plug 'tpope/vim-vinegar'
 Plug 'janko-m/vim-test'
@@ -136,7 +135,7 @@ Plug 'mattn/calendar-vim'
 Plug 'Valloric/ListToggle'
 Plug 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
-    let g:neomake_open_list = 2
+    let g:neomake_open_list = 0
     let g:neomake_airline = 1
     let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
     let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
@@ -166,6 +165,25 @@ Plug 'justinmk/vim-sneak'
     omap t <Plug>Sneak_t
     omap T <Plug>Sneak_T
 Plug 'justinmk/vim-dirvish'
+    augroup my_dirvish_events
+      autocmd!
+      " Map t to "open in new tab".
+      autocmd FileType dirvish
+        \  nnoremap <buffer> t :call dirvish#open('tabedit', 0)<CR>
+        \ |xnoremap <buffer> t :call dirvish#open('tabedit', 0)<CR>
+
+      " Enable :Gstatus and friends.
+      autocmd FileType dirvish call fugitive#detect(@%)
+
+      " Map CTRL-R to reload the Dirvish buffer.
+      autocmd FileType dirvish nnoremap <buffer> <C-R> :<C-U>Dirvish %<CR>
+
+      " Map `gh` to hide dot-prefixed files.
+      " To "toggle" this, just press `R` to reload.
+      autocmd FileType dirvish nnoremap <buffer>
+        \ gh :keeppatterns g@\v/\.[^\/]+/?$@d<cr>
+    augroup END
+
 Plug 'Valloric/MatchTagAlways'
     let g:mta_filetypes = {
     \ 'html' : 1,
@@ -274,6 +292,7 @@ Plug 'junegunn/fzf.vim'
 
 " Appearance
 Plug 'junegunn/goyo.vim'
+    let g:goyo_width=120
     nnoremap <silent> gy :Goyo<CR>
 Plug 'nanotech/jellybeans.vim'
     let g:jellybeans_background_color_256=234
@@ -358,6 +377,7 @@ Plug 'idanarye/vim-merginal'
 Plug 'mhinz/vim-signify'
 
 " Languages
+Plug 'suan/vim-instant-markdown'
 Plug 'elixir-lang/vim-elixir'
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'phpvim/phpfold.vim', { 'for': 'php', 'do': 'composer update' }
@@ -388,6 +408,8 @@ Plug 'tobyS/vmustache', {'for': 'php'}
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
     nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
+
+Plug 'shawncplus/phpcomplete.vim'
 Plug 'vim-php/tagbar-phpctags.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'arakashic/chromatica.nvim'
@@ -411,7 +433,7 @@ nnoremap <silent> <leader>h :nohls<CR>
 
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
 nnoremap <silent> <F2>  :TagbarOpenAutoClose<CR>
-nnoremap <silent> <F3>  :25Lexplore<CR>
+nnoremap <silent> <F3>  :Dirvish<CR>
 
 nmap <silent> <leader>tn :tabnew<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
