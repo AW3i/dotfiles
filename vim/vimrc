@@ -62,8 +62,9 @@ let g:netrw_browse_split = 4
 let g:netrw_altv = 1
 set background=dark
 set cursorline
+set title
 
-colorscheme despacio
+colorscheme jellybeans
 
 filetype plugin indent  on
 filetype off
@@ -101,14 +102,18 @@ Plug 'SirVer/UltiSnips'
 Plug 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
     let g:deoplete#tag#cache_limit_size = 50000000
+    "let g:deoplete#omni_patterns = {}
+    "let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+
 Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
-Plug 'pbogut/deoplete-padawan'
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
 Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = '<tab>'
 Plug 'honza/vim-snippets'
 
 " Utility
+Plug 'dhruvasagar/vim-table-mode', {'on': 'TableModeEnable'}
+Plug 'wellle/targets.vim'
 Plug 'junegunn/vim-slash'
 Plug 'diepm/vim-rest-console'
 Plug 'tpope/vim-vinegar'
@@ -125,6 +130,7 @@ Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
 Plug 'jceb/vim-orgmode'
+Plug 'blindFS/vim-taskwarrior'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-eunuch'
 Plug 'vim-scripts/utl.vim'
@@ -140,12 +146,12 @@ Plug 'benekastah/neomake'
     let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
     let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
     let g:neomake_php_phpcs_args_standard = 'PSR2'
-    let g:neomake_php_phpmd_maker = {
-    \ 'args': ['%:p', 'text', '~/.phpmd.xml'],
-    \ 'errorformat': '%E%f:%l%\s%m'
-    \ }
-    "let g:neomake_php_enabled_makers = ['php', 'phpcs']
-    let g:neomake_php_enabled_makers = ['php']
+    "let g:neomake_php_phpmd_maker = {
+    "\ 'args': ['%:p', 'text', '~/.phpmd.xml'],
+    "\ 'errorformat': '%E%f:%l%\s%m'
+    "\ }
+    let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
+    "let g:neomake_php_enabled_makers = ['php']
     map <F4> :lopen<CR>
     map <F5> :Neomake<CR>
 Plug 'justinmk/vim-sneak'
@@ -200,6 +206,7 @@ Plug 'ludovicchabant/vim-gutentags'
     \ '*/node_modules/*',
     \ '*/migrate/*.rb'
     \ ]
+    let g:gutentags_generate_on_write = 0
     let g:gutentags_cache_dir = '/home/alex/.tags'
     let g:gutentags_ctags_executable_php = 'phpctags --recurse=yes'
 Plug 'junegunn/vim-peekaboo'
@@ -240,7 +247,7 @@ Plug 'junegunn/fzf.vim'
     imap <C-x><C-l> <plug>(fzf-complete-line)
 
     let g:fzf_files_options =
-      \ '--preview "(coderay {} ) 2> /dev/null | head -'.&lines.'"'
+      \ '-i --preview "(coderay {} ) 2> /dev/null | head -'.&lines.'"'
 
     function! SearchWordWithAg()
         execute 'Ag' expand('<cword>')
@@ -328,7 +335,7 @@ Plug 'junegunn/limelight.vim'
 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
-    let g:airline_theme='zenburn'
+    let g:airline_theme='jellybeans'
     "let g:airline_left_sep  = '▓▒░'
     "let g:airline_right_sep = '░▒▓'
     "let g:airline_section_z = '%2p%% %2l/%L:%2v'
@@ -377,6 +384,8 @@ Plug 'idanarye/vim-merginal'
 Plug 'mhinz/vim-signify'
 
 " Languages
+Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
+    let g:phpcomplete_parse_docblock_comments = 1
 Plug 'suan/vim-instant-markdown'
 Plug 'elixir-lang/vim-elixir'
 Plug 'fatih/vim-go', {'for': 'go'}
@@ -409,8 +418,8 @@ Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
     nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
 
-Plug 'shawncplus/phpcomplete.vim'
 Plug 'vim-php/tagbar-phpctags.vim'
+Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'} 
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'arakashic/chromatica.nvim'
     let g:chromatica#highlight_feature_level = 1
@@ -467,8 +476,3 @@ function! CleanEmptyBuffers()
   endif
 endfunction
 "hi ColorColumn ctermbg=124
-hi SneakPluginTarget guifg=black guibg=red ctermfg=black ctermbg=red
-hi SneakPluginScope  guifg=black guibg=yellow ctermfg=black ctermbg=yellow
-hi SneakStreakTarget guifg=black guibg=red ctermfg=black ctermbg=blue
-hi SneakStreakMask  guifg=black guibg=yellow ctermfg=blue ctermbg=blue
-
