@@ -43,6 +43,10 @@ set iskeyword+=_,$,@,%,#
 set splitbelow
 set splitright
 set undolevels=500
+if has("persistent_undo")
+    set undodir=~/.undodir/
+    set undofile
+endif
 set timeout timeoutlen=1000 ttimeoutlen=100
 set list listchars=tab:»·,trail:·,extends:»,precedes:«
 set encoding=utf-8
@@ -63,6 +67,9 @@ let g:netrw_altv = 1
 set background=dark
 set cursorline
 set title
+if exists('&inccommand')
+  set inccommand=split
+endif
 
 colorscheme jellybeans
 
@@ -109,9 +116,11 @@ Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go'}
 Plug 'c9s/perlomni.vim', {'for': 'perl'}
 Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = '<tab>'
+    let g:SuperTabClosePreviewOnPopupClose = 1
 Plug 'honza/vim-snippets'
 
 " Utility
+Plug 'Olical/vim-enmasse'
 Plug 'dhruvasagar/vim-table-mode', {'on': 'TableModeEnable'}
 Plug 'wellle/targets.vim'
 Plug 'junegunn/vim-slash'
@@ -125,8 +134,11 @@ Plug 'janko-m/vim-test'
     nmap <silent> <leader>rl :TestLast<CR>
     nmap <silent> <leader>rg :TestVisit<CR>
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+    nnoremap <silent> <F1>  :UndotreeToggle<CR>
 Plug 'tpope/vim-unimpaired'
 Plug 'majutsushi/tagbar'
+    nnoremap <silent> <leader>ff  :TagbarOpenAutoClose<CR>
+    nnoremap <silent> <F2>  :TagbarToggle<CR>
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
 Plug 'jceb/vim-orgmode'
@@ -146,10 +158,10 @@ Plug 'benekastah/neomake'
     let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
     let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
     let g:neomake_php_phpcs_args_standard = 'PSR2'
-    "let g:neomake_php_phpmd_maker = {
-    "\ 'args': ['%:p', 'text', '~/.phpmd.xml'],
-    "\ 'errorformat': '%E%f:%l%\s%m'
-    "\ }
+    let g:neomake_php_phpmd_maker = {
+    \ 'args': ['%:p', 'text', '~/.phpmd.xml'],
+    \ 'errorformat': '%E%f:%l%\s%m'
+    \ }
     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
     "let g:neomake_php_enabled_makers = ['php']
     map <F4> :lopen<CR>
@@ -171,6 +183,7 @@ Plug 'justinmk/vim-sneak'
     omap t <Plug>Sneak_t
     omap T <Plug>Sneak_T
 Plug 'justinmk/vim-dirvish'
+    nnoremap <silent> <F3>  :Dirvish<CR>
     augroup my_dirvish_events
       autocmd!
       " Map t to "open in new tab".
@@ -439,10 +452,6 @@ highlight! WarningSign guifg=black guibg=#FFED26 ctermfg=16 ctermbg=11
 nnoremap <leader>s :w<CR>
 
 nnoremap <silent> <leader>h :nohls<CR>
-
-nnoremap <silent> <F1>  :UndotreeToggle<CR>
-nnoremap <silent> <F2>  :TagbarOpenAutoClose<CR>
-nnoremap <silent> <F3>  :Dirvish<CR>
 
 nmap <silent> <leader>tn :tabnew<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
