@@ -12,12 +12,11 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-abolish'
 
 " Completion
-"Plug 'Shougo/deoplete.nvim'
-    "let g:deoplete#enable_at_startup = 1
-    "let g:deoplete#tag#cache_limit_size = 50000000
+Plug 'Shougo/deoplete.nvim'
+    let g:deoplete#enable_at_startup = 1
+    let g:deoplete#tag#cache_limit_size = 50000000
     "let g:deoplete#omni_patterns = {}
     "let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-Plug 'ajh17/VimCompletesMe'
 
 Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = '<tab>'
@@ -51,7 +50,6 @@ Plug 'Valloric/ListToggle'
 Plug 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
     let g:neomake_open_list = 0
-    let g:neomake_airline = 1
     let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
     let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
     let g:neomake_php_phpcs_args_standard = 'PSR2'
@@ -206,28 +204,82 @@ Plug 'junegunn/limelight.vim'
     let g:limelight_default_coefficient = 0.7
     let g:limelight_conceal_ctermfg = 238
 
-Plug 'vim-airline/vim-airline-themes'
-Plug 'vim-airline/vim-airline'
-    let g:airline_theme='jellybeans'
-    if !exists('g:airline_symbols')
-        let g:airline_symbols = {}
-    endif
-    let g:airline_left_sep = ''
-    let g:airline_left_alt_sep = ''
-    let g:airline_right_sep = ''
-    let g:airline_right_alt_sep = ''
-    let g:airline_symbols.branch = ''
-    let g:airline_symbols.readonly = ''
-    let g:airline_symbols.linenr = ''
+Plug 'itchyny/lightline.vim'
 
+let g:lightline = {
+    \   'colorscheme': 'jellybeans',
+    \   'active': {
+    \     'left': [
+    \       ['mode', 'paste'],
+    \       ['fugitive'],
+    \       ['bufferinfo'],
+    \     ],
+    \     'right': [
+    \       ['colinfo', 'percent'],
+    \       ['filetype'],
+    \       ['fileformat']
+    \     ]
+    \   },
+    \   'inactive': {
+    \     'left': [ ['bufferinfo'] ],
+    \     'right': [ ['percent'], ['filetype'] ]
+    \   },
+    \   'tabline': {
+    \ 'left': [ ['tabs'], ['bufferline'] ],
+    \     'right': [ ['fileencoding'] ]
+    \   },
+    \   'component': {
+    \     'bufferinfo': '%f %m',
+    \     'colinfo': ':%c%V',
+    \     'fileencoding': '%{&fenc}',
+    \     'readonly': '%{&readonly?"":""}',
+    \     'paste': '%{&paste?"PASTE":""}'
+    \   },
+    \   'component_function': {
+    \     'fileformat'  : 'MyFileformat',
+    \     'filetype'    : 'MyFiletype',
+    \     'fugitive'    : 'MyFugitive'
+    \   },
+    \   'separator': { 'left': '', 'right': '' },
+    \   'subseparator': { 'left': '', 'right': '' },
+    \ }
 
-    " Tabline
-    let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#show_close_button = 0
-    let g:airline#extensions#tabline#show_buffers = 1
-    let g:airline#extensions#tabline#show_splits = 0
-    let g:airline#extensions#tabline#excludes = []
-    let g:airline#extensions#tabline#exclude_preview = 0
+let g:lightline.enable = {
+    \   'statusline': 1,
+    \   'tabline': 1
+    \ }
+
+let g:lightline.mode_map = {
+    \   'n'      : ' N ',
+    \   'i'      : ' I ',
+    \   'R'      : ' R ',
+    \   'v'      : ' V ',
+    \   'V'      : 'V-L',
+    \   'c'      : ' C ',
+    \   "\<C-v>" : 'V-B',
+    \   's'      : ' S ',
+    \   'S'      : 'S-L',
+    \   "\<C-s>" : 'S-B',
+    \   "t"      : ' T ',
+    \   '?'      : ' ? '
+    \ }
+
+function! MyFiletype()
+  return strlen(&filetype) ? &filetype : '--'
+endfunction
+
+function! MyFileformat()
+  return winwidth('.') > 80 ? &fileformat : ''
+endfunction
+
+function! MyFugitive()
+  if exists('*fugitive#head') && winwidth('.') > 75
+    let bmark = '┣ '
+    let branch = fugitive#head()
+    return strlen(branch) ? bmark . branch : ''
+  endif
+  return ''
+endfunction
 
 " VCS
 "Plug 'jreybert/vimagit'

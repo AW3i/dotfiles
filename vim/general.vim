@@ -63,6 +63,7 @@ let g:netrw_altv = 1
 set background=dark
 set cursorline
 set title
+au BufNewFile,BufRead *.phtml setf php
 if exists('&inccommand')
   set inccommand=split
 endif
