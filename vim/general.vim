@@ -95,3 +95,4 @@ function! CleanEmptyBuffers()
     exe 'bw '.join(buffers, ' ')
   endif
 endfunction
+

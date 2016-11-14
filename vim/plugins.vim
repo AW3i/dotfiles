@@ -33,6 +33,8 @@ Plug 'janko-m/vim-test'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
 Plug 'majutsushi/tagbar'
+    "remap sort for tagbar so it doesn't collide with sneak
+    let g:tagbar_map_togglesort = "r"
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
 Plug 'jceb/vim-orgmode'
@@ -179,7 +181,7 @@ Plug 'nanotech/jellybeans.vim'
     let g:jellybeans_background_color_256=234
 Plug 'mhinz/vim-startify'
     let g:startify_session_dir = '~/.config/nvim/session'
-    let g:startify_bookmarks = [ {'v': '~/.vimrc'}, {'o': '~/ownCloud/shared/org/index.org'}]
+    let g:startify_bookmarks = [{'o': '~/ownCloud/shared/org/index.org'}]
     let g:startify_list_order = [
                 \ ['Sessions:'],
                 \ 'sessions',
@@ -211,13 +213,12 @@ let g:lightline = {
     \   'active': {
     \     'left': [
     \       ['mode', 'paste'],
-    \       ['fugitive'],
-    \       ['bufferinfo'],
+    \       ['fugitive', 'bufferinfo'],
+    \       ['tagbar']
     \     ],
     \     'right': [
     \       ['colinfo', 'percent'],
-    \       ['filetype'],
-    \       ['fileformat']
+    \       ['fileformat', 'filetype'],
     \     ]
     \   },
     \   'inactive': {
@@ -225,15 +226,16 @@ let g:lightline = {
     \     'right': [ ['percent'], ['filetype'] ]
     \   },
     \   'tabline': {
-    \ 'left': [ ['tabs'], ['bufferline'] ],
+    \     'left': [ ['tabs'], ['bufferline'] ],
     \     'right': [ ['fileencoding'] ]
     \   },
     \   'component': {
-    \     'bufferinfo': '%f %m',
+    \     'bufferinfo': '%<%f %m',
     \     'colinfo': ':%c%V',
     \     'fileencoding': '%{&fenc}',
     \     'readonly': '%{&readonly?"":""}',
-    \     'paste': '%{&paste?"PASTE":""}'
+    \     'paste': '%{&paste?"PASTE":""}',
+      \   'tagbar': '%{tagbar#currenttag("%s", "")}',
     \   },
     \   'component_function': {
     \     'fileformat'  : 'MyFileformat',
@@ -305,16 +307,6 @@ Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
     endfunction
     autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
-Plug 'StanAngeloff/php.vim', {'for': 'php'}
-    function! PhpSyntaxOverride()
-        hi! def link phpDocTags phpDefine
-        hi! def link phpDocParam phpType
-    endfunction
-
-    augroup phpSyntaxOverride
-        autocmd!
-        autocmd FileType php call PhpSyntaxOverride()
-    augroup END
 Plug 'tobyS/vmustache', {'for': 'php'}
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
