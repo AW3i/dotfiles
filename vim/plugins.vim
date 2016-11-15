@@ -14,7 +14,7 @@ Plug 'tpope/vim-abolish'
 " Completion
 Plug 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
-    let g:deoplete#tag#cache_limit_size = 50000000
+    "let g:deoplete#tag#cache_limit_size = 50000000
     "let g:deoplete#omni_patterns = {}
     "let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
 
@@ -24,6 +24,7 @@ Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 
 " Utility
+Plug 'tommcdo/vim-exchange'
 Plug 'dhruvasagar/vim-table-mode', {'on': 'TableModeEnable'}
 Plug 'wellle/targets.vim'
 Plug 'junegunn/vim-slash'
@@ -290,8 +291,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " Languages
-Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
-    let g:phpcomplete_parse_docblock_comments = 1
+"Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
+    "let g:phpcomplete_parse_docblock_comments = 1
+Plug 'pbogut/deoplete-padawan'
 Plug 'suan/vim-instant-markdown'
 Plug 'phpvim/phpfold.vim', { 'for': 'php', 'do': 'composer update' }
 Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}

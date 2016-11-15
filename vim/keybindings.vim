@@ -20,6 +20,10 @@ nmap * *zz
 nmap # #zz
 nmap g* g*zz
 nmap g# g#zz
+"
+" Store relative line number jumps in the jumplist.
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 " vim-test  bindings
 nmap <silent> <leader>rT :TestNearest<CR>
@@ -61,8 +65,8 @@ nnoremap <silent> <leader>o :BTags<CR>
 nnoremap <silent> <leader>O :Tags<CR>
 nnoremap <silent> <leader>? :History<CR>
 nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
-"nnoremap <silent> K :call SearchWordWithAg()<CR>
-"vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+nnoremap <silent> K :call SearchWordWithAg()<CR>
+vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>w :Windows<CR>
