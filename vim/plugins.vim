@@ -24,10 +24,11 @@ Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 
 " Utility
+Plug 'kana/vim-niceblock'
 Plug 'tommcdo/vim-exchange'
 Plug 'dhruvasagar/vim-table-mode', {'on': 'TableModeEnable'}
 Plug 'wellle/targets.vim'
-Plug 'junegunn/vim-slash'
+Plug 'pgdouyon/vim-evanesco'
 Plug 'diepm/vim-rest-console'
 Plug 'janko-m/vim-test'
     let test#strategy = "neoterm"
@@ -92,6 +93,17 @@ if has('python')
         let g:UltiSnipsUsePythonVersion = 3
         let g:UltiSnipsEditSplit="vertical"
         let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+        let g:snips_author = 'Alexandros Weigl'
+        let g:snips_github = 'https://github.com/AW3i'
+        if !exists("g:snips_company")
+            let g:snips_company = 'TechDivison'
+        endif
+        if !exists("g:snips_project_email")
+            let g:snips_project_email= 'info@appserver.io'
+        endif
+        if !exists("g:snips_username")
+            let g:snips_username = 'AW3i'
+        endif
     Plug 'Valloric/MatchTagAlways'
         let g:mta_filetypes = {
         \ 'html' : 1,
@@ -111,7 +123,7 @@ Plug 'ludovicchabant/vim-gutentags'
     \ '*/migrate/*.rb'
     \ ]
     let g:gutentags_generate_on_write = 0
-    let g:gutentags_cache_dir = '/home/aw3i/.tags'
+    let g:gutentags_cache_dir = '/home/alex/.tags'
     let g:gutentags_ctags_executable_php = 'phpctags --recurse=yes'
 Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
