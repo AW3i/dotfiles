@@ -64,7 +64,7 @@ Plug 'benekastah/neomake'
     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
     "let g:neomake_php_enabled_makers = ['php']
 Plug 'justinmk/vim-sneak'
-    let g:sneak#streak = 1
+    let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
     augroup my_dirvish_events
       autocmd!
@@ -186,6 +186,12 @@ Plug 'junegunn/fzf.vim'
     \ 'sink*':    function('<sid>ag_handler'),
     \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
     \ })
+
+    command! FZFMru call fzf#run({
+    \  'source':  v:oldfiles,
+    \  'sink':    'e',
+    \  'options': '-m -x +s',
+    \  'down':    '40%'})
 
 " Appearance
 Plug 'junegunn/goyo.vim'
