@@ -137,7 +137,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
     let g:fzf_nvim_statusline = 0 " disable statusline overwriting
     let g:fzf_files_options =
-      \ '-i --preview "(coderay {} ) 2> /dev/null | head -'.&lines.'"'
+      \ '--preview "(highlight -O ansi {} || cat {}) 2> /dev/null | head -'.&lines.'"'
 
     function! SearchWordWithAg()
         execute 'Ag' expand('<cword>')
