@@ -88,11 +88,3 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>[5 q"
 let &t_SR = "\<Esc>[3 q"
 let &t_EI = "\<Esc>[2 q"
-
-function! CleanEmptyBuffers()
-  let buffers = filter(range(0, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0')
-  if !empty(buffers)
-    exe 'bw '.join(buffers, ' ')
-  endif
-endfunction
-

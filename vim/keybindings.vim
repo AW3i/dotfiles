@@ -1,5 +1,4 @@
 nnoremap <leader>s :w<CR>
-
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
@@ -7,10 +6,11 @@ nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap <silent> <leader>bc :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <silent> <leader>bd :bd<CR>
 nnoremap <silent> <leader>tn :tabnew<CR>
-
 " Switch back to normal mode from terminal mode
 if has('nvim')
     tnoremap <esc><esc> <C-\><C-n>
+    nnoremap  <leader>tv :vs +te<CR>
+    nnoremap  <leader>ts :sp +te<CR>
 endif
 
 " Keep search results at the center of screen

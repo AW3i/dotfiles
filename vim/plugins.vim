@@ -17,19 +17,46 @@ Plug 'Shougo/deoplete.nvim'
     "let g:deoplete#tag#cache_limit_size = 50000000
     "let g:deoplete#omni_patterns = {}
     "let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+Plug 'pbogut/deoplete-padawan'
 
 Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = '<tab>'
     let g:SuperTabClosePreviewOnPopupClose = 1
-Plug 'honza/vim-snippets'
+if has('python')
+    Plug 'SirVer/UltiSnips'
+        let g:UltiSnipsExpandTrigger = "<tab>"
+        let g:UltiSnipsJumpForwardTrigger = "<tab>"
+        let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+        let g:UltiSnipsUsePythonVersion = 3
+        let g:UltiSnipsEditSplit="vertical"
+        let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+        let g:snips_author = 'Alexandros Weigl'
+        let g:snips_github = 'https://github.com/AW3i'
+        if !exists("g:snips_company")
+            let g:snips_company = 'TechDivison'
+        endif
+        if !exists("g:snips_project_email")
+            let g:snips_project_email= 'info@appserver.io'
+        endif
+        if !exists("g:snips_username")
+            let g:snips_username = 'AW3i'
+        endif
+    Plug 'Valloric/MatchTagAlways'
+        let g:mta_filetypes = {
+        \ 'html' : 1,
+        \ 'dhtml' : 1,
+        \ 'xhtml' : 1,
+        \ 'xml' : 1,
+        \ 'phtml' : 1,
+        \}
+    Plug 'honza/vim-snippets'
+endif
 
 " Utility
-Plug 'kana/vim-niceblock'
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tommcdo/vim-exchange'
-Plug 'dhruvasagar/vim-table-mode', {'on': 'TableModeEnable'}
 Plug 'wellle/targets.vim'
 Plug 'pgdouyon/vim-evanesco'
-Plug 'diepm/vim-rest-console'
 Plug 'janko-m/vim-test'
     let test#strategy = "neoterm"
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
@@ -37,19 +64,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'majutsushi/tagbar'
     "remap sort for tagbar so it doesn't collide with sneak
     let g:tagbar_map_togglesort = "r"
-Plug 'mattn/emmet-vim'
-Plug 'ap/vim-css-color'
-Plug 'jceb/vim-orgmode'
-
-" for orgmode
-Plug 'vim-scripts/utl.vim'
-Plug 'kshenoy/vim-signature'
-Plug 'tpope/vim-speeddating'
-Plug 'mattn/calendar-vim'
-
 Plug 'tpope/vim-eunuch'
 Plug 'ryanss/vim-hackernews'
-Plug 'joonty/vdebug'
 Plug 'Valloric/ListToggle'
 Plug 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
@@ -84,36 +100,6 @@ Plug 'justinmk/vim-dirvish'
       autocmd FileType dirvish nnoremap <buffer>
         \ gh :keeppatterns g@\v/\.[^\/]+/?$@d<cr>
     augroup END
-
-if has('python')
-    Plug 'SirVer/UltiSnips'
-        let g:UltiSnipsExpandTrigger = "<tab>"
-        let g:UltiSnipsJumpForwardTrigger = "<tab>"
-        let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-        let g:UltiSnipsUsePythonVersion = 3
-        let g:UltiSnipsEditSplit="vertical"
-        let g:UltiSnipsSnippetDirectories=["UltiSnips"]
-        let g:snips_author = 'Alexandros Weigl'
-        let g:snips_github = 'https://github.com/AW3i'
-        if !exists("g:snips_company")
-            let g:snips_company = 'TechDivison'
-        endif
-        if !exists("g:snips_project_email")
-            let g:snips_project_email= 'info@appserver.io'
-        endif
-        if !exists("g:snips_username")
-            let g:snips_username = 'AW3i'
-        endif
-    Plug 'Valloric/MatchTagAlways'
-        let g:mta_filetypes = {
-        \ 'html' : 1,
-        \ 'dhtml' : 1,
-        \ 'xhtml' : 1,
-        \ 'xml' : 1,
-        \ 'phtml' : 1,
-        \}
-endif
-
 Plug 'ludovicchabant/vim-gutentags'
     let g:gutentags_exclude = [
     \ '*.min.js',
@@ -130,9 +116,9 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'kassio/neoterm'
     let g:neoterm_position = 'horizontal'
     let g:neoterm_size = '15'
+Plug 'zenbro/mirror.vim'
 
 " File Navigation
-Plug 'zenbro/mirror.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
     let g:fzf_nvim_statusline = 0 " disable statusline overwriting
@@ -195,9 +181,6 @@ Plug 'junegunn/fzf.vim'
 
 " Appearance
 Plug 'junegunn/goyo.vim'
-    let g:goyo_width=120
-Plug 'nanotech/jellybeans.vim'
-    let g:jellybeans_background_color_256=234
 Plug 'mhinz/vim-startify'
     let g:startify_session_dir = '~/.config/nvim/session'
     let g:startify_bookmarks = [{'o': '~/ownCloud/shared/org/index.org'}]
@@ -217,8 +200,8 @@ Plug 'mhinz/vim-startify'
     let g:startify_change_to_vcs_root = 1
     let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
     let g:startify_session_before_save = [
-        \ 'echo "Cleaning up before saving.."',
-        \ 'call CleanEmptyBuffers()',
+        \ 'echo "Cleaning left over terminals"',
+        \ 'bufdo if bufname("%")=~? "term:\/\/" | bdel! | endif',
         \ ]
     autocmd! User Startified setlocal colorcolumn=0
 Plug 'junegunn/limelight.vim'
@@ -226,7 +209,6 @@ Plug 'junegunn/limelight.vim'
     let g:limelight_conceal_ctermfg = 238
 
 Plug 'itchyny/lightline.vim'
-
 let g:lightline = {
     \   'colorscheme': 'jellybeans',
     \   'active': {
@@ -309,10 +291,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " Languages
-"Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
-    "let g:phpcomplete_parse_docblock_comments = 1
-Plug 'pbogut/deoplete-padawan'
-Plug 'suan/vim-instant-markdown'
+Plug 'sheerun/vim-polyglot'
 Plug 'phpvim/phpfold.vim', { 'for': 'php', 'do': 'composer update' }
 Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
     function! IPhpInsertUse()
@@ -327,12 +306,9 @@ Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
     endfunction
     autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
-Plug 'tobyS/vmustache', {'for': 'php'}
+Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
-
 Plug 'vim-php/tagbar-phpctags.vim'
-Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'} 
 Plug 'adoy/vim-php-refactoring-toolbox'
-Plug 'sheerun/vim-polyglot'
 call plug#end()
