@@ -16,9 +16,6 @@ set shiftwidth=4
 set shiftround
 set matchpairs+=<:>
 
-set foldmethod=indent
-set foldnestmax=0
-
 set scrolloff=10
 set sidescrolloff=7
 set sidescroll=1
@@ -60,15 +57,16 @@ let maplocalleader = "\\"
 let g:netrw_liststyle=0
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
-set background=dark
 set cursorline
 set title
+set noequalalways
 au BufNewFile,BufRead *.phtml setf php
 if exists('&inccommand')
   set inccommand=split
 endif
 
-colorscheme jellybeans
+colo seoul256
+set background=dark
 
 filetype plugin indent  on
 filetype off

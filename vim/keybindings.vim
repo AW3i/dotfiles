@@ -6,6 +6,16 @@ nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap <silent> <leader>bc :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <silent> <leader>bd :bd<CR>
 nnoremap <silent> <leader>tn :tabnew<CR>
+nnoremap <silent> <M-1> 1gt<CR>
+nnoremap <silent> <M-2> 2gt<CR>
+nnoremap <silent> <M-3> 3gt<CR>
+nnoremap <silent> <M-4> 4gt<CR>
+nnoremap <silent> <M-5> 5gt<CR>
+nnoremap <silent> <M-6> 6gt<CR>
+nnoremap <silent> <M-7> 7gt<CR>
+nnoremap <silent> <M-8> 8gt<CR>
+nnoremap <silent> <M-9> 9gt<CR>
+nnoremap <silent> <M-0> 0gt<CR>
 " Switch back to normal mode from terminal mode
 if has('nvim')
     tnoremap <esc><esc> <C-\><C-n>
@@ -55,6 +65,7 @@ nnoremap <silent> <leader>tc :call neoterm#kill()<cr>
 " toggle terminal
 nnoremap <leader>tt :Ttoggle<CR>
 nnoremap <leader>tr :T 
+let g:neoterm_automap_keys = '<leader>tm'
 
 " fzf
 nnoremap <silent> <leader><space> :Files<CR>
@@ -88,10 +99,7 @@ nmap <leader>go :Git checkout<Space>
 " Others
 nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
 nnoremap <silent> <F3>  :Dirvish<CR>
-nnoremap <silent> gy :Goyo<CR>
 nnoremap <F12> :Startify<CR>
-nmap <silent> gl :Limelight!!<CR>
-xmap gl <Plug>(Limelight)
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
 
 "tagbar
@@ -101,3 +109,14 @@ nnoremap <silent> <F2>  :TagbarToggle<CR>
 " Easy align bindings
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+" Put at the very end of your .vimrc file.
+
+function! PhpSyntaxOverride()
+  hi! def link phpDocTags  phpDefine
+  hi! def link phpDocParam phpType
+endfunction
+
+augroup phpSyntaxOverride
+  autocmd!
+  autocmd FileType php call PhpSyntaxOverride()
+augroup END

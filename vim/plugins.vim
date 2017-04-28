@@ -8,7 +8,7 @@ Plug 'Raimondi/delimitMate'
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'scrooloose/nerdcommenter'
+Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
 
 " Completion
@@ -17,6 +17,8 @@ Plug 'Shougo/deoplete.nvim'
     "let g:deoplete#tag#cache_limit_size = 50000000
     "let g:deoplete#omni_patterns = {}
     "let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+    let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+    let g:deoplete#ignore_sources.php = ['omni']
 Plug 'pbogut/deoplete-padawan'
 
 Plug 'ervandew/supertab'
@@ -53,6 +55,9 @@ if has('python')
 endif
 
 " Utility
+Plug 'junegunn/seoul256.vim'
+Plug 'shinchu/lightline-seoul256.vim'
+Plug 'troydm/zoomwintab.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tommcdo/vim-exchange'
 Plug 'wellle/targets.vim'
@@ -67,7 +72,7 @@ Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-eunuch'
 Plug 'ryanss/vim-hackernews'
 Plug 'Valloric/ListToggle'
-Plug 'benekastah/neomake'
+Plug 'neomake/neomake'
     autocmd! BufWritePost * Neomake
     let g:neomake_open_list = 0
     let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
@@ -78,7 +83,6 @@ Plug 'benekastah/neomake'
     \ 'errorformat': '%E%f:%l%\s%m'
     \ }
     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
-    "let g:neomake_php_enabled_makers = ['php']
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
@@ -101,7 +105,7 @@ Plug 'justinmk/vim-dirvish'
         \ gh :keeppatterns g@\v/\.[^\/]+/?$@d<cr>
     augroup END
 Plug 'ludovicchabant/vim-gutentags'
-    let g:gutentags_exclude = [
+    let g:gutentags_ctags_exclude = [
     \ '*.min.js',
     \ '*html*',
     \ 'jquery*.js',
@@ -116,6 +120,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'kassio/neoterm'
     let g:neoterm_position = 'horizontal'
     let g:neoterm_size = '15'
+    let g:neoterm_autoscroll = 1
 Plug 'zenbro/mirror.vim'
 
 " File Navigation
@@ -180,7 +185,6 @@ Plug 'junegunn/fzf.vim'
     \  'down':    '40%'})
 
 " Appearance
-Plug 'junegunn/goyo.vim'
 Plug 'mhinz/vim-startify'
     let g:startify_session_dir = '~/.config/nvim/session'
     let g:startify_bookmarks = [{'o': '~/ownCloud/shared/org/index.org'}]
@@ -199,18 +203,15 @@ Plug 'mhinz/vim-startify'
     let g:startify_change_to_dir = 1
     let g:startify_change_to_vcs_root = 1
     let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
-    let g:startify_session_before_save = [
-        \ 'echo "Cleaning left over terminals"',
-        \ 'bufdo if bufname("%")=~? "term:\/\/" | bdel! | endif',
-        \ ]
+    " let g:startify_session_before_save = [
+    "     \ 'echo "Cleaning left over terminals"',
+    "     \ 'bufdo if bufname("%")=~? "term:\/\/" | bdel! | endif',
+    "     \ ]
     autocmd! User Startified setlocal colorcolumn=0
-Plug 'junegunn/limelight.vim'
-    let g:limelight_default_coefficient = 0.7
-    let g:limelight_conceal_ctermfg = 238
 
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-    \   'colorscheme': 'jellybeans',
+    \   'colorscheme': 'seoul256',
     \   'active': {
     \     'left': [
     \       ['mode', 'paste'],
@@ -311,4 +312,5 @@ Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'vim-php/tagbar-phpctags.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
+Plug 'docteurklein/php-getter-setter.vim'
 call plug#end()
