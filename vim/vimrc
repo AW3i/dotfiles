@@ -10,6 +10,6 @@ if empty(glob(vimpath . 'autoload/plug.vim'))
     autocmd VimEnter * PlugInstall
 endif
 
-exec 'source' vimpath . 'general.vim'
 exec 'source' vimpath . 'plugins.vim'
+exec 'source' vimpath . 'general.vim'
 exec 'source' vimpath . 'keybindings.vim'

@@ -20,6 +20,12 @@ Plug 'Shougo/deoplete.nvim'
     let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
     let g:deoplete#ignore_sources.php = ['omni']
 Plug 'pbogut/deoplete-padawan'
+Plug 'zchee/deoplete-jedi'
+Plug 'tmhedberg/SimpylFold'
+"`npm install` For javascript code completion support
+" Plug 'roxma/nvim-completion-manager' ", {'do': 'npm install'}
+" " PHP code completion is moved to a standalone plugin
+" Plug 'roxma/nvim-cm-php-language-server',  {'do': 'composer install && composer run-script parse-stubs'}
 
 Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = '<tab>'
