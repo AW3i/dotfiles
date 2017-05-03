@@ -12,14 +12,30 @@ Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
 
 " Completion
-Plug 'Shougo/deoplete.nvim'
-    let g:deoplete#enable_at_startup = 1
-    "let g:deoplete#tag#cache_limit_size = 50000000
-    "let g:deoplete#omni_patterns = {}
-    "let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-    let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
-    let g:deoplete#ignore_sources.php = ['omni']
-Plug 'pbogut/deoplete-padawan'
+" Plug 'Shougo/deoplete.nvim'
+"     let g:deoplete#enable_at_startup = 1
+"     "let g:deoplete#tag#cache_limit_size = 50000000
+"     "let g:deoplete#omni_patterns = {}
+"     "let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+"     let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+"     let g:deoplete#ignore_sources.php = ['omni']
+" Plug 'pbogut/deoplete-padawan'
+" " the framework
+Plug 'roxma/python-support.nvim'
+    " for python completions
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
+    " language specific completions on markdown file
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'mistune')
+
+    " utils, optional
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'psutil')
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'setproctitle')
+
+Plug 'roxma/nvim-completion-manager'
+Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
+autocmd FileType php LanguageClientStart
+Plug 'Shougo/echodoc.vim'
+    let g:echodoc_enable_at_startup = 1
 
 Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = '<tab>'
@@ -292,6 +308,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " Languages
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'roxma/LanguageServer-php-neovim'
+"     autocmd FileType php LanguageClientStart
 Plug 'sheerun/vim-polyglot'
 Plug 'phpvim/phpfold.vim', { 'for': 'php', 'do': 'composer update' }
 Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
