@@ -57,7 +57,6 @@ let maplocalleader = "\\"
 let g:netrw_liststyle=0
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
-set cursorline
 set title
 set noequalalways
 au BufNewFile,BufRead *.phtml setf php
@@ -82,7 +81,6 @@ highlight! WarningSign guifg=black guibg=#FFED26 ctermfg=16 ctermbg=11
 
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
 " and a blinking underline in replace mode
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-let &t_SI = "\<Esc>[5 q"
-let &t_SR = "\<Esc>[3 q"
-let &t_EI = "\<Esc>[2 q"
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+"enable mouse support
+set mouse=a
