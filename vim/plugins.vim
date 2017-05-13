@@ -334,4 +334,5 @@ Plug 'tobyS/pdv', {'for': 'php'}
 Plug 'vim-php/tagbar-phpctags.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'docteurklein/php-getter-setter.vim'
+Plug 'tmhedberg/SimpylFold'
 call plug#end()
