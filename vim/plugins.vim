@@ -71,6 +71,8 @@ if has('python')
 endif
 
 " Utility
+Plug 'justinmk/vim-gtfo'
+    let g:gtfo#terminals = { 'unix': 'termite -d' }
 Plug 'junegunn/seoul256.vim'
 Plug 'shinchu/lightline-seoul256.vim'
 Plug 'troydm/zoomwintab.vim'
