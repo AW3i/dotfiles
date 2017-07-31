@@ -35,6 +35,7 @@ Plug 'roxma/python-support.nvim'
 Plug 'roxma/nvim-completion-manager'
 Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
     autocmd FileType php LanguageClientStart
+Plug 'roxma/nvim-cm-tern',  {'do': 'npm install'}
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
 
