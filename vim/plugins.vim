@@ -36,6 +36,7 @@ Plug 'roxma/nvim-completion-manager'
 Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
     autocmd FileType php LanguageClientStart
 Plug 'roxma/nvim-cm-tern',  {'do': 'npm install'}
+Plug 'maksimr/vim-jsbeautify'
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
 
@@ -92,17 +93,25 @@ Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-eunuch'
 Plug 'ryanss/vim-hackernews'
 Plug 'Valloric/ListToggle'
-Plug 'neomake/neomake'
-    autocmd! BufWritePost * Neomake
-    let g:neomake_open_list = 0
-    let g:neomake_error_sign = { 'text': '✘', 'texthl': 'ErrorSign' }
-    let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'WarningSign' }
-    let g:neomake_php_phpcs_args_standard = 'PSR2'
-    let g:neomake_php_phpmd_maker = {
-    \ 'args': ['%:p', 'text', '~/.phpmd.xml'],
-    \ 'errorformat': '%E%f:%l%\s%m'
-    \ }
-    let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
+Plug 'w0rp/ale'
+    let g:ale_set_loclist = 0
+    let g:ale_set_quickfix = 1
+    let g:ale_sign_error = '✘'
+    let g:ale_sign_warning = ':('
+    nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+    nmap <silent> <C-j> <Plug>(ale_next_wrap)
+    let g:ale_php_phpcs_standard = 'PSR2'
+" plug 'neomake/neomake'
+"     autocmd! bufwritepost * neomake
+"     let g:neomake_open_list = 0
+"     let g:neomake_error_sign = { 'text': '✘', 'texthl': 'errorsign' }
+"     let g:neomake_warning_sign = { 'text': ':(', 'texthl': 'warningsign' }
+"     let g:neomake_php_phpcs_args_standard = 'psr2'
+"     let g:neomake_php_phpmd_maker = {
+"     \ 'args': ['%:p', 'text', '~/.phpmd.xml'],
+"     \ 'errorformat': '%e%f:%l%\s%m'
+"     \ }
+"     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
@@ -205,6 +214,7 @@ Plug 'junegunn/fzf.vim'
     \  'down':    '40%'})
 
 " Appearance
+Plug 'kshenoy/vim-signature'
 Plug 'mhinz/vim-startify'
     let g:startify_session_dir = '~/.config/nvim/session'
     let g:startify_bookmarks = [{'o': '~/ownCloud/shared/org/index.org'}]
@@ -223,10 +233,11 @@ Plug 'mhinz/vim-startify'
     let g:startify_change_to_dir = 1
     let g:startify_change_to_vcs_root = 1
     let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
-    " let g:startify_session_before_save = [
-    "     \ 'echo "Cleaning left over terminals"',
-    "     \ 'bufdo if bufname("%")=~? "term:\/\/" | bdel! | endif',
-    "     \ ]
+    let g:startify_session_before_save = [
+        \ 'echo "Cleaning left over terminals"',
+        \ 'TcloseAll!',
+        \ 'bufdo if bufname("%")=~? "term:\/\/" | bdel! | endif',
+        \ ]
     autocmd! User Startified setlocal colorcolumn=0
 
 Plug 'itchyny/lightline.vim'
@@ -335,4 +346,5 @@ Plug 'vim-php/tagbar-phpctags.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'docteurklein/php-getter-setter.vim'
 Plug 'tmhedberg/SimpylFold'
+Plug 'mattn/emmet-vim'
 call plug#end()
