@@ -1,8 +1,4 @@
 nnoremap <leader>s :w<CR>
-nnoremap <silent> <C-k> :wincmd k<CR>
-nnoremap <silent> <C-j> :wincmd j<CR>
-nnoremap <silent> <C-l> :wincmd l<CR>
-nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap <silent> <leader>bc :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <silent> <leader>bd :bd<CR>
 nnoremap <silent> <leader>tn :tabnew<CR>
@@ -98,7 +94,6 @@ nmap <leader>go :Git checkout<Space>
 
 " Others
 nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
-nnoremap <silent> <F3>  :Dirvish<CR>
 nnoremap <F12> :Startify<CR>
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
 
@@ -120,3 +115,12 @@ augroup phpSyntaxOverride
   autocmd!
   autocmd FileType php call PhpSyntaxOverride()
 augroup END
+
+" LanguageClient_Neovim
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F3> :call LanguageClient_textDocument_rename()<CR>
+
+" Ale
+    nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+    nmap <silent> <C-j> <Plug>(ale_next_wrap)

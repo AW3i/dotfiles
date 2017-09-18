@@ -1,7 +1,6 @@
 set backspace=indent,eol,start
 set history=1000
 set showcmd
-set showmode
 set incsearch
 set hlsearch
 set wrap
@@ -54,18 +53,17 @@ set grepprg=ag\ --nogroup\ --nocolor
 let &showbreak='↪ '
 let mapleader = " "
 let maplocalleader = "\\"
-let g:netrw_liststyle=0
+let g:netrw_liststyle = 0
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
 set title
 set noequalalways
-au BufNewFile,BufRead *.phtml setf php
 if exists('&inccommand')
   set inccommand=split
 endif
 
-colo seoul256
-set background=dark
+set termguicolors
+colorscheme janah
 
 filetype plugin indent  on
 filetype off
@@ -84,3 +82,5 @@ highlight! WarningSign guifg=black guibg=#FFED26 ctermfg=16 ctermbg=11
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 "enable mouse support
 set mouse=a
+autocmd BufNewFile,BufRead *.phtml setf php
+autocmd BufNewFile,BufRead *.dhtml setf php
