@@ -4,7 +4,7 @@ call plug#begin(vimpath. 'plugged')
 Plug 'Raimondi/delimitMate'
     let delimitMate_jump_expansion = 1
     let delimitMate_expand_cr = 2
-    let delimitMate_expand_space = 1
+    let delimitMate_expand_space = 0
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -120,7 +120,10 @@ Plug 'roxma/python-support.nvim'
     " utils, optional
     let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'psutil')
     let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'typing')
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'setproctitle')
+" Task Management
+Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+Plug 'tbabej/taskwiki'
+Plug 'powerman/vim-plugin-AnsiEsc'
 
 " File Navigation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
