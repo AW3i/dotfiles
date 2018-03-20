@@ -5,7 +5,7 @@ Plug 'Raimondi/delimitMate'
     let delimitMate_jump_expansion = 1
     let delimitMate_expand_cr = 2
     let delimitMate_expand_space = 0
-Plug 'junegunn/vim-easy-align'
+Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tomtom/tcomment_vim'
@@ -49,8 +49,17 @@ endif
 " Utility
 " Opens the filemanager or a terminal at the directory of the current file
 Plug 'justinmk/vim-gtfo'
-    let g:gtfo#terminals = { 'unix': 'termite -d' }
+    let g:gtfo#terminals = { 'unix': 'kitty --detach --directory' }
 Plug 'mhinz/vim-janah'
+Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+let g:nord_italic = 1
+let g:nord_italic_comments = 1
+augroup NordMods
+    autocmd!
+    autocmd ColorScheme nord highlight CursorLineNr ctermfg=6 guifg=#81A1C1
+    autocmd ColorScheme nord highlight CursorLine ctermbg=NONE guibg=#2E3440
+augroup end
+Plug 'tpope/vim-rsi'
 " Zooms into a buffer and also unzooms back without breaking the layout
 Plug 'troydm/zoomwintab.vim'
 Plug 'wellle/targets.vim'
@@ -63,7 +72,8 @@ Plug 'majutsushi/tagbar'
     "remap sort for tagbar so it doesn't collide with sneak
     let g:tagbar_map_togglesort = "r"
 Plug 'tpope/vim-eunuch'
-Plug 'ryanss/vim-hackernews'
+Plug 'dansomething/vim-hackernews'
+Plug 'joshhartigan/vim-reddit'
 Plug 'Valloric/ListToggle'
 Plug 'w0rp/ale'
     let g:ale_set_loclist = 1
@@ -109,19 +119,10 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
-    let g:neoterm_position = 'horizontal'
     let g:neoterm_size = '15'
-Plug 'roxma/python-support.nvim'
-    " for python completions
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
-    " language specific completions on markdown file
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'mistune')
-
-    " utils, optional
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'psutil')
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'typing')
 " Task Management
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+  let g:vimwiki_list = [{'path': '~/ownCloud/vimwiki/', 'path_html': '~/public_html/'}]
 Plug 'tbabej/taskwiki'
 Plug 'powerman/vim-plugin-AnsiEsc'
 
@@ -174,19 +175,33 @@ Plug 'junegunn/fzf.vim'
     endfunction
 
     command! -nargs=* Ag call fzf#run({
-    \ 'source':  printf('ag --nogroup --column --color "%s"',
+    \ 'source':  printf('rg --column --color always "%s"',
     \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
     \ 'sink*':    function('<sid>ag_handler'),
     \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
     \ })
 
-    command! FZFMru call fzf#run({
-    \  'source':  v:oldfiles,
-    \  'sink':    'e',
-    \  'options': '-m -x +s',
-    \  'down':    '40%'})
+    let g:fzf_colors =
+    \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
+
+Plug 'lvht/fzf-mru'
 
 " Appearance
+Plug 'arakashic/chromatica.nvim', {'for': 'c'}
+Plug 'junegunn/goyo.vim'
+
 Plug 'mhinz/vim-startify'
     let g:startify_session_dir = '~/.config/nvim/session'
     let g:startify_bookmarks = [{'o': '~/ownCloud/shared/org/index.org'}]
@@ -294,11 +309,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " Languages
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', {'branch': 'next',  'do': 'bash install.sh'}
 Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
-   autocmd FileType php LanguageClientStart
 Plug 'sheerun/vim-polyglot'
-Plug 'lvht/phpfold.vim', { 'for': 'php' }
 Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
     function! IPhpInsertUse()
         call PhpInsertUse()
@@ -315,9 +328,11 @@ Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
 Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
-Plug 'vim-php/tagbar-phpctags.vim'
-Plug 'adoy/vim-php-refactoring-toolbox'
-Plug 'docteurklein/php-getter-setter.vim'
-Plug 'tmhedberg/SimpylFold'
+Plug 'vim-php/tagbar-phpctags.vim', {'for': 'php'}
+
+Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
+
+Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
+Plug 'tmhedberg/SimpylFold', {'for': 'python'}
 Plug 'mattn/emmet-vim'
 call plug#end()

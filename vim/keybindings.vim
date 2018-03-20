@@ -57,9 +57,9 @@ omap T <Plug>Sneak_T
 " clear terminal
 nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
 " kills the current job (send a <c-c>)
-nnoremap <silent> <leader>tc :call neoterm#kill()<cr>
+nnoremap <silent> <leader>tc :1Tkill<cr>
 " toggle terminal
-nnoremap <leader>tt :Ttoggle<CR>
+nnoremap <leader>tt :1Ttoggle<CR>
 nnoremap <leader>tr :T 
 let g:neoterm_automap_keys = '<leader>tm'
 

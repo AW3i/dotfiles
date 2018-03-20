@@ -7,7 +7,6 @@ set wrap
 set linebreak
 set laststatus=2
 
-set smartindent
 set tabstop=4
 set expandtab
 set smarttab
@@ -38,7 +37,7 @@ set splitbelow
 set splitright
 set undolevels=500
 if has("persistent_undo")
-    set undodir=~/.undodir/
+"    set undodir=~/.undodir/ move
     set undofile
 endif
 set timeout timeoutlen=1000 ttimeoutlen=100
@@ -63,7 +62,7 @@ if exists('&inccommand')
 endif
 
 set termguicolors
-colorscheme janah
+colorscheme nord
 
 filetype plugin indent  on
 filetype off

@@ -1,0 +1,12 @@
+#!/bin/env perl
+
+use strict;
+
+my $remoteName = shift(@ARGV);
+my $gitCommand = shift(@ARGV);
+
+my $remote = `git config --get remote.$remoteName.url`;
+$remote =~ s#\:.*$##g;
+chomp($remote);
+print("ledger-agent -v -e ed25519 $remote -- git $gitCommand $remoteName @ARGV\n");
+system("ledger-agent -v -e ed25519 $remote -- git $gitCommand $remoteName @ARGV");
