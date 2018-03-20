@@ -31,6 +31,7 @@ export LANG=en_US.UTF-8
 export LESSCHARSET=utf-8
 export EDITOR=/usr/bin/vi
 export VISUAL=/usr/bin/vi
+export GNUPGHOME=$HOME/.gnupg/ledger
 export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:$HOME/.bin:/opt/bin:$GOBIN:/usr/lib/node_modules/grunt-cli/bin/:$HOME/.cargo/bin:$HOME/.config/composer/vendor/bin:$HOME/.local/bin
 export FZF_DEFAULT_OPTS='
     --bind ctrl-f:page-down,ctrl-b:page-up
