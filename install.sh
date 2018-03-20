@@ -1,15 +1,17 @@
 #!/bin/bash
 
 currentDir=`pwd`;
+mkdir $HOME/.bin
 echo "Creating Symlinks";
-ln -s $currentDir/vim/vimrc $HOME/.vimrc;
-ln -s $currentDir/tmux.conf $HOME/.tmux.conf;
-ln -s $currentDir/xinitrc $HOME/.xinitrc;
-ln -s $currentDir/Xresources $HOME/.Xresources;
-ln -s $currentDir/xxkbrc $HOME/.xxkbrc;
-ln -s $currentDir/zshrc $HOME/.zshrc;
-ln -s $currentDir/vim $HOME/.vim;
-ln -s $currentDir/tmux $HOME/.tmux;
+ln -sf $currentDir/vim/vimrc $HOME/.vimrc;
+ln -sf $currentDir/tmux.conf $HOME/.tmux.conf;
+ln -sf $currentDir/xinitrc $HOME/.xinitrc;
+ln -sf $currentDir/Xresources $HOME/.Xresources;
+ln -sf $currentDir/xxkbrc $HOME/.xxkbrc;
+ln -sf $currentDir/zshrc $HOME/.zshrc;
+ln -sf $currentDir/vim $HOME/.vim;
+ln -sf $currentDir/tmux $HOME/.tmux;
+ln -sf $currentDir/bin/lgit $HOME/.bin/lgit;
 echo "Installing vim plugins";
-vim +PlugInstall +qall;
+nvim +PlugInstall +qall;
 echo "Done";
