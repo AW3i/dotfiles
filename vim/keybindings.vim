@@ -60,6 +60,10 @@ nnoremap <leader>tc :<c-u>exec v:count.'Tkill'<cr>
 " toggle terminal
 nnoremap <leader>tt :<c-u>exec v:count.'Ttoggle'<cr>
 nnoremap <leader>tl :<c-u>exec v:count.'Tclear'<cr>
+nnoremap <silent> <leader>tr :T 
+xmap <leader>rs <plug>(neoterm-repl-send)
+nmap <leader>rs <plug>(neoterm-repl-send)
+nmap <leader>rsl <plug>(neoterm-repl-send-line)
 let g:neoterm_automap_keys = '<leader>tm'
 
 " fzf

@@ -20,6 +20,7 @@ alias lssh='TERM=xterm-256color ledger-agent --connect'
 alias m='f -e mpv' # quick opening files with mplayer
 alias o='a -e xdg-open' # quick opening files with xdg-open
 alias git_hub='ledger-agent -v -e ed25519 git@github.com -- git'
+alias phpstan='docker run -v $PWD:/app --rm phpstan/phpstan'
 
 plugins=(git vi-mode docker fasd)
 
@@ -29,10 +30,10 @@ export GOPATH=$HOME/ownCloud/programming/go
 export GOBIN=$GOPATH/bin
 export LANG=en_US.UTF-8
 export LESSCHARSET=utf-8
-export EDITOR=/usr/bin/vi
+export EDITOR=/usr/local/bin/nvr
 export VISUAL=/usr/bin/vi
 export GNUPGHOME=$HOME/.gnupg/ledger
-export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:$HOME/.bin:/opt/bin:$GOBIN:/usr/lib/node_modules/grunt-cli/bin/:$HOME/.cargo/bin:$HOME/.config/composer/vendor/bin:$HOME/.local/bin
+export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/games/:$HOME/.bin:/opt/bin:$GOBIN:/usr/lib/node_modules/grunt-cli/bin/:$HOME/.cargo/bin:$HOME/.config/composer/vendor/bin:$HOME/.local/bin
 export FZF_DEFAULT_OPTS='
     --bind ctrl-f:page-down,ctrl-b:page-up
     --multi --bind "ctrl-a:select-all,ctrl-d:deselect-all"

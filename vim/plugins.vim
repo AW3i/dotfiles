@@ -10,6 +10,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
+Plug 'kana/vim-textobj-function'
+Plug 'kana/vim-textobj-user'
 
 " Completion
 Plug 'roxma/nvim-completion-manager'
@@ -42,15 +44,16 @@ if has('python')
         \ 'xhtml' : 1,
         \ 'xml' : 1,
         \ 'phtml' : 1,
+        \ 'twig' : 1,
         \}
     Plug 'honza/vim-snippets'
 endif
+
 
 " Utility
 " Opens the filemanager or a terminal at the directory of the current file
 Plug 'justinmk/vim-gtfo'
     let g:gtfo#terminals = { 'unix': 'kitty --detach --directory' }
-Plug 'mhinz/vim-janah'
 Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
@@ -73,7 +76,6 @@ Plug 'majutsushi/tagbar'
     let g:tagbar_map_togglesort = "r"
 Plug 'tpope/vim-eunuch'
 Plug 'dansomething/vim-hackernews'
-Plug 'joshhartigan/vim-reddit'
 Plug 'Valloric/ListToggle'
 Plug 'w0rp/ale'
     let g:ale_lint_on_text_changed = 'never'
@@ -119,11 +121,19 @@ Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
     let g:neoterm_size = '15'
+Plug 'roxma/python-support.nvim'
+    " for python completions
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
+    " language specific completions on markdown file
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'mistune')
+
+    " utils, optional
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'psutil')
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'typing')
 " Task Management
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
   let g:vimwiki_list = [{'path': '~/ownCloud/vimwiki/', 'path_html': '~/public_html/'}]
 Plug 'tbabej/taskwiki'
-Plug 'powerman/vim-plugin-AnsiEsc'
 
 " File Navigation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -198,9 +208,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'lvht/fzf-mru'
 
 " Appearance
-Plug 'arakashic/chromatica.nvim', {'for': 'c'}
-Plug 'junegunn/goyo.vim'
-
 Plug 'mhinz/vim-startify'
     let g:startify_session_dir = '~/.config/nvim/session'
     let g:startify_bookmarks = [{'o': '~/ownCloud/shared/org/index.org'}]
@@ -226,85 +233,86 @@ Plug 'mhinz/vim-startify'
     "     \ ]
     autocmd! User Startified setlocal colorcolumn=0
 
-" Statusline plugin
-Plug 'itchyny/lightline.vim'
-    let g:lightline = {
-        \   'colorscheme': 'jellybeans',
-        \   'active': {
-        \     'left': [
-        \       ['mode', 'paste'],
-        \       ['fugitive', 'bufferinfo'],
-        \       ['tagbar']
-        \     ],
-        \     'right': [
-        \       ['colinfo', 'percent'],
-        \       ['fileformat', 'filetype'],
-        \     ]
-        \   },
-        \   'inactive': {
-        \     'left': [ ['bufferinfo'] ],
-        \     'right': [ ['percent'], ['filetype'] ]
-        \   },
-        \   'tabline': {
-        \     'left': [ ['tabs'], ['bufferline'] ],
-        \     'right': [ ['fileencoding'] ]
-        \   },
-        \   'component': {
-        \     'bufferinfo': '%<%f %m',
-        \     'colinfo': ':%c%V',
-        \     'fileencoding': '%{&fenc}',
-        \     'readonly': '%{&readonly?"":""}',
-        \     'paste': '%{&paste?"PASTE":""}',
-        \   'tagbar': '%{tagbar#currenttag("%s", "")}',
-        \   },
-        \   'component_function': {
-        \     'fileformat'  : 'MyFileformat',
-        \     'filetype'    : 'MyFiletype',
-        \     'fugitive'    : 'MyFugitive'
-        \   },
-        \   'separator': { 'left': '', 'right': '' },
-        \   'subseparator': { 'left': '', 'right': '' },
-        \ }
+    " Statusline plugin
+    Plug 'itchyny/lightline.vim'
+        let g:lightline = {
+            \   'colorscheme': 'nord',
+            \   'active': {
+            \     'left': [
+            \       ['mode', 'paste'],
+            \       ['fugitive', 'bufferinfo'],
+            \       ['tagbar']
+            \     ],
+            \     'right': [
+            \       ['colinfo', 'percent'],
+            \       ['fileformat', 'filetype'],
+            \     ]
+            \   },
+            \   'inactive': {
+            \     'left': [ ['bufferinfo'] ],
+            \     'right': [ ['percent'], ['filetype'] ]
+            \   },
+            \   'tabline': {
+            \     'left': [ ['tabs'], ['bufferline'] ],
+            \     'right': [ ['fileencoding'] ]
+            \   },
+            \   'component': {
+            \     'bufferinfo': '%<%f %m',
+            \     'colinfo': ':%c%V',
+            \     'fileencoding': '%{&fenc}',
+            \     'readonly': '%{&readonly?"":""}',
+            \     'paste': '%{&paste?"PASTE":""}',
+            \   'tagbar': '%{tagbar#currenttag("%s", "")}',
+            \   },
+            \   'component_function': {
+            \     'fileformat'  : 'MyFileformat',
+            \     'filetype'    : 'MyFiletype',
+            \     'fugitive'    : 'MyFugitive'
+            \   },
+            \   'separator': { 'left': '', 'right': '' },
+            \   'subseparator': { 'left': '', 'right': '' },
+            \ }
 
-    let g:lightline.enable = {
-        \   'statusline': 1,
-        \   'tabline': 1
-        \ }
+        let g:lightline.enable = {
+            \   'statusline': 1,
+            \   'tabline': 1
+            \ }
 
-    let g:lightline.mode_map = {
-        \   'n'      : ' N ',
-        \   'i'      : ' I ',
-        \   'R'      : ' R ',
-        \   'v'      : ' V ',
-        \   'V'      : 'V-L',
-        \   'c'      : ' C ',
-        \   "\<C-v>" : 'V-B',
-        \   's'      : ' S ',
-        \   'S'      : 'S-L',
-        \   "\<C-s>" : 'S-B',
-        \   "t"      : ' T ',
-        \   '?'      : ' ? '
-        \ }
+        let g:lightline.mode_map = {
+            \   'n'      : ' N ',
+            \   'i'      : ' I ',
+            \   'R'      : ' R ',
+            \   'v'      : ' V ',
+            \   'V'      : 'V-L',
+            \   'c'      : ' C ',
+            \   "\<C-v>" : 'V-B',
+            \   's'      : ' S ',
+            \   'S'      : 'S-L',
+            \   "\<C-s>" : 'S-B',
+            \   "t"      : ' T ',
+            \   '?'      : ' ? '
+            \ }
 
-    function! MyFiletype()
-    return strlen(&filetype) ? &filetype : '--'
-    endfunction
+        function! MyFiletype()
+        return strlen(&filetype) ? &filetype : '--'
+        endfunction
 
-    function! MyFileformat()
-    return winwidth('.') > 80 ? &fileformat : ''
-    endfunction
+        function! MyFileformat()
+        return winwidth('.') > 80 ? &fileformat : ''
+        endfunction
 
-    function! MyFugitive()
-    if exists('*fugitive#head') && winwidth('.') > 75
-        let bmark = '┣ '
-        let branch = fugitive#head()
-        return strlen(branch) ? bmark . branch : ''
-    endif
-    return ''
-    endfunction
+        function! MyFugitive()
+        if exists('*fugitive#head') && winwidth('.') > 75
+            let bmark = '┣ '
+            let branch = fugitive#head()
+            return strlen(branch) ? bmark . branch : ''
+        endif
+        return ''
+        endfunction
 
 " VCS
 Plug 'tpope/vim-fugitive'
+Plug 'sodapopcan/vim-twiggy'
 Plug 'mhinz/vim-signify'
 
 " Languages
@@ -313,11 +321,9 @@ Plug 'mhinz/vim-signify'
 Plug 'phpactor/phpactor', {'do': 'composer install'}
 Plug 'roxma/ncm-phpactor'
 Plug 'sheerun/vim-polyglot'
-Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
 Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'vim-php/tagbar-phpctags.vim', {'for': 'php'}
-Plug 'tmhedberg/SimpylFold', {'for': 'python'}
 Plug 'mattn/emmet-vim'
 call plug#end()
