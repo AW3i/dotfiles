@@ -76,14 +76,13 @@ Plug 'dansomething/vim-hackernews'
 Plug 'joshhartigan/vim-reddit'
 Plug 'Valloric/ListToggle'
 Plug 'w0rp/ale'
-    let g:ale_set_loclist = 1
-    let g:ale_set_quickfix = 0
     let g:ale_lint_on_text_changed = 'never'
-    let g:ale_lint_on_enter = 0
+    let g:ale_lint_on_enter = 1
     let g:ale_lint_on_insert_leave = 1
     let g:ale_sign_error = '✘'
     let g:ale_sign_warning = ':('
     let g:ale_php_phpcs_standard = 'PSR2'
+    let g:ale_echo_msg_format = '<%linter%> %code: %%s'
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
