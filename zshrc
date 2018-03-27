@@ -38,6 +38,7 @@ export FZF_DEFAULT_OPTS='
     --multi --bind "ctrl-a:select-all,ctrl-d:deselect-all"
     --color hl:103,fg+:222,bg+:234,hl+:104
     --color info:183,prompt:110,spinner:107,pointer:167,marker:215
+    --no-height
 '
 if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
   alias h='nvr -o'
