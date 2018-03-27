@@ -308,30 +308,16 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " Languages
-Plug 'autozimu/LanguageClient-neovim', {'branch': 'next',  'do': 'bash install.sh'}
-Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
+" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next',  'do': 'bash install.sh'}
+" Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
+Plug 'phpactor/phpactor', {'do': 'composer install'}
+Plug 'roxma/ncm-phpactor'
 Plug 'sheerun/vim-polyglot'
-Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
-    function! IPhpInsertUse()
-        call PhpInsertUse()
-        call feedkeys('a',  'n')
-    endfunction
-    autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
-
-    function! IPhpExpandClass()
-        call PhpExpandClass()
-        call feedkeys('a', 'n')
-    endfunction
-    autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
 Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'vim-php/tagbar-phpctags.vim', {'for': 'php'}
-
-Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
-
-Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
 Plug 'tmhedberg/SimpylFold', {'for': 'python'}
 Plug 'mattn/emmet-vim'
 call plug#end()

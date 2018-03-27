@@ -116,9 +116,26 @@ augroup phpSyntaxOverride
 augroup END
 
 " LanguageClient_Neovim
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F3> :call LanguageClient_textDocument_rename()<CR>
+" nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+" nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+" nnoremap <silent> <F3> :call LanguageClient_textDocument_rename()<CR>
+" Include use statement
+nmap <Leader>u :call phpactor#UseAdd()<CR>
+
+" Invoke the context menu
+nmap <Leader>pm :call phpactor#ContextMenu()<CR>
+
+" Goto definition of class or class member under the cursor
+nmap <Leader>po :call phpactor#GotoDefinition()<CR>
+
+" Transform the classes in the current file
+nmap <Leader>pt :call phpactor#Transform()<CR>
+
+" Generate a new class (replacing the current file)
+nmap <Leader>cc :call phpactor#ClassNew()<CR>
+
+" Extract method from selection
+vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
 
 " Ale
     nmap <silent> <C-k> <Plug>(ale_previous_wrap)
