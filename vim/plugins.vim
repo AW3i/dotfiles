@@ -14,7 +14,75 @@ Plug 'kana/vim-textobj-function'
 Plug 'kana/vim-textobj-user'
 
 " Completion
-Plug 'roxma/nvim-completion-manager'
+if has('nvim')
+        " assuming your using vim-plug: https://github.com/junegunn/vim-plug
+    Plug 'ncm2/ncm2'
+    " ncm2 requires nvim-yarp
+    Plug 'roxma/nvim-yarp'
+
+    " enable ncm2 for all buffers
+    autocmd BufEnter * call ncm2#enable_for_buffer()
+
+
+
+    " suppress the annoying 'match x of y', 'The only match' and 'Pattern not
+    " found' messages
+    set shortmess+=c
+
+    " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+    inoremap <c-c> <ESC>
+
+    " When the <Enter> key is pressed while the popup menu is visible, it only
+    " hides the menu. Use this mapping to close the menu and also start a new
+    " line.
+    inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
+    " wrap existing omnifunc
+    " Note that omnifunc does not run in background and may probably block the
+    " editor. If you don't want to be blocked by omnifunc too often, you could
+    " add 180ms delay before the omni wrapper:
+    "  'on_complete': ['ncm2#on_complete#delay', 180,
+    "               \ 'ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+    au User Ncm2Plugin call ncm2#register_source({
+            \ 'name' : 'css',
+            \ 'priority': 9, 
+            \ 'subscope_enable': 1,
+            \ 'scope': ['css','scss'],
+            \ 'mark': 'css',
+            \ 'word_pattern': '[\w\-]+',
+            \ 'complete_pattern': ':\s*',
+            \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+            \ })
+    " :help Ncm2PopupOpen for more information
+    set completeopt=noinsert,menuone,noselect
+        " some completion sources
+    Plug 'ncm2/ncm2-bufword'
+    Plug 'ncm2/ncm2-tmux'
+    Plug 'ncm2/ncm2-path'
+    Plug 'ncm2/ncm2-jedi'
+    Plug 'ncm2/ncm2-bufword'
+    Plug 'ncm2/ncm2-tagprefix'
+    Plug 'ncm2/ncm2-ultisnips'
+    Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
+    Plug 'ncm2/ncm2-html-subscope'
+    Plug 'ncm2/ncm2-markdown-subscope'
+    Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+    Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
+    "
+    "
+    " use LSP completion on ctrl-x ctrl-o as fallback for padawan in legacy projects
+    au filetype php set omnifunc=LanguageClient#complete
+
+    " no need for diagnostics, we're going to use neomake for that
+    let g:LanguageClient_diagnosticsEnable  = 0
+    let g:LanguageClient_signColumnAlwaysOn = 0
+    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+    nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
+    nnoremap K :call LanguageClient_textDocument_hover()<cr>
+endif
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
 Plug 'ervandew/supertab'
@@ -116,7 +184,7 @@ Plug 'ludovicchabant/vim-gutentags'
     \ ]
     let g:gutentags_generate_on_write = 0
     let g:gutentags_cache_dir = '/home/alex/.tags'
-    let g:gutentags_ctags_executable_php = 'phpctags --recurse=yes'
+    let g:gutentags_ctags_executable_php = '/home/alex/.bin/phpctags'
 Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
@@ -130,10 +198,6 @@ Plug 'roxma/python-support.nvim'
     " utils, optional
     let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'psutil')
     let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'typing')
-" Task Management
-Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
-  let g:vimwiki_list = [{'path': '~/ownCloud/vimwiki/', 'path_html': '~/public_html/'}]
-Plug 'tbabej/taskwiki'
 
 " File Navigation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -236,7 +300,7 @@ Plug 'mhinz/vim-startify'
     " Statusline plugin
     Plug 'itchyny/lightline.vim'
         let g:lightline = {
-            \   'colorscheme': 'nord',
+            \   'colorscheme': 'seoul256',
             \   'active': {
             \     'left': [
             \       ['mode', 'paste'],
@@ -310,17 +374,17 @@ Plug 'mhinz/vim-startify'
         return ''
         endfunction
 
+Plug 'junegunn/seoul256.vim'
+
 " VCS
 Plug 'tpope/vim-fugitive'
 Plug 'sodapopcan/vim-twiggy'
 Plug 'mhinz/vim-signify'
 
 " Languages
-" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next',  'do': 'bash install.sh'}
-" Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
-Plug 'phpactor/phpactor', {'do': 'composer install'}
-Plug 'roxma/ncm-phpactor'
 Plug 'sheerun/vim-polyglot'
+    let g:polyglot_disabled = ['latex']
+Plug 'lervag/vimtex'
 Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"

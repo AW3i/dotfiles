@@ -62,7 +62,8 @@ if exists('&inccommand')
 endif
 
 set termguicolors
-colorscheme nord
+let g:seoul256_srgb = 1
+colorscheme seoul256
 
 filetype plugin indent  on
 filetype off
