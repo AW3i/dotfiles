@@ -1,1 +1,4 @@
 vim/plugged/
+vim/session/
+vim/spell/
+vim/autoload/
