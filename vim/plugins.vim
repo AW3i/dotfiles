@@ -57,7 +57,6 @@ if has('nvim')
     set completeopt=noinsert,menuone,noselect
         " some completion sources
     Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-tmux'
     Plug 'ncm2/ncm2-path'
     Plug 'ncm2/ncm2-jedi'
     Plug 'ncm2/ncm2-bufword'
@@ -71,17 +70,17 @@ if has('nvim')
     \ 'do': 'bash install.sh',
     \ }
     Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
-    "
-    "
     " use LSP completion on ctrl-x ctrl-o as fallback for padawan in legacy projects
     au filetype php set omnifunc=LanguageClient#complete
 
     " no need for diagnostics, we're going to use neomake for that
     let g:LanguageClient_diagnosticsEnable  = 0
     let g:LanguageClient_signColumnAlwaysOn = 0
-    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-    nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
-    nnoremap K :call LanguageClient_textDocument_hover()<cr>
+    Plug 'JakeBecker/elixir-ls'
+    let g:LanguageClient_rootMarkers = {
+    \ 'elixir': ['mix.exs'],
+    \ }
+
 endif
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
@@ -188,7 +187,11 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
-    let g:neoterm_size = '15'
+    let g:neoterm_default_mod = 'botright'
+    let g:neoterm_automap_keys = '<leader>tm'
+    let g:neoterm_use_relative_path = 1
+    let g:neoterm_autoscroll = 1
+    let g:neoterm_always_open_to_exec = 0
 Plug 'roxma/python-support.nvim'
     " for python completions
     let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
@@ -270,6 +273,11 @@ Plug 'junegunn/fzf.vim'
       \ 'header':  ['fg', 'Comment'] }
 
 Plug 'lvht/fzf-mru'
+
+Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+  let g:vimwiki_list = [{'path': '~/ownCloud/vimwiki/', 'path_html': '~/public_html/',
+                       \ 'syntax': 'markdown', 'ext': '.md'}]
+Plug 'tbabej/taskwiki'
 
 " Appearance
 Plug 'mhinz/vim-startify'
@@ -382,6 +390,7 @@ Plug 'sodapopcan/vim-twiggy'
 Plug 'mhinz/vim-signify'
 
 " Languages
+Plug 'vim-vdebug/vdebug'
 Plug 'sheerun/vim-polyglot'
     let g:polyglot_disabled = ['latex']
 Plug 'lervag/vimtex'
@@ -390,4 +399,5 @@ Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'vim-php/tagbar-phpctags.vim', {'for': 'php'}
 Plug 'mattn/emmet-vim'
+Plug 'editorconfig/editorconfig-vim'
 call plug#end()

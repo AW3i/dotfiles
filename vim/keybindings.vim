@@ -54,17 +54,22 @@ xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 
-" clear terminal
-" kills the current job (send a <c-c>)
-nnoremap <leader>tc :<c-u>exec v:count.'Tkill'<cr>
-" toggle terminal
-nnoremap <leader>tt :<c-u>exec v:count.'Ttoggle'<cr>
-nnoremap <leader>tl :<c-u>exec v:count.'Tclear'<cr>
-nnoremap <silent> <leader>tr :T 
-xmap <leader>rs <plug>(neoterm-repl-send)
-nmap <leader>rs <plug>(neoterm-repl-send)
-nmap <leader>rsl <plug>(neoterm-repl-send-line)
-let g:neoterm_automap_keys = '<leader>tm'
+" neoterm
+xmap <leader>tr <plug>(neoterm-repl-send)
+nmap <leader>tr <plug>(neoterm-repl-send)
+nmap <leader>trl <plug>(neoterm-repl-send-line)
+
+nnoremap <silent> <leader>tR :<c-u>exec printf("%sTexec !! \<lt>cr>", v:count)<cr>
+nnoremap <silent> <leader>tt :<c-u>exec printf('%sTtoggle', v:count)<cr>
+nnoremap <silent> <leader>vt :<c-u>exec printf('botright vertical %s Ttoggle', v:count)<cr>
+nnoremap <silent> <leader>te :<c-u>exec printf('%sT exit', v:count)<cr>
+nnoremap <silent> <leader>tl :<c-u>exec printf('%sTclear', v:count)<cr>
+nnoremap <silent> <leader>tk :<c-u>exec printf('%sTkill', v:count)<cr>
+
+cabbrev tt Ttoggle
+cabbrev htt botright Ttoggle
+cabbrev vtt botright vertical Ttoggle
+cabbrev vt botright vertical T
 
 " fzf
 nnoremap <silent> <leader><space> :Files<CR>
