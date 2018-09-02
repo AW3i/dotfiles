@@ -31,9 +31,11 @@ export GOBIN=$GOPATH/bin
 export LANG=en_US.UTF-8
 export LESSCHARSET=utf-8
 export EDITOR=/usr/bin/nvim
+export TERMINAL=/usr/bin/kitty
 export VISUAL=/usr/bin/vi
 #export GNUPGHOME=$HOME/.gnupg/ledger
 export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/games/:$HOME/.bin:/opt/bin:$GOBIN:/usr/lib/node_modules/grunt-cli/bin/:$HOME/.cargo/bin:$HOME/.config/composer/vendor/bin:$HOME/.local/bin
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_DEFAULT_OPTS='
     --bind ctrl-f:page-down,ctrl-b:page-up
     --multi --bind "ctrl-a:select-all,ctrl-d:deselect-all"
@@ -60,16 +62,4 @@ e() {
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 eval "$(fasd --init auto)"
-
-# ALT-I - Paste the selected entry from locate output into the command line
-fzf-locate-widget() {
-  local selected
-  if selected=$(locate / | fzf -q "$LBUFFER"); then
-    LBUFFER=$selected
-  fi
-  zle redisplay
-}
-zle     -N    fzf-locate-widget
-bindkey '\ei' fzf-locate-widget
-
-fzf-locate() { xdg-open "$(locate "*" | fzf -e)" ;}
+source $HOME/Documents/git/dotfiles/zsh/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
