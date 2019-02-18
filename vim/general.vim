@@ -62,8 +62,8 @@ if exists('&inccommand')
 endif
 
 set termguicolors
-let g:seoul256_srgb = 1
-colorscheme seoul256
+" let g:seoul256_srgb = 1
+colorscheme iceberg
 
 filetype plugin indent  on
 filetype off

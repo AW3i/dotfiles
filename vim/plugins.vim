@@ -65,21 +65,10 @@ if has('nvim')
     Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
     Plug 'ncm2/ncm2-html-subscope'
     Plug 'ncm2/ncm2-markdown-subscope'
-    Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-    Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
-    " use LSP completion on ctrl-x ctrl-o as fallback for padawan in legacy projects
-    au filetype php set omnifunc=LanguageClient#complete
-
-    " no need for diagnostics, we're going to use neomake for that
-    let g:LanguageClient_diagnosticsEnable  = 0
-    let g:LanguageClient_signColumnAlwaysOn = 0
-    Plug 'JakeBecker/elixir-ls'
-    let g:LanguageClient_rootMarkers = {
-    \ 'elixir': ['mix.exs'],
-    \ }
+    Plug 'slashmili/alchemist.vim'
+    Plug 'pbogut/ncm2-alchemist'
+    Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
+    Plug 'phpactor/ncm2-phpactor'
 
 endif
 Plug 'Shougo/echodoc.vim'
@@ -272,8 +261,6 @@ Plug 'junegunn/fzf.vim'
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
 
-Plug 'lvht/fzf-mru'
-
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
   let g:vimwiki_list = [{'path': '~/ownCloud/vimwiki/', 'path_html': '~/public_html/',
                        \ 'syntax': 'markdown', 'ext': '.md'}]
@@ -308,7 +295,7 @@ Plug 'mhinz/vim-startify'
     " Statusline plugin
     Plug 'itchyny/lightline.vim'
         let g:lightline = {
-            \   'colorscheme': 'seoul256',
+            \   'colorscheme': 'iceberg',
             \   'active': {
             \     'left': [
             \       ['mode', 'paste'],
@@ -383,6 +370,7 @@ Plug 'mhinz/vim-startify'
         endfunction
 
 Plug 'junegunn/seoul256.vim'
+Plug 'cocopon/iceberg.vim'
 
 " VCS
 Plug 'tpope/vim-fugitive'

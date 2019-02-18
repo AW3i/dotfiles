@@ -86,7 +86,7 @@ nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>w :Windows<CR>
 inoremap <silent> <C-s> <ESC>:Snippets<CR>
-nnoremap <silent> <leader>m :FZFMru<CR>
+nnoremap <silent> <leader>m :Mru<CR>
 
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 imap <C-x><C-l> <plug>(fzf-complete-line)
@@ -94,11 +94,11 @@ imap <C-x><C-l> <plug>(fzf-complete-line)
 " fugitive mappings
 nmap <leader>ga :Gwrite<CR>
 nmap <leader>gs :Gstatus<CR>
-nmap <leader>gt :Gcommit -v -q %:p<CR>
+"nmap <leader>gt :Gcommit -v -q %:p<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gc :Gcommit -v -q<CR>
 nmap <leader>gb :Git branch<Space>
-nmap <leader>go :Git checkout<Space>
+"nmap <leader>go :Git checkout<Space>
 
 " Others
 nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
@@ -130,22 +130,25 @@ augroup END
 " nnoremap <silent> <F3> :call LanguageClient_textDocument_rename()<CR>
 " Include use statement
 nmap <Leader>u :call phpactor#UseAdd()<CR>
-
 " Invoke the context menu
-nmap <Leader>pm :call phpactor#ContextMenu()<CR>
-
+nmap <Leader>cm :call phpactor#ContextMenu()<CR>
 " Goto definition of class or class member under the cursor
-nmap <Leader>po :call phpactor#GotoDefinition()<CR>
-
+nmap <Leader>go :call phpactor#GotoDefinition()<CR>
+nmap <Leader>na :call phpactor#Navigate()<CR>
 " Transform the classes in the current file
 nmap <Leader>pt :call phpactor#Transform()<CR>
-
+" Display information
+nmap <Leader>h :call phpactor#Hover()<CR>
 " Generate a new class (replacing the current file)
 nmap <Leader>cc :call phpactor#ClassNew()<CR>
-
+" Extract expressoins
+nmap <Leader>ee :call phpactor#ExtractExpression(v:false)<CR>
+vmap <silent><Leader>em :<C-U>call phpactor#ExtractExpression(v:true)<CR>
+"Extract interface
+nmap <Leader>ei :call phpactor#ClassInflect()<CR>
+nmap <Leader>fr :call phpactor#FindReferences()<CR>
 " Extract method from selection
 vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
-
 " Ale
     nmap <silent> <C-k> <Plug>(ale_previous_wrap)
     nmap <silent> <C-j> <Plug>(ale_next_wrap)
