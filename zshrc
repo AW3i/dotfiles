@@ -20,7 +20,6 @@ alias lssh='TERM=xterm-256color ledger-agent --connect'
 alias m='f -e mpv' # quick opening files with mplayer
 alias o='a -e xdg-open' # quick opening files with xdg-open
 alias git_hub='ledger-agent -v -e ed25519 git@github.com -- git'
-alias phpstan='docker run -v $PWD:/app --rm phpstan/phpstan'
 
 plugins=(git vi-mode docker fasd)
 

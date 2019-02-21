@@ -1,5 +1,43 @@
 call plug#begin(vimpath. 'plugged')
 
+" Delimitmate: Auto Close Pairs
+" Lion: Align
+" Surround: Surround/change or delete
+" Repeat: duh
+" Tcomment: Comment out lines
+" Abolish: Abreviate, Substitute on steroids 
+" Ncm2: Completion manager & +6 Plugins
+" Echodoc: Display method signatures
+" Ultisnips: Snippets + Honza/snippets
+" RSI: Readline Keybindings
+" Zommwintab: Zoom in and out of buffers
+" Targets: Provide vim objects
+" Evanesco: Visual Star search
+" VimTest: Testing
+" UndoTree: a Tree view of vim's undo
+" Unimpaired: Useful keybindings
+" Eunuch: Provide file utility commands
+" Hackernews: Procrastination
+" ListToggle: Toggle Quickfix and Location list
+" Ale: Linter/LSP support
+" Sneak: Motion Plugin
+" Dirvish: File manager
+" Peekaboo: Display registers on specific keybindings
+" Neoterm: Terminal manager
+" PythonSupport: Update Python libraries for nvim
+" FZF: Fuzzy Searcher
+" Vimade: Fade inactive buffers
+" Startify: Session Manager
+" Lightline: A statusline
+" Iceberg: Colorscheme for now
+" Fugitve: Git client
+" Signify: Show changed lines in VCS
+" Vdebug: Debugging
+" Polyglot: Support many languages
+" Vimtex: Latex
+" Pdv: Php docblocks generator
+" Editrconfig: Respect editorconfig
+
 " Text Manipulation
 Plug 'Raimondi/delimitMate'
     let delimitMate_jump_expansion = 1
@@ -10,72 +48,35 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
-Plug 'kana/vim-textobj-function'
-Plug 'kana/vim-textobj-user'
 
 " Completion
 if has('nvim')
-        " assuming your using vim-plug: https://github.com/junegunn/vim-plug
     Plug 'ncm2/ncm2'
     " ncm2 requires nvim-yarp
     Plug 'roxma/nvim-yarp'
-
     " enable ncm2 for all buffers
     autocmd BufEnter * call ncm2#enable_for_buffer()
-
-
-
     " suppress the annoying 'match x of y', 'The only match' and 'Pattern not
     " found' messages
     set shortmess+=c
-
     " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
     inoremap <c-c> <ESC>
-
     " When the <Enter> key is pressed while the popup menu is visible, it only
     " hides the menu. Use this mapping to close the menu and also start a new
     " line.
     inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-
-    " wrap existing omnifunc
-    " Note that omnifunc does not run in background and may probably block the
-    " editor. If you don't want to be blocked by omnifunc too often, you could
-    " add 180ms delay before the omni wrapper:
-    "  'on_complete': ['ncm2#on_complete#delay', 180,
-    "               \ 'ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
-    au User Ncm2Plugin call ncm2#register_source({
-            \ 'name' : 'css',
-            \ 'priority': 9, 
-            \ 'subscope_enable': 1,
-            \ 'scope': ['css','scss'],
-            \ 'mark': 'css',
-            \ 'word_pattern': '[\w\-]+',
-            \ 'complete_pattern': ':\s*',
-            \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
-            \ })
     " :help Ncm2PopupOpen for more information
     set completeopt=noinsert,menuone,noselect
         " some completion sources
     Plug 'ncm2/ncm2-bufword'
     Plug 'ncm2/ncm2-path'
-    Plug 'ncm2/ncm2-jedi'
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-tagprefix'
     Plug 'ncm2/ncm2-ultisnips'
     Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
-    Plug 'ncm2/ncm2-html-subscope'
-    Plug 'ncm2/ncm2-markdown-subscope'
-    Plug 'slashmili/alchemist.vim'
-    Plug 'pbogut/ncm2-alchemist'
     Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
     Plug 'phpactor/ncm2-phpactor'
-
 endif
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
-Plug 'ervandew/supertab'
-    let g:SuperTabDefaultCompletionType = '<tab>'
-    let g:SuperTabClosePreviewOnPopupClose = 1
 if has('python')
     Plug 'SirVer/UltiSnips'
         let g:UltiSnipsExpandTrigger = "<tab>"
@@ -107,29 +108,19 @@ endif
 
 
 " Utility
-" Opens the filemanager or a terminal at the directory of the current file
-Plug 'justinmk/vim-gtfo'
-    let g:gtfo#terminals = { 'unix': 'kitty --detach --directory' }
-Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
-let g:nord_italic = 1
-let g:nord_italic_comments = 1
-augroup NordMods
-    autocmd!
-    autocmd ColorScheme nord highlight CursorLineNr ctermfg=6 guifg=#81A1C1
-    autocmd ColorScheme nord highlight CursorLine ctermbg=NONE guibg=#2E3440
-augroup end
+" Readline bindings
 Plug 'tpope/vim-rsi'
 " Zooms into a buffer and also unzooms back without breaking the layout
 Plug 'troydm/zoomwintab.vim'
+" Text objects
 Plug 'wellle/targets.vim'
+" Star search
 Plug 'pgdouyon/vim-evanesco'
 Plug 'janko-m/vim-test'
     let test#strategy = "neoterm"
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
-Plug 'majutsushi/tagbar'
-    "remap sort for tagbar so it doesn't collide with sneak
-    let g:tagbar_map_togglesort = "r"
+" Basic file management commands
 Plug 'tpope/vim-eunuch'
 Plug 'dansomething/vim-hackernews'
 Plug 'Valloric/ListToggle'
@@ -143,6 +134,7 @@ Plug 'w0rp/ale'
     let g:ale_echo_msg_format = '<%linter%> %code: %%s'
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
+" Alternative to netrw
 Plug 'justinmk/vim-dirvish'
     augroup my_dirvish_events
       autocmd!
@@ -162,17 +154,7 @@ Plug 'justinmk/vim-dirvish'
       autocmd FileType dirvish nnoremap <buffer>
         \ gh :keeppatterns g@\v/\.[^\/]+/?$@d<cr>
     augroup END
-Plug 'ludovicchabant/vim-gutentags'
-    let g:gutentags_ctags_exclude = [
-    \ '*.min.js',
-    \ '*html*',
-    \ 'jquery*.js',
-    \ '*/node_modules/*',
-    \ '*/migrate/*.rb'
-    \ ]
-    let g:gutentags_generate_on_write = 0
-    let g:gutentags_cache_dir = '/home/alex/.tags'
-    let g:gutentags_ctags_executable_php = '/home/alex/.bin/phpctags'
+" Display the registers
 Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
@@ -182,15 +164,6 @@ Plug 'kassio/neoterm'
     let g:neoterm_autoscroll = 1
     let g:neoterm_always_open_to_exec = 0
 Plug 'roxma/python-support.nvim'
-    " for python completions
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
-    " language specific completions on markdown file
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'mistune')
-
-    " utils, optional
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'psutil')
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'typing')
-
 " File Navigation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -261,10 +234,8 @@ Plug 'junegunn/fzf.vim'
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
 
-Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
-  let g:vimwiki_list = [{'path': '~/ownCloud/vimwiki/', 'path_html': '~/public_html/',
-                       \ 'syntax': 'markdown', 'ext': '.md'}]
-Plug 'tbabej/taskwiki'
+Plug 'TaDaa/vimade'
+
 
 " Appearance
 Plug 'mhinz/vim-startify'
@@ -300,7 +271,6 @@ Plug 'mhinz/vim-startify'
             \     'left': [
             \       ['mode', 'paste'],
             \       ['fugitive', 'bufferinfo'],
-            \       ['tagbar']
             \     ],
             \     'right': [
             \       ['colinfo', 'percent'],
@@ -321,7 +291,6 @@ Plug 'mhinz/vim-startify'
             \     'fileencoding': '%{&fenc}',
             \     'readonly': '%{&readonly?"":""}',
             \     'paste': '%{&paste?"PASTE":""}',
-            \   'tagbar': '%{tagbar#currenttag("%s", "")}',
             \   },
             \   'component_function': {
             \     'fileformat'  : 'MyFileformat',
@@ -369,12 +338,10 @@ Plug 'mhinz/vim-startify'
         return ''
         endfunction
 
-Plug 'junegunn/seoul256.vim'
 Plug 'cocopon/iceberg.vim'
 
 " VCS
 Plug 'tpope/vim-fugitive'
-Plug 'sodapopcan/vim-twiggy'
 Plug 'mhinz/vim-signify'
 
 " Languages
@@ -385,7 +352,5 @@ Plug 'lervag/vimtex'
 Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
-Plug 'vim-php/tagbar-phpctags.vim', {'for': 'php'}
-Plug 'mattn/emmet-vim'
-Plug 'editorconfig/editorconfig-vim'
+Plug 'sgur/vim-editorconfig'
 call plug#end()

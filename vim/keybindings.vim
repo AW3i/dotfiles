@@ -1,17 +1,6 @@
-nnoremap <leader>s :w<CR>
 nnoremap <silent> <leader>bc :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <silent> <leader>bd :bd<CR>
 nnoremap <silent> <leader>tn :tabnew<CR>
-nnoremap <silent> <M-1> 1gt<CR>
-nnoremap <silent> <M-2> 2gt<CR>
-nnoremap <silent> <M-3> 3gt<CR>
-nnoremap <silent> <M-4> 4gt<CR>
-nnoremap <silent> <M-5> 5gt<CR>
-nnoremap <silent> <M-6> 6gt<CR>
-nnoremap <silent> <M-7> 7gt<CR>
-nnoremap <silent> <M-8> 8gt<CR>
-nnoremap <silent> <M-9> 9gt<CR>
-nnoremap <silent> <M-0> 0gt<CR>
 " Switch back to normal mode from terminal mode
 if has('nvim')
     tnoremap <esc><esc> <C-\><C-n>
@@ -26,7 +15,7 @@ nmap * *zz
 nmap # #zz
 nmap g* g*zz
 nmap g# g#zz
-"
+
 " Store relative line number jumps in the jumplist.
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
 nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
@@ -56,9 +45,10 @@ omap T <Plug>Sneak_T
 
 " neoterm
 xmap <leader>tr <plug>(neoterm-repl-send)
-nmap <leader>tr <plug>(neoterm-repl-send)
 nmap <leader>trl <plug>(neoterm-repl-send-line)
 
+nnoremap <leader>tr :T 
+" Rerun last command
 nnoremap <silent> <leader>tR :<c-u>exec printf("%sTexec !! \<lt>cr>", v:count)<cr>
 nnoremap <silent> <leader>tt :<c-u>exec printf('%sTtoggle', v:count)<cr>
 nnoremap <silent> <leader>vt :<c-u>exec printf('botright vertical %s Ttoggle', v:count)<cr>
@@ -94,40 +84,15 @@ imap <C-x><C-l> <plug>(fzf-complete-line)
 " fugitive mappings
 nmap <leader>ga :Gwrite<CR>
 nmap <leader>gs :Gstatus<CR>
-"nmap <leader>gt :Gcommit -v -q %:p<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gc :Gcommit -v -q<CR>
 nmap <leader>gb :Git branch<Space>
-"nmap <leader>go :Git checkout<Space>
 
 " Others
 nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
 nnoremap <F12> :Startify<CR>
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
 
-"tagbar
-nnoremap <silent> <leader>ff  :TagbarOpenAutoClose<CR>
-nnoremap <silent> <F2>  :TagbarToggle<CR>
-
-" Easy align bindings
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-" Put at the very end of your .vimrc file.
-
-function! PhpSyntaxOverride()
-  hi! def link phpDocTags  phpDefine
-  hi! def link phpDocParam phpType
-endfunction
-
-augroup phpSyntaxOverride
-  autocmd!
-  autocmd FileType php call PhpSyntaxOverride()
-augroup END
-
-" LanguageClient_Neovim
-" nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-" nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-" nnoremap <silent> <F3> :call LanguageClient_textDocument_rename()<CR>
 " Include use statement
 nmap <Leader>u :call phpactor#UseAdd()<CR>
 " Invoke the context menu
@@ -150,5 +115,15 @@ nmap <Leader>fr :call phpactor#FindReferences()<CR>
 " Extract method from selection
 vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
 " Ale
-    nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-    nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+function! PhpSyntaxOverride()
+  hi! def link phpDocTags  phpDefine
+  hi! def link phpDocParam phpType
+endfunction
+
+augroup phpSyntaxOverride
+  autocmd!
+  autocmd FileType php call PhpSyntaxOverride()
+augroup END
