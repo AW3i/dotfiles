@@ -72,6 +72,7 @@ if has('nvim')
     Plug 'ncm2/ncm2-path'
     Plug 'ncm2/ncm2-ultisnips'
     Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
+    Plug 'ncm2/float-preview.nvim'
     Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
     Plug 'phpactor/ncm2-phpactor'
 endif
@@ -84,7 +85,8 @@ if has('python')
         let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
         let g:UltiSnipsUsePythonVersion = 3
         let g:UltiSnipsEditSplit="vertical"
-        let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+""        let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+        let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
         let g:snips_author = 'Alexandros Weigl'
         let g:snips_github = 'https://github.com/AW3i'
         if !exists("g:snips_company")
@@ -235,7 +237,21 @@ Plug 'junegunn/fzf.vim'
       \ 'header':  ['fg', 'Comment'] }
 
 Plug 'TaDaa/vimade'
-
+Plug 'Konfekt/Fastfold'
+    nmap zuz <Plug>(FastFoldUpdate)
+    let g:fastfold_savehook = 1
+    let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+    let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+    let g:markdown_folding = 1
+    let g:tex_fold_enabled = 1
+    let g:xml_syntax_folding = 1
+    let g:javaScript_fold = 1
+    let g:sh_fold_enabled= 7
+    let g:php_folding = 1
+    let g:elixir_folding = 1
+Plug 'AndrewRadev/tagalong.vim'
+Plug 'vimwiki/vimwiki'
+Plug 'soywod/kronos.vim'
 
 " Appearance
 Plug 'mhinz/vim-startify'
@@ -353,4 +369,7 @@ Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'sgur/vim-editorconfig'
+Plug 'slashmili/alchemist.vim'
+Plug 'pbogut/ncm2-alchemist'
+Plug 'arcseldon/vim-elixirConceal'
 call plug#end()

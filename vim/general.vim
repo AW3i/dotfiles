@@ -60,6 +60,7 @@ set noequalalways
 if exists('&inccommand')
   set inccommand=split
 endif
+set foldmethod=syntax
 
 set termguicolors
 " let g:seoul256_srgb = 1

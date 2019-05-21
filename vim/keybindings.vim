@@ -66,8 +66,8 @@ nnoremap <silent> <leader><space> :Files<CR>
 nnoremap <silent> <leader>a :Buffers<CR>
 nnoremap <silent> <leader>; :BLines<CR>
 nnoremap <silent> <leader>. :Lines<CR>
-nnoremap <silent> <leader>o :BTags<CR>
-nnoremap <silent> <leader>O :Tags<CR>
+" nnoremap <silent> <leader>o :BTags<CR>
+" nnoremap <silent> <leader>O :Tags<CR>
 nnoremap <silent> <leader>? :History<CR>
 nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 nnoremap <silent> K :call SearchWordWithAg()<CR>
@@ -89,31 +89,34 @@ nmap <leader>gc :Gcommit -v -q<CR>
 nmap <leader>gb :Git branch<Space>
 
 " Others
-nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
+autocmd FileType php nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
 nnoremap <F12> :Startify<CR>
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
 
 " Include use statement
-nmap <Leader>u :call phpactor#UseAdd()<CR>
+autocmd FileType php nmap <Leader>u :call phpactor#UseAdd()<CR>
 " Invoke the context menu
-nmap <Leader>cm :call phpactor#ContextMenu()<CR>
+autocmd FileType php nmap <Leader>mm :call phpactor#ContextMenu()<CR>
 " Goto definition of class or class member under the cursor
-nmap <Leader>go :call phpactor#GotoDefinition()<CR>
-nmap <Leader>na :call phpactor#Navigate()<CR>
+autocmd FileType php nmap <Leader>oo :call phpactor#GotoDefinition()<CR>
+autocmd FileType php nmap <Leader>oh :call phpactor#GotoDefinitionHsplit()<CR>
+autocmd FileType php nmap <Leader>ov :call phpactor#GotoDefinitionVsplit()<CR>
+autocmd FileType php nmap <Leader>ot :call phpactor#GotoDefinitionTab()<CR>
+autocmd FileType php nmap <Leader>na :call phpactor#Navigate()<CR>
 " Transform the classes in the current file
-nmap <Leader>pt :call phpactor#Transform()<CR>
+autocmd FileType php nmap <Leader>pt :call phpactor#Transform()<CR>
 " Display information
-nmap <Leader>h :call phpactor#Hover()<CR>
+autocmd FileType php nmap <Leader>h :call phpactor#Hover()<CR>
 " Generate a new class (replacing the current file)
-nmap <Leader>cc :call phpactor#ClassNew()<CR>
+autocmd FileType php nmap <Leader>cc :call phpactor#ClassNew()<CR>
 " Extract expressoins
-nmap <Leader>ee :call phpactor#ExtractExpression(v:false)<CR>
-vmap <silent><Leader>em :<C-U>call phpactor#ExtractExpression(v:true)<CR>
+autocmd FileType php nmap <Leader>ee :call phpactor#ExtractExpression(v:false)<CR>
+autocmd FileType php vmap <silent><Leader>em :<C-U>call phpactor#ExtractExpression(v:true)<CR>
 "Extract interface
-nmap <Leader>ei :call phpactor#ClassInflect()<CR>
-nmap <Leader>fr :call phpactor#FindReferences()<CR>
+autocmd FileType php nmap <Leader>ei :call phpactor#ClassInflect()<CR>
+autocmd FileType php nmap <Leader>fr :call phpactor#FindReferences()<CR>
 " Extract method from selection
-vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
+autocmd FileType php vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
 " Ale
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -127,3 +130,4 @@ augroup phpSyntaxOverride
   autocmd!
   autocmd FileType php call PhpSyntaxOverride()
 augroup END
+autocmd BufWritePost *.exs,*.ex silent :!mix format %
