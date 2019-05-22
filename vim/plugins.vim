@@ -114,7 +114,7 @@ endif
 " Readline bindings
 Plug 'tpope/vim-rsi'
 " Zooms into a buffer and also unzooms back without breaking the layout
-Plug 'troydm/zoomwintab.vim'
+Plug 'troydm/zoomwintab.vim', {'on': 'ZoomWinTabToggle'}
 " Text objects
 Plug 'wellle/targets.vim'
 " Star search
@@ -125,7 +125,7 @@ Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
 " Basic file management commands
 Plug 'tpope/vim-eunuch'
-Plug 'dansomething/vim-hackernews'
+Plug 'dansomething/vim-hackernews', {'on': 'HackerNews'}
 Plug 'Valloric/ListToggle'
 Plug 'w0rp/ale'
     let g:ale_lint_on_text_changed = 'never'
@@ -394,4 +394,6 @@ Plug 'sgur/vim-editorconfig'
 Plug 'slashmili/alchemist.vim'
 Plug 'pbogut/ncm2-alchemist'
 Plug 'arcseldon/vim-elixirConceal'
+Plug 'mattn/emmet-vim'
+    let g:user_emmet_install_global = 0
 call plug#end()
