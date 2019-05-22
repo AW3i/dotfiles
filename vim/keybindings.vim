@@ -68,10 +68,13 @@ nnoremap <silent> <leader>; :BLines<CR>
 nnoremap <silent> <leader>. :Lines<CR>
 " nnoremap <silent> <leader>o :BTags<CR>
 " nnoremap <silent> <leader>O :Tags<CR>
-nnoremap <silent> <leader>? :History<CR>
+nnoremap <silent> <leader>h :History<CR>
+nnoremap <silent> <leader>? :execute 'Agi ' . input('Ag/')<CR>
 nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 nnoremap <silent> K :call SearchWordWithAg()<CR>
+nnoremap <silent> Ki :call SearchWordWithAgi()<CR>
 vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+vnoremap <silent> Ki :call SearchVisualSelectionWithAgi()<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>w :Windows<CR>

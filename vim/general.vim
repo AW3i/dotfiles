@@ -48,6 +48,10 @@ set complete+=i,kspell
 set omnifunc=syntaxcomplete#Complete
 set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
 set wildignore+=*.swp,*.tmp
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-ignore\ --no-heading\ --smart-case
+endif
+
 set grepprg=ag\ --nogroup\ --nocolor
 let &showbreak='↪ '
 let mapleader = " "

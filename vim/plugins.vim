@@ -39,10 +39,11 @@ call plug#begin(vimpath. 'plugged')
 " Editrconfig: Respect editorconfig
 
 " Text Manipulation
-Plug 'Raimondi/delimitMate'
-    let delimitMate_jump_expansion = 1
-    let delimitMate_expand_cr = 2
-    let delimitMate_expand_space = 0
+" Plug 'Raimondi/delimitMate'
+"     let delimitMate_jump_expansion = 1
+"     let delimitMate_expand_cr = 2
+"     let delimitMate_expand_space = 0
+Plug 'jiangmiao/auto-pairs'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -71,10 +72,10 @@ if has('nvim')
     Plug 'ncm2/ncm2-bufword'
     Plug 'ncm2/ncm2-path'
     Plug 'ncm2/ncm2-ultisnips'
-    Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
+    Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'}
     Plug 'ncm2/float-preview.nvim'
     Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
-    Plug 'phpactor/ncm2-phpactor'
+    Plug 'phpactor/ncm2-phpactor', {'for': 'php'}
 endif
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
@@ -165,8 +166,6 @@ Plug 'kassio/neoterm'
     let g:neoterm_use_relative_path = 1
     let g:neoterm_autoscroll = 1
     let g:neoterm_always_open_to_exec = 0
-Plug 'roxma/python-support.nvim'
-" File Navigation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
     let g:fzf_nvim_statusline = 0 " disable statusline overwriting
@@ -175,6 +174,10 @@ Plug 'junegunn/fzf.vim'
 
     function! SearchWordWithAg()
         execute 'Ag' expand('<cword>')
+    endfunction
+
+    function! SearchWordWithAgi()
+        execute 'Agi' expand('<cword>')
     endfunction
 
     function! SearchVisualSelectionWithAg() range
@@ -188,6 +191,19 @@ Plug 'junegunn/fzf.vim'
         let &clipboard = old_clipboard
         execute 'Ag' selection
     endfunction
+
+    function! SearchVisualSelectionWithAgi() range
+        let old_reg = getreg('"')
+        let old_regtype = getregtype('"')
+        let old_clipboard = &clipboard
+        set clipboard&
+        normal! ""gvy
+        let selection = getreg('"')
+        call setreg('"', old_reg, old_regtype)
+        let &clipboard = old_clipboard
+        execute 'Agj' selection
+    endfunction
+
 
     function! s:ag_to_qf(line)
         let parts = split(a:line, ':')
@@ -221,6 +237,13 @@ Plug 'junegunn/fzf.vim'
     \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
     \ })
 
+    command! -nargs=* Agi call fzf#run({
+    \ 'source':  printf('rg --no-ignore --column --color always "%s"',
+    \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
+    \ 'sink*':    function('<sid>ag_handler'),
+    \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
+    \ })
+
     let g:fzf_colors =
     \ { 'fg':      ['fg', 'Normal'],
       \ 'bg':      ['bg', 'Normal'],
@@ -236,7 +259,6 @@ Plug 'junegunn/fzf.vim'
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
 
-Plug 'TaDaa/vimade'
 Plug 'Konfekt/Fastfold'
     nmap zuz <Plug>(FastFoldUpdate)
     let g:fastfold_savehook = 1
@@ -250,8 +272,8 @@ Plug 'Konfekt/Fastfold'
     let g:php_folding = 1
     let g:elixir_folding = 1
 Plug 'AndrewRadev/tagalong.vim'
+    let g:tagalong_additional_filetypes = ['phtml', 'twig', 'dhtml']
 Plug 'vimwiki/vimwiki'
-Plug 'soywod/kronos.vim'
 
 " Appearance
 Plug 'mhinz/vim-startify'
