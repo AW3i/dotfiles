@@ -37,7 +37,6 @@ set splitbelow
 set splitright
 set undolevels=500
 if has("persistent_undo")
-"    set undodir=~/.undodir/ move
     set undofile
 endif
 set timeout timeoutlen=1000 ttimeoutlen=100
@@ -52,7 +51,6 @@ if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-ignore\ --no-heading\ --smart-case
 endif
 
-set grepprg=ag\ --nogroup\ --nocolor
 let &showbreak='↪ '
 let mapleader = " "
 let maplocalleader = "\\"
@@ -65,17 +63,17 @@ if exists('&inccommand')
   set inccommand=split
 endif
 set foldmethod=syntax
+set nomodeline
 
-set termguicolors
-" let g:seoul256_srgb = 1
-colorscheme iceberg
+if (has("termguicolors"))
+    set termguicolors
+endif
+" colorscheme hybrid_reverse
+colorscheme one
+set background=light
 
 filetype plugin indent  on
 filetype off
-
-"Highlight in red when a line has more than 81 characters
-highlight ColorColumn ctermbg=red
-call matchadd('ColorColumn', '\%81v', 100)
 
 autocmd FileType mail set spell
 
@@ -89,3 +87,4 @@ set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr
 set mouse=a
 autocmd BufNewFile,BufRead *.phtml setf php
 autocmd BufNewFile,BufRead *.dhtml setf php
+syntax on

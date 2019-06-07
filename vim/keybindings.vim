@@ -69,7 +69,7 @@ nnoremap <silent> <leader>. :Lines<CR>
 " nnoremap <silent> <leader>o :BTags<CR>
 " nnoremap <silent> <leader>O :Tags<CR>
 nnoremap <silent> <leader>h :History<CR>
-nnoremap <silent> <leader>? :execute 'Agi ' . input('Ag/')<CR>
+nnoremap <silent> <leader>, :execute 'Agi ' . input('Ag/')<CR>
 nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 nnoremap <silent> K :call SearchWordWithAg()<CR>
 nnoremap <silent> Ki :call SearchWordWithAgi()<CR>

@@ -75,6 +75,7 @@ if has('nvim')
     Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'}
     Plug 'ncm2/float-preview.nvim'
     Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
+        let g:phpactorInputListStrategy = 'fzf'
     Plug 'phpactor/ncm2-phpactor', {'for': 'php'}
 endif
 Plug 'Shougo/echodoc.vim'
@@ -134,7 +135,15 @@ Plug 'w0rp/ale'
     let g:ale_sign_error = '✘'
     let g:ale_sign_warning = ':('
     let g:ale_php_phpcs_standard = 'PSR2'
+    let g:ale_linters = { 'php': ['php','psalm'] }
     let g:ale_echo_msg_format = '<%linter%> %code: %%s'
+    " autocmd BufEnter *.min.js ALEDisableBuffer
+    " autocmd BufEnter *.sql ALEDisableBuffer
+    let g:ale_pattern_options = {
+        \   '.*\.json$': {'ale_enabled': 0},
+        \   '.*\.min\.*$': {'ale_enabled': 0},
+        \   '.*\.sql': {'ale_enabled': 0},
+        \}
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 " Alternative to netrw
@@ -304,7 +313,7 @@ Plug 'mhinz/vim-startify'
     " Statusline plugin
     Plug 'itchyny/lightline.vim'
         let g:lightline = {
-            \   'colorscheme': 'iceberg',
+            \   'colorscheme': 'one',
             \   'active': {
             \     'left': [
             \       ['mode', 'paste'],
@@ -376,7 +385,12 @@ Plug 'mhinz/vim-startify'
         return ''
         endfunction
 
-Plug 'cocopon/iceberg.vim'
+Plug 'rakr/vim-one'
+Plug 'kristijanhusak/vim-hybrid-material'
+    let g:enable_bold_font = 1
+    let g:enable_italic_font = 1
+Plug 'justinmk/vim-gtfo'
+
 
 " VCS
 Plug 'tpope/vim-fugitive'
@@ -384,6 +398,11 @@ Plug 'mhinz/vim-signify'
 
 " Languages
 Plug 'vim-vdebug/vdebug'
+    if !exists('g:vdebug_options')
+      let g:vdebug_options = {}
+    endif
+    let g:vdebug_options.break_on_open = 0
+    let g:vdebug_options.ide_key = 'PHPSTORM'
 Plug 'sheerun/vim-polyglot'
     let g:polyglot_disabled = ['latex']
 Plug 'lervag/vimtex'
