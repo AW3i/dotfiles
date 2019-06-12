@@ -10,7 +10,6 @@ call plug#begin(vimpath. 'plugged')
 " Echodoc: Display method signatures
 " Ultisnips: Snippets + Honza/snippets
 " RSI: Readline Keybindings
-" Zommwintab: Zoom in and out of buffers
 " Targets: Provide vim objects
 " Evanesco: Visual Star search
 " VimTest: Testing
@@ -50,36 +49,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
 
-" Completion
-if has('nvim')
-    Plug 'ncm2/ncm2'
-    " ncm2 requires nvim-yarp
-    Plug 'roxma/nvim-yarp'
-    " enable ncm2 for all buffers
-    autocmd BufEnter * call ncm2#enable_for_buffer()
-    " suppress the annoying 'match x of y', 'The only match' and 'Pattern not
-    " found' messages
-    set shortmess+=c
-    " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
-    inoremap <c-c> <ESC>
-    " When the <Enter> key is pressed while the popup menu is visible, it only
-    " hides the menu. Use this mapping to close the menu and also start a new
-    " line.
-    inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-    " :help Ncm2PopupOpen for more information
-    set completeopt=noinsert,menuone,noselect
-        " some completion sources
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-path'
-    Plug 'ncm2/ncm2-ultisnips'
-    Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'}
-    Plug 'ncm2/float-preview.nvim'
-    Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
-        let g:phpactorInputListStrategy = 'fzf'
-    Plug 'phpactor/ncm2-phpactor', {'for': 'php'}
-endif
-Plug 'Shougo/echodoc.vim'
-    let g:echodoc_enable_at_startup = 1
+" Templates
 if has('python')
     Plug 'SirVer/UltiSnips'
         let g:UltiSnipsExpandTrigger = "<tab>"
@@ -87,7 +57,6 @@ if has('python')
         let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
         let g:UltiSnipsUsePythonVersion = 3
         let g:UltiSnipsEditSplit="vertical"
-""        let g:UltiSnipsSnippetDirectories=["UltiSnips"]
         let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
         let g:snips_author = 'Alexandros Weigl'
         let g:snips_github = 'https://github.com/AW3i'
@@ -114,12 +83,11 @@ endif
 " Utility
 " Readline bindings
 Plug 'tpope/vim-rsi'
-" Zooms into a buffer and also unzooms back without breaking the layout
-Plug 'troydm/zoomwintab.vim', {'on': 'ZoomWinTabToggle'}
 " Text objects
 Plug 'wellle/targets.vim'
 " Star search
 Plug 'pgdouyon/vim-evanesco'
+" test n stuff
 Plug 'janko-m/vim-test'
     let test#strategy = "neoterm"
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
@@ -166,9 +134,6 @@ Plug 'justinmk/vim-dirvish'
       autocmd FileType dirvish nnoremap <buffer>
         \ gh :keeppatterns g@\v/\.[^\/]+/?$@d<cr>
     augroup END
-" Display the registers
-Plug 'junegunn/vim-peekaboo'
-    let g:peekaboo_delay = 400
 Plug 'kassio/neoterm'
     let g:neoterm_default_mod = 'botright'
     let g:neoterm_automap_keys = '<leader>tm'
@@ -282,121 +247,121 @@ Plug 'Konfekt/Fastfold'
     let g:elixir_folding = 1
 Plug 'AndrewRadev/tagalong.vim'
     let g:tagalong_additional_filetypes = ['phtml', 'twig', 'dhtml']
-Plug 'vimwiki/vimwiki'
 
 " Appearance
-Plug 'mhinz/vim-startify'
-    let g:startify_session_dir = '~/.config/nvim/session'
-    let g:startify_bookmarks = [{'o': '~/ownCloud/shared/org/index.org'}]
-    let g:startify_list_order = [
-                \ ['Sessions:'],
-                \ 'sessions',
-                \ ['Bookmarks:'],
-                \ 'bookmarks',
-                \ ['Files:'],
-                \ 'files',
-                \ ['Dir:'],
-                \ 'dir'
-                \ ]
-    let g:startify_session_persistence = 1
-    let g:startify_session_delete_buffers = 1
-    let g:startify_change_to_dir = 1
-    let g:startify_change_to_vcs_root = 1
-    let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
-    " let g:startify_session_before_save = [
-    "     \ 'echo "Cleaning left over terminals"',
-    "     \ 'TcloseAll!',
-    "     \ 'bufdo if bufname("%")=~? "term:\/\/" | bdel! | endif',
-    "     \ ]
-    autocmd! User Startified setlocal colorcolumn=0
+" Statusline plugin
+Plug 'itchyny/lightline.vim'
+    let g:lightline = {
+        \   'colorscheme': 'one',
+        \   'active': {
+        \     'left': [
+        \       ['mode', 'paste'],
+        \       ['fugitive', 'bufferinfo'],
+        \     ],
+        \     'right': [
+        \       ['colinfo', 'percent'],
+        \       ['fileformat', 'filetype'],
+        \     ]
+        \   },
+        \   'inactive': {
+        \     'left': [ ['bufferinfo'] ],
+        \     'right': [ ['percent'], ['filetype'] ]
+        \   },
+        \   'tabline': {
+        \     'left': [ ['tabs'], ['bufferline'] ],
+        \     'right': [ ['fileencoding'] ]
+        \   },
+        \   'component': {
+        \     'bufferinfo': '%<%f %m',
+        \     'colinfo': ':%c%V',
+        \     'fileencoding': '%{&fenc}',
+        \     'readonly': '%{&readonly?"":""}',
+        \     'paste': '%{&paste?"PASTE":""}',
+        \   },
+        \   'component_function': {
+        \     'fileformat'  : 'MyFileformat',
+        \     'filetype'    : 'MyFiletype',
+        \     'fugitive'    : 'MyFugitive'
+        \   },
+        \   'separator': { 'left': '', 'right': '' },
+        \   'subseparator': { 'left': '', 'right': '' },
+        \ }
 
-    " Statusline plugin
-    Plug 'itchyny/lightline.vim'
-        let g:lightline = {
-            \   'colorscheme': 'one',
-            \   'active': {
-            \     'left': [
-            \       ['mode', 'paste'],
-            \       ['fugitive', 'bufferinfo'],
-            \     ],
-            \     'right': [
-            \       ['colinfo', 'percent'],
-            \       ['fileformat', 'filetype'],
-            \     ]
-            \   },
-            \   'inactive': {
-            \     'left': [ ['bufferinfo'] ],
-            \     'right': [ ['percent'], ['filetype'] ]
-            \   },
-            \   'tabline': {
-            \     'left': [ ['tabs'], ['bufferline'] ],
-            \     'right': [ ['fileencoding'] ]
-            \   },
-            \   'component': {
-            \     'bufferinfo': '%<%f %m',
-            \     'colinfo': ':%c%V',
-            \     'fileencoding': '%{&fenc}',
-            \     'readonly': '%{&readonly?"":""}',
-            \     'paste': '%{&paste?"PASTE":""}',
-            \   },
-            \   'component_function': {
-            \     'fileformat'  : 'MyFileformat',
-            \     'filetype'    : 'MyFiletype',
-            \     'fugitive'    : 'MyFugitive'
-            \   },
-            \   'separator': { 'left': '', 'right': '' },
-            \   'subseparator': { 'left': '', 'right': '' },
-            \ }
+    let g:lightline.enable = {
+        \   'statusline': 1,
+        \   'tabline': 1
+        \ }
 
-        let g:lightline.enable = {
-            \   'statusline': 1,
-            \   'tabline': 1
-            \ }
+    let g:lightline.mode_map = {
+        \   'n'      : ' N ',
+        \   'i'      : ' I ',
+        \   'R'      : ' R ',
+        \   'v'      : ' V ',
+        \   'V'      : 'V-L',
+        \   'c'      : ' C ',
+        \   "\<C-v>" : 'V-B',
+        \   's'      : ' S ',
+        \   'S'      : 'S-L',
+        \   "\<C-s>" : 'S-B',
+        \   "t"      : ' T ',
+        \   '?'      : ' ? '
+        \ }
 
-        let g:lightline.mode_map = {
-            \   'n'      : ' N ',
-            \   'i'      : ' I ',
-            \   'R'      : ' R ',
-            \   'v'      : ' V ',
-            \   'V'      : 'V-L',
-            \   'c'      : ' C ',
-            \   "\<C-v>" : 'V-B',
-            \   's'      : ' S ',
-            \   'S'      : 'S-L',
-            \   "\<C-s>" : 'S-B',
-            \   "t"      : ' T ',
-            \   '?'      : ' ? '
-            \ }
+    function! MyFiletype()
+    return strlen(&filetype) ? &filetype : '--'
+    endfunction
 
-        function! MyFiletype()
-        return strlen(&filetype) ? &filetype : '--'
-        endfunction
+    function! MyFileformat()
+    return winwidth('.') > 80 ? &fileformat : ''
+    endfunction
 
-        function! MyFileformat()
-        return winwidth('.') > 80 ? &fileformat : ''
-        endfunction
-
-        function! MyFugitive()
-        if exists('*fugitive#head') && winwidth('.') > 75
-            let bmark = '┣ '
-            let branch = fugitive#head()
-            return strlen(branch) ? bmark . branch : ''
-        endif
-        return ''
-        endfunction
+    function! MyFugitive()
+    if exists('*fugitive#head') && winwidth('.') > 75
+        let bmark = '┣ '
+        let branch = fugitive#head()
+        return strlen(branch) ? bmark . branch : ''
+    endif
+    return ''
+    endfunction
 
 Plug 'rakr/vim-one'
-Plug 'kristijanhusak/vim-hybrid-material'
-    let g:enable_bold_font = 1
-    let g:enable_italic_font = 1
-Plug 'justinmk/vim-gtfo'
-
+" Plug 'kristijanhusak/vim-hybrid-material'
+"     let g:enable_bold_font = 1
+"     let g:enable_italic_font = 1
 
 " VCS
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " Languages
+if has('nvim')
+    Plug 'ncm2/ncm2'
+    " ncm2 requires nvim-yarp
+    Plug 'roxma/nvim-yarp'
+    " enable ncm2 for all buffers
+    autocmd BufEnter * call ncm2#enable_for_buffer()
+    " suppress the annoying 'match x of y', 'The only match' and 'Pattern not
+    " found' messages
+    set shortmess+=c
+    " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+    inoremap <c-c> <ESC>
+    " When the <Enter> key is pressed while the popup menu is visible, it only
+    " hides the menu. Use this mapping to close the menu and also start a new
+    " line.
+    inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+    " :help Ncm2PopupOpen for more information
+    set completeopt=noinsert,menuone,noselect
+        " some completion sources
+    Plug 'ncm2/ncm2-bufword'
+    Plug 'ncm2/ncm2-path'
+    Plug 'ncm2/ncm2-ultisnips'
+    Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'}
+    Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
+        let g:phpactorInputListStrategy = 'fzf'
+    Plug 'phpactor/ncm2-phpactor', {'for': 'php'}
+endif
+Plug 'Shougo/echodoc.vim'
+    let g:echodoc_enable_at_startup = 1
 Plug 'vim-vdebug/vdebug'
     if !exists('g:vdebug_options')
       let g:vdebug_options = {}
@@ -412,7 +377,6 @@ Plug 'tobyS/pdv', {'for': 'php'}
 Plug 'sgur/vim-editorconfig'
 Plug 'slashmili/alchemist.vim'
 Plug 'pbogut/ncm2-alchemist'
-Plug 'arcseldon/vim-elixirConceal'
 Plug 'mattn/emmet-vim'
     let g:user_emmet_install_global = 0
 call plug#end()
