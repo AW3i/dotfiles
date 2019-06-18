@@ -34,9 +34,7 @@ syntax on
 set showmatch
 set hidden
 set noautowrite
-set autoread
 set more
-set ruler
 set noshowmode
 set nostartofline
 set wildmenu
@@ -66,9 +64,6 @@ endif
 let &showbreak='↪ '
 let mapleader = " "
 let maplocalleader = "\\"
-let g:netrw_liststyle = 0
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
 set title
 set noequalalways
 if exists('&inccommand')
@@ -80,7 +75,6 @@ set nomodeline
 filetype plugin indent  on
 filetype off
 
-
 highlight! ErrorSign guifg=black guibg=#E01600 ctermfg=16 ctermbg=160
 highlight! WarningSign guifg=black guibg=#FFED26 ctermfg=16 ctermbg=11
 
@@ -91,20 +85,15 @@ set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr
 set mouse=a
 
 call plug#begin(vimpath. 'plugged')
-
-" Text Manipulation
-" Plug 'Raimondi/delimitMate'
-"     let delimitMate_jump_expansion = 1
-"     let delimitMate_expand_cr = 2
-"     let delimitMate_expand_space = 0
-Plug 'jiangmiao/auto-pairs'
+Plug 'Raimondi/delimitMate'
+    let delimitMate_jump_expansion = 1
+    let delimitMate_expand_cr = 2
+    let delimitMate_expand_space = 0
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
-
-" Templates
 if has('python')
     Plug 'SirVer/UltiSnips'
         let g:UltiSnipsExpandTrigger = "<tab>"
@@ -114,40 +103,23 @@ if has('python')
         let g:UltiSnipsEditSplit="vertical"
         let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
         let g:snips_author = 'Alexandros Weigl'
-        let g:snips_github = 'https://github.com/AW3i'
         if !exists("g:snips_company")
             let g:snips_company = 'TechDivison'
         endif
         if !exists("g:snips_username")
             let g:snips_username = 'AW3i'
         endif
-
-    Plug 'Valloric/MatchTagAlways'
-        let g:mta_filetypes = {
-        \ 'html' : 1,
-        \ 'dhtml' : 1,
-        \ 'xhtml' : 1,
-        \ 'xml' : 1,
-        \ 'phtml' : 1,
-        \ 'twig' : 1,
-        \}
     Plug 'honza/vim-snippets'
 endif
-
-
-" Utility
 " Readline bindings
 Plug 'tpope/vim-rsi'
-" Text objects
 Plug 'wellle/targets.vim'
 " Star search
 Plug 'pgdouyon/vim-evanesco'
-" test n stuff
 Plug 'janko-m/vim-test'
     let test#strategy = "neoterm"
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
-" Basic file management commands
 Plug 'tpope/vim-eunuch'
 Plug 'dansomething/vim-hackernews', {'on': 'HackerNews'}
 Plug 'w0rp/ale'
@@ -168,7 +140,6 @@ Plug 'w0rp/ale'
         \}
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
-" Alternative to netrw
 Plug 'justinmk/vim-dirvish'
     augroup my_dirvish_events
       autocmd!
@@ -306,7 +277,6 @@ Plug 'vimwiki/vimwiki'
     let g:vimwiki_folding='syntax'
 
 " Appearance
-" Statusline plugin
 Plug 'itchyny/lightline.vim'
     let g:lightline = {
         \   'colorscheme': 'one',
@@ -380,7 +350,7 @@ Plug 'itchyny/lightline.vim'
     endif
     return ''
     endfunction
-
+"
 Plug 'rakr/vim-one'
 " Plug 'kristijanhusak/vim-hybrid-material'
 "     let g:enable_bold_font = 1
@@ -400,12 +370,6 @@ if has('nvim')
     " suppress the annoying 'match x of y', 'The only match' and 'Pattern not
     " found' messages
     set shortmess+=c
-    " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
-    inoremap <c-c> <ESC>
-    " When the <Enter> key is pressed while the popup menu is visible, it only
-    " hides the menu. Use this mapping to close the menu and also start a new
-    " line.
-    inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
     " :help Ncm2PopupOpen for more information
     set completeopt=noinsert,menuone,noselect
         " some completion sources
@@ -413,9 +377,8 @@ if has('nvim')
     Plug 'ncm2/ncm2-path'
     Plug 'ncm2/ncm2-ultisnips'
     Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'}
-    Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
-        let g:phpactorInputListStrategy = 'fzf'
     Plug 'phpactor/ncm2-phpactor', {'for': 'php'}
+    Plug 'pbogut/ncm2-alchemist'
 endif
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
@@ -427,16 +390,17 @@ Plug 'vim-vdebug/vdebug'
     let g:vdebug_options.ide_key = 'PHPSTORM'
 Plug 'sheerun/vim-polyglot'
     let g:polyglot_disabled = ['latex']
+Plug 'sgur/vim-editorconfig'
+Plug 'andymass/vim-matchup'
+Plug 'mattn/emmet-vim'
+    let g:user_emmet_install_global = 0
 Plug 'lervag/vimtex'
 Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
 Plug 'tobyS/pdv', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
-Plug 'sgur/vim-editorconfig'
+Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
+    let g:phpactorInputListStrategy = 'fzf'
 Plug 'slashmili/alchemist.vim'
-Plug 'pbogut/ncm2-alchemist'
-Plug 'mattn/emmet-vim'
-    let g:user_emmet_install_global = 0
-Plug 'andymass/vim-matchup'
 call plug#end()
 
 if (has("termguicolors"))
@@ -468,13 +432,6 @@ nmap g# g#zz
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
 nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
-" vim-test  bindings
-nmap <silent> <leader>rT :TestNearest<CR>
-nmap <silent> <leader>rt :TestFile<CR>
-nmap <silent> <leader>ra :TestSuite<CR>
-nmap <silent> <leader>rl :TestLast<CR>
-nmap <silent> <leader>rg :TestVisit<CR>
-
 " sneak
 "replace 'f' with 1-char Sneak
 nmap f <Plug>Sneak_f
@@ -503,11 +460,6 @@ nnoremap <silent> <leader>vt :<c-u>exec printf('botright vertical %s Ttoggle', v
 nnoremap <silent> <leader>te :<c-u>exec printf('%sT exit', v:count)<cr>
 nnoremap <silent> <leader>tl :<c-u>exec printf('%sTclear', v:count)<cr>
 nnoremap <silent> <leader>tk :<c-u>exec printf('%sTkill', v:count)<cr>
-
-cabbrev tt Ttoggle
-cabbrev htt botright Ttoggle
-cabbrev vtt botright vertical Ttoggle
-cabbrev vt botright vertical T
 
 " fzf
 nnoremap <silent> <leader><space> :Files<CR>
@@ -541,7 +493,6 @@ nmap <leader>gb :Git branch<Space>
 
 " Others
 autocmd FileType php nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
-nnoremap <F12> :Startify<CR>
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
 
 " Include use statement
