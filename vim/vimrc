@@ -95,7 +95,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
 if has('python')
-    Plug 'SirVer/UltiSnips'
+    Plug 'SirVer/UltiSnips' | Plug 'honza/vim-snippets'
         let g:UltiSnipsExpandTrigger = "<tab>"
         let g:UltiSnipsJumpForwardTrigger = "<tab>"
         let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
@@ -109,7 +109,6 @@ if has('python')
         if !exists("g:snips_username")
             let g:snips_username = 'AW3i'
         endif
-    Plug 'honza/vim-snippets'
 endif
 " Readline bindings
 Plug 'tpope/vim-rsi'
@@ -362,9 +361,7 @@ Plug 'mhinz/vim-signify'
 
 " Languages
 if has('nvim')
-    Plug 'ncm2/ncm2'
-    " ncm2 requires nvim-yarp
-    Plug 'roxma/nvim-yarp'
+    Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'| Plug 'ncm2/ncm2-bufword' | Plug 'ncm2/ncm2-path' | Plug 'ncm2/ncm2-ultisnips' | Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'} | Plug 'phpactor/ncm2-phpactor', {'for': 'php'} | Plug 'pbogut/ncm2-alchemist'
     " enable ncm2 for all buffers
     autocmd BufEnter * call ncm2#enable_for_buffer()
     " suppress the annoying 'match x of y', 'The only match' and 'Pattern not
@@ -373,12 +370,6 @@ if has('nvim')
     " :help Ncm2PopupOpen for more information
     set completeopt=noinsert,menuone,noselect
         " some completion sources
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-path'
-    Plug 'ncm2/ncm2-ultisnips'
-    Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'}
-    Plug 'phpactor/ncm2-phpactor', {'for': 'php'}
-    Plug 'pbogut/ncm2-alchemist'
 endif
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
@@ -394,13 +385,13 @@ Plug 'sgur/vim-editorconfig'
 Plug 'andymass/vim-matchup'
 Plug 'mattn/emmet-vim'
     let g:user_emmet_install_global = 0
-Plug 'lervag/vimtex'
-Plug 'tobyS/vmustache', {'for': 'php'} "Library for pdv
-Plug 'tobyS/pdv', {'for': 'php'}
+Plug 'lervag/vimtex', {'for': 'tex'}
+
+Plug 'tobyS/pdv', {'for': 'php'} | Plug 'tobyS/vmustache', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
     let g:phpactorInputListStrategy = 'fzf'
-Plug 'slashmili/alchemist.vim'
+Plug 'slashmili/alchemist.vim', {'for': 'elixir'}
 call plug#end()
 
 if (has("termguicolors"))
