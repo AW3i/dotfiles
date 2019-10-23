@@ -1,0 +1,150 @@
+# Example mailcap file for Reddit Terminal Viewer
+# https://github.com/michael-lazar/rtv/
+#
+# Copy the contents of this file to {HOME}/.mailcap, or point to it using $MAILCAPS
+# Then launch RTV using the --enable-media flag. All shell commands defined in
+# this file depend on external programs that must be installed on your system.
+#
+# HELP REQUESTED! If you come up with your own commands (especially for OS X)
+# and would like to share, please post an issue on the GitHub tracker and we
+# can get them added to this file as references.
+#
+#
+#                              Mailcap 101
+# - The first entry with a matching MIME type will be executed, * is a wildcard
+# - %s will be replaced with the image or video url
+# - Add ``test=test -n "$DISPLAY"`` if your command opens a new window
+# - Add ``needsterminal`` for commands that use the terminal
+# - Add ``copiousoutput`` for commands that dump text to stdout
+
+###############################################################################
+# Commands below this point will open media in a separate window without
+# pausing execution of RTV.
+###############################################################################
+
+# Feh is a simple and effective image viewer
+# Note that rtv returns a list of urls for imgur albums, so we don't put quotes
+# around the `%s`
+image/x-imgur-album; feh -g 640x480 %s; test=test -n "$DISPLAY"
+image/gif; mpv '%s' --autofit 640x480 --loop=inf; test=test -n "$DISPLAY"
+image/*; kitty +kitten icat %s; copiousoutput
+image/pjpeg; sxiv %s; copiousoutput
+image/jpeg; sxiv %s; copiousoutput
+image/png; sxiv %s; copiousoutput
+image/gif; sxiv %s; copiousoutput
+
+# Youtube videos are assigned a custom mime-type, which can be streamed with
+# vlc or youtube-dl.
+video/x-youtube; vlc '%s' --width 640 --height 480; test=test -n "$DISPLAY"
+#video/x-youtube; mpv --ytdl-format=bestvideo+bestaudio/best '%s' --autofit 640x480; test=test -n "$DISPLAY"
+
+# Mpv is a simple and effective video streamer
+video/*; mpv '%s' --autofit 640x480 --loop=inf; test=test -n "$DISPLAY"
+audio/*; mpv '%s' --autofit 640x480 --loop=inf; test=test -n "$DISPLAY"
+
+###############################################################################
+# Commands below this point will attempt to display media directly in the
+# terminal when a desktop is not available (e.g. inside of an SSH session)
+###############################################################################
+
+# View images directly in your terminal with iTerm2
+# curl -L https://iterm2.com/misc/install_shell_integration_and_utilities.sh | bash
+# image/*; curl -s %s | ~/.iterm2/imgcat && read -n 1; needsterminal
+
+# View true images in the terminal, supported by rxvt-unicode, xterm and st
+# Requires the w3m-img package
+# image/*; w3m -o 'ext_image_viewer=off' '%s'; needsterminal
+
+# 256 color images using half-width unicode characters
+# Much higher quality that img2txt, but must be built from source
+# https://github.com/rossy/img2xterm
+
+# Full motion videos - requires a framebuffer to view
+video/x-youtube; mpv -vo drm -quiet '%s'; needsterminal
+video/*; mpv -vo drm -quiet '%s'; needsterminal
+
+# Ascii videos
+# video/x-youtube; youtube-dl -q -o - '%s' | mplayer -cache 8192 -vo caca -quiet -; needsterminal
+# video/*; wget '%s' -O - | mplayer -cache 8192 -vo caca -quiet -; needsterminaltml; w3m -I %{charset} -T text/html; copiousoutput;
+application/pdf; zathura %s
+#; Local mailcap preferences for the MUTT mail client.
+
+
+#text/html; links -html-assume-codepage utf-8 -force-html -dump %s; test=test -z "$DISPLAY"; nametemplate=%s.html; copiousoutput
+text/html; firefox %s && sleep 2; nametemplate=%s.html; copiousoutput
+text/html; google-chrome-stable %s && sleep 2; nametemplate=%s.html; copiousoutput
+text/html; w3m -I %{charset} -T text/html -dump; copiousoutput
+
+
+
+image/*; kitty +kitten icat %s; copiousoutput
+image/pjpeg; sxiv %s; copiousoutput
+image/jpeg; sxiv %s; copiousoutput
+image/png; sxiv %s; copiousoutput
+image/gif; sxiv %s; copiousoutput
+
+video/*; mpv %s
+video/*; mplayer %s
+
+audio/*; mpv %s
+audio/*; mplayer %s
+
+application/ogg; mpv %s: test=test "$DISPLAY" != "" 
+
+text/plain; cat %s; test=test "`echo %{charset} | tr '[A-Z]' '[a-z]'`" = utf-8 ; copiousoutput
+
+application/msword; /usr/bin/lowriter %s
+application/vnd.oasis.opendocument.text; /usr/bin/lowriter %s
+application/vnd.ms-excel; /usr/bin/localc %s
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; /usr/bin/lowriter %s
+# application/pdf; apvlv '%s'; test=test "$DISPLAY" != ""; description=Portable Document Format; nametemplate=%s.pdf
+# application/pdf; pdftotext '%s' | less ; test=test "$DISPLAY" = ""
+
+text/x-sgml; cat %s; copiousoutput
+text/x-chdr; cat %s; copiousoutput
+text/x-csrc; cat %s; copiousoutput
+text/x-tex; cat %s; copiousoutput
+text/tex; cat %s; copiousoutput
+text/x-sh; cat %s; copiousoutput
+text/english; cat %s; copiousoutput
+
+
+application/x-gzip-dvi; zcat | dvi2tty-filter -w 132; copiousoutput
+
+application/x-gzip; zcat | less; needsterminal
+application/x-gunzip; zcat | less; needsterminal
+application/x-gzip; zcat; copiousoutput
+application/x-gunzip; zcat; copiousoutput
+application/x-bzip2; bzcat |less; needsterminal
+
+application/x-cpio; cpio -tvF --quiet %s; copiousoutput
+application/x-gtar; tar tvf %s; copiousoutput
+application/x-tar; tar tvf %s; copiousoutput
+application/x-tar-gz; tar tvfz %s; copiousoutput
+application/x-rar-compressed; rar v %s; copiousoutput
+application/x-zip-compressed; unzip -v %s; copiousoutput
+application/zip; unzip -v %s; copiousoutput
+
+application/x-csh; cat %s; copiousoutput
+application/x-sh; cat %s; copiousoutput
+application/x-script; cat %s; copiousoutput
+application/x-shellscript; cat %s; copiousoutput
+application/x-latex; cat %s; copiousoutput
+application/x-tex; cat %s; copiousoutput
+application/x-shar; cat %s; copiousoutput
+application/x-perl; cat %s; copiousoutput
+
+application/x-troff; groff -Tlatin1 %s; copiousoutput
+application/x-troff-man; man -l %s 2>/dev/null; copiousoutput
+application/x-troff-me; groff -me -Tlatin1 %s; copiousoutput
+
+# S/MIME signature handling
+application/x-pkcs7-signature; openssl pkcs7 -in %s -inform der -noout \
+-print_certs -TEXT | less; needsterminal
+#application/x-pkcs7-signature; openssl pk7out -inform DER | openssl pkcs7 \
+#-print_certs -text -noout ; nametemplate=%s.p7s ; copiousoutput
+application/x-pkcs7-mime; openssl smime -pk7out -inform DER | \
+openssl pkcs7 -print_certs -text -noout |\
+less ; nametemplate=%s.p7m ; test=test %{smime-type} == signed-data
+
+# vim: syntax=mailcap ts=8 sw=8 nowrap
