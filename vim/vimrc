@@ -9,7 +9,6 @@ if empty(glob(vimpath . 'autoload/plug.vim'))
     silent !curl -fLo vimpath . 'autoload/plug.vim' --create-dirs
     autocmd VimEnter * PlugInstall
 endif
-
 set backspace=indent,eol,start
 set history=1000
 set showcmd
@@ -54,6 +53,7 @@ set list listchars=tab:»·,trail:·,extends:»,precedes:«
 set encoding=utf-8
 scriptencoding utf-8
 set complete+=i,kspell
+" set spellang=en_gb,de_de
 set omnifunc=syntaxcomplete#Complete
 set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
 set wildignore+=*.swp,*.tmp
@@ -69,6 +69,11 @@ set noequalalways
 if exists('&inccommand')
   set inccommand=split
 endif
+set foldmethod=syntax
+set foldlevel=1
+autocmd FileType php setlocal foldmethod=expr
+set viewoptions=cursor,folds,slash,unix
+
 set nomodeline
 
 filetype plugin indent  on
@@ -89,20 +94,72 @@ call plug#begin(vimpath. 'plugged')
 "     let delimitMate_expand_cr = 2
 "     let delimitMate_expand_space = 0
 Plug 'tmsvg/pear-tree'
-Plug 'tpope/vim-obsession'
-Plug 'kana/vim-operator-replace'
-Plug 'kana/vim-operator-user'
-Plug 'tommcdo/vim-exchange'
-Plug 'dhruvasagar/vim-prosession'
-Plug 'rhysd/vim-grammarous'
-Plug 'mechatroner/rainbow_csv'
-autocmd BufNewFile,BufRead *.csv   set filetype=csv_semicolon
-Plug 'swekaj/php-foldexpr.vim'
+    augroup html_pairs
+        autocmd!
+        autocmd FileType html let b:pear_tree_pairs = {
+                    \'<*>': {'closer': '</*>'}
+                    \ }
+    augroup END
+    let g:pear_tree_ft_disabled = ['c', 'python', 'markdown']
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
+" Plug 'tpope/vim-dadbod'
+" "" operator mapping
+" func! DBExe(...)
+"     if !a:0
+"         let &operatorfunc = matchstr(expand('<sfile>'), '[^. ]*$')
+"         return 'g@'
+"     endif
+"     let sel_save = &selection
+"     let &selection = "inclusive"
+"     let reg_save = @@
+"
+"     if a:1 == 'char'    " Invoked from Visual mode, use gv command.
+"         silent exe 'normal! gvy'
+"     elseif a:1 == 'line'
+"         silent exe "normal! '[V']y"
+"     else
+"         silent exe 'normal! `[v`]y'
+"     endif
+"
+"     execute "DB " . @@
+"
+"     let &selection = sel_save
+"     let @@ = reg_save
+" endfunc
+" xnoremap <expr> <Plug>(DBExe)     DBExe()
+" nnoremap <expr> <Plug>(DBExe)     DBExe()
+" nnoremap <expr> <Plug>(DBExeLine) DBExe() . '_'
+"
+" xmap <leader>db  <Plug>(DBExe)
+" nmap <leader>db  <Plug>(DBExe)
+" omap <leader>db  <Plug>(DBExe)
+" nmap <leader>dbb <Plug>(DBExeLine)
+" let g:dadbods = []
+" let db = { "name": "Prinz.local", "url": "mysql://root:root@localhost/prinz"}
+"
+" call add(g:dadbods, db)
+
+" if g:db and b:db is set up -- b:db will be used.
+" so g:db would serve as a default database (first in the list)
+" let g:db = g:dadbods[0].url
+
+" let g:db = "mysql://root:root@localhost/prinz"
+" command! DBSelect :call popup_menu(map(copy(g:dadbods), {k,v -> v.name}), { "callback": 'DBSelected'})
+
+" func! DBSelected(id, result)
+"     if a:result != -1
+"         let b:db = g:dadbods[a:result-1].url
+"         echomsg 'DB ' . g:dadbods[a:result-1].name . ' is selected.'
+"     endif
+" endfunc
+" Plug 'vim-scripts/dbext.vim', {'for': 'sql'}
+"     let g:dbext_default_profile_mysql_local = 'type=MYSQL:user=root:passwd=root:dbname=prinz'
+"     let g:dbext_default_profile='mysql_local'
+"
 if has('python')
     Plug 'SirVer/UltiSnips' | Plug 'honza/vim-snippets'
         let g:UltiSnipsExpandTrigger = "<tab>"
@@ -124,17 +181,15 @@ Plug 'tpope/vim-rsi'
 Plug 'wellle/targets.vim'
 " Star search
 Plug 'pgdouyon/vim-evanesco'
-Plug 'janko-m/vim-test'
-    let test#strategy = "neoterm"
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
 Plug 'dansomething/vim-hackernews', {'on': 'HackerNews'}
 Plug 'neomake/neomake'
-    let g:neomake_php_phpcs_args_standard = '~/rules.xml'
-    let g:neomake_php_enabled_makers = ['php', 'phpcs', 'psalm']
-Plug 'rhysd/git-messenger.vim'
-
+    let g:neomake_php_phpcs_args_standard = 'src/vendor/magento/magento-coding-standard/Magento2/ruleset.xml'
+    let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd', 'psalm']
+Plug 'kana/vim-operator-user'
+Plug 'kana/vim-operator-replace'
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
@@ -168,15 +223,15 @@ Plug 'junegunn/fzf.vim'
     let g:fzf_files_options =
       \ '--preview "(highlight -O ansi {} || cat {}) 2> /dev/null | head -'.&lines.'"'
 
-    function! SearchWordWithAg()
-        execute 'Ag' expand('<cword>')
+    function! SearchWordWithRg()
+        execute 'Rg' expand('<cword>')
     endfunction
 
-    function! SearchWordWithAgi()
-        execute 'Agi' expand('<cword>')
+    function! SearchWordWithRgi()
+        execute 'Rgi' expand('<cword>')
     endfunction
 
-    function! SearchVisualSelectionWithAg() range
+    function! SearchVisualSelectionWithRg() range
         let old_reg = getreg('"')
         let old_regtype = getregtype('"')
         let old_clipboard = &clipboard
@@ -185,10 +240,10 @@ Plug 'junegunn/fzf.vim'
         let selection = getreg('"')
         call setreg('"', old_reg, old_regtype)
         let &clipboard = old_clipboard
-        execute 'Ag' selection
+        execute 'Rg' selection
     endfunction
 
-    function! SearchVisualSelectionWithAgi() range
+    function! SearchVisualSelectionWithRgi() range
         let old_reg = getreg('"')
         let old_regtype = getregtype('"')
         let old_clipboard = &clipboard
@@ -197,23 +252,23 @@ Plug 'junegunn/fzf.vim'
         let selection = getreg('"')
         call setreg('"', old_reg, old_regtype)
         let &clipboard = old_clipboard
-        execute 'Agj' selection
+        execute 'Rgj' selection
     endfunction
 
 
-    function! s:ag_to_qf(line)
+    function! s:rg_to_qf(line)
         let parts = split(a:line, ':')
         return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
         \ 'text': join(parts[3:], ':')}
     endfunction
 
-    function! s:ag_handler(lines)
+    function! s:rg_handler(lines)
         if len(a:lines) < 2 | return | endif
 
         let cmd = get({'ctrl-x': 'split',
         \ 'ctrl-v': 'vertical split',
         \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
-        let list = map(a:lines[1:], 's:ag_to_qf(v:val)')
+        let list = map(a:lines[1:], 's:rg_to_qf(v:val)')
 
         let first = list[0]
         execute cmd escape(first.filename, ' %#\')
@@ -226,17 +281,17 @@ Plug 'junegunn/fzf.vim'
         wincmd p endif
     endfunction
 
-    command! -nargs=* Ag call fzf#run({
+    command! -nargs=* Rg call fzf#run({
     \ 'source':  printf('rg --column --color always "%s"',
     \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
-    \ 'sink*':    function('<sid>ag_handler'),
+    \ 'sink*':    function('<sid>rg_handler'),
     \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
     \ })
 
-    command! -nargs=* Agi call fzf#run({
+    command! -nargs=* Rgi call fzf#run({
     \ 'source':  printf('rg --no-ignore --column --color always "%s"',
     \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
-    \ 'sink*':    function('<sid>ag_handler'),
+    \ 'sink*':    function('<sid>rg_handler'),
     \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
     \ })
 
@@ -255,10 +310,26 @@ Plug 'junegunn/fzf.vim'
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
 
+Plug 'tpope/vim-obsession'
+Plug 'dhruvasagar/vim-prosession'
+
 Plug 'Konfekt/Fastfold'
+    nmap zuz <Plug>(FastFoldUpdate)
+    let g:fastfold_savehook = 1
+    let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+    let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+    let g:markdown_folding = 1
+    let g:tex_fold_enabled = 1
+    let g:xml_syntax_folding = 2
+    let g:javaScript_fold = 2
+    let g:sh_fold_enabled= 7
+    let g:php_folding = 1
+    let g:elixir_folding = 2
+    let g:org_folding = 1
 Plug 'AndrewRadev/tagalong.vim'
     let g:tagalong_additional_filetypes = ['phtml', 'twig', 'dhtml']
-
+Plug 'tommcdo/vim-exchange'
+Plug 'mattn/emmet-vim'
 " Appearance
 Plug 'itchyny/lightline.vim'
     let g:lightline = {
@@ -335,15 +406,44 @@ Plug 'itchyny/lightline.vim'
     endfunction
 "
 Plug 'rakr/vim-one'
+Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
+
+"" Check it out again with german language didn't work earlier
+    let g:grammarous#use_vim_spelllang = 0
+    let g:grammarous#enable_spell_check = 1
+    let g:grammarous#use_location_list = 1
+
 " Plug 'kristijanhusak/vim-hybrid-material'
 "     let g:enable_bold_font = 1
 "     let g:enable_italic_font = 1
 
 " VCS
 Plug 'tpope/vim-fugitive'
-Plug 'mhinz/vim-signify'
+Plug 'rhysd/git-messenger.vim'
+    let g:git_messenger_include_diff = 0
+    let g:git_messenger_always_into_popup = v:true
+" tagerino vista
+" Plug 'liuchengxu/vista.vim'
+" Plug 'ludovicchabant/vim-gutentags'
+" Plug 'blueyed/vim-gutentags', {'branch': 'ignore-sigpipe-on-exit'}
 " Languages
+Plug 'Shougo/echodoc.vim'
+    let g:echodoc_enable_at_startup = 1
+Plug 'vim-vdebug/vdebug'
+    if !exists('g:vdebug_options')
+      let g:vdebug_options = {}
+    endif
+    let g:vdebug_options.break_on_open = 0
+    let g:vdebug_options['max_children'] = 128
+    let g:vdebug_options.ide_key = 'PHPSTORM'
+Plug 'sheerun/vim-polyglot'
+    let g:polyglot_disabled = ['latex', 'csv']
+" Plug 'sgur/vim-editorconfig'
+Plug 'andymass/vim-matchup'
+" Plug 'lervag/vimtex', {'for': 'tex'}
 if has('nvim')
+    Plug 'slashmili/alchemist.vim'
+    let g:ncm2_alchmist_vim_path = "/home/alex/Documents/git/dotfiles/vim/plugged/alchemist.vim"
     Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'| Plug 'ncm2/ncm2-bufword' | Plug 'ncm2/ncm2-path' | Plug 'ncm2/ncm2-ultisnips' | Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'} | Plug 'phpactor/ncm2-phpactor', {'for': 'php'} | Plug 'pbogut/ncm2-alchemist'
     " enable ncm2 for all buffers
     autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -354,38 +454,27 @@ if has('nvim')
     set completeopt=noinsert,menuone,noselect
         " some completion sources
 endif
-Plug 'Shougo/echodoc.vim'
-    let g:echodoc_enable_at_startup = 1
-Plug 'vim-vdebug/vdebug'
-    if !exists('g:vdebug_options')
-      let g:vdebug_options = {}
-    endif
-    let g:vdebug_options.break_on_open = 0
-    let g:vdebug_options.ide_key = 'PHPSTORM'
-Plug 'sheerun/vim-polyglot'
-    let g:polyglot_disabled = ['latex']
-Plug 'sgur/vim-editorconfig'
-Plug 'andymass/vim-matchup'
-Plug 'mattn/emmet-vim'
-    let g:user_emmet_install_global = 0
-Plug 'lervag/vimtex', {'for': 'tex'}
-
+Plug 'mechatroner/rainbow_csv'
 Plug 'tobyS/pdv', {'for': 'php'} | Plug 'tobyS/vmustache', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
-    let g:phpactorInputListStrategy = 'fzf'
-Plug 'slashmili/alchemist.vim', {'for': 'elixir'}
+    let g:phpactorOmniAutoClassImport = v:true
+Plug 'swekaj/php-foldexpr.vim'
+    let b:phpfold_text_right_lines = 1
 call plug#end()
-"
-" When writing a buffer (no delay).
-call neomake#configure#automake('w')
-" When writing a buffer (no delay), and on normal mode changes (after 750ms).
-call neomake#configure#automake('nw', 750)
-" When reading a buffer (after 1s), and when writing (no delay).
-call neomake#configure#automake('rw', 1000)
-" Full config: when writing or reading a buffer, and on changes in insert and
-" normal mode (after 1s; no delay when writing).
-call neomake#configure#automake('nrwi', 500)
+" function! MyOnBattery()
+"   if has('unix')
+"     return readfile('/sys/class/power_supply/AC/online') == ['0']
+"   endif
+"   return 0
+" endfunction
+
+" if MyOnBattery()
+"   call neomake#configure#automake('w')
+" else
+"   call neomake#configure#automake('nw', 1000)
+" endif
+
 
 if (has("termguicolors"))
     set termguicolors
@@ -403,6 +492,12 @@ if has('nvim')
     nnoremap  <leader>tv :vs +te<CR>
     nnoremap  <leader>ts :sp +te<CR>
 endif
+
+function! CreateDiaryEntry()
+    let date = '~/diary/' . strftime("%Y-%m-%d") . '.org'
+    execute 'edit' date
+endfunction
+nnoremap <leader>w<leader>w :call CreateDiaryEntry()<CR>
 
 " Keep search results at the center of screen
 nmap n nzz
@@ -451,25 +546,22 @@ nnoremap <silent> <leader>a :Buffers<CR>
 nnoremap <silent> <leader>; :BLines<CR>
 nnoremap <silent> <leader>. :Lines<CR>
 " nnoremap <silent> <leader>o :BTags<CR>
+nnoremap <silent> <leader>o :Vista finder<CR>
 " nnoremap <silent> <leader>O :Tags<CR>
 nnoremap <silent> <leader>h :History<CR>
-nnoremap <silent> <leader>, :execute 'Agi ' . input('Ag/')<CR>
-nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
-nnoremap <silent> K :call SearchWordWithAg()<CR>
-nnoremap <silent> Ki :call SearchWordWithAgi()<CR>
-vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
-vnoremap <silent> Ki :call SearchVisualSelectionWithAgi()<CR>
+nnoremap <silent> <leader>, :execute 'Rgi ' . input('Rgi/')<CR>
+nnoremap <silent> <leader>/ :execute 'Rg ' . input('Rg/')<CR>
+nnoremap <silent> K :call SearchWordWithRg()<CR>
+nnoremap <silent> Ki :call SearchWordWithRgi()<CR>
+vnoremap <silent> K :call SearchVisualSelectionWithRg()<CR>
+vnoremap <silent> Ki :call SearchVisualSelectionWithRgi()<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
-nnoremap <silent> <leader>w :Windows<CR>
-inoremap <silent> <C-s> <ESC>:Snippets<CR>
-nnoremap <silent> <leader>m :Mru<CR>
 
-imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+imap <C-x><C-f> <plug>(fzf-complete-file-rg)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " fugitive mappings
-nmap <leader>ga :Gwrite<CR>
 nmap <leader>gs :Gstatus<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gc :Gcommit -v -q<CR>
@@ -478,6 +570,12 @@ nmap <leader>gb :Git branch<Space>
 " Others
 autocmd FileType php nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
 nnoremap <silent> <F1>  :UndotreeToggle<CR>
+nnoremap <silent> <F2>  :Vista!!<CR>
+" Edit macro in cmdline window
+nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+cnoremap <c-n>  <down>
+cnoremap <c-p>  <up>
+" diff w !diff -au "%" - > changes.patch
 
 " Include use statement
 autocmd FileType php nmap <Leader>u :call phpactor#UseAdd()<CR>
@@ -503,6 +601,7 @@ autocmd FileType php nmap <Leader>ei :call phpactor#ClassInflect()<CR>
 autocmd FileType php nmap <Leader>fr :call phpactor#FindReferences()<CR>
 " Extract method from selection
 autocmd FileType php vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
+autocmd BufNewFile,BufRead *.csv set nowrap
 " Ale
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
