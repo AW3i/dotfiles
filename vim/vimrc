@@ -84,10 +84,20 @@ set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr
 set mouse=a
 
 call plug#begin(vimpath. 'plugged')
-Plug 'Raimondi/delimitMate'
-    let delimitMate_jump_expansion = 1
-    let delimitMate_expand_cr = 2
-    let delimitMate_expand_space = 0
+" Plug 'Raimondi/delimitMate'
+"     let delimitMate_jump_expansion = 1
+"     let delimitMate_expand_cr = 2
+"     let delimitMate_expand_space = 0
+Plug 'tmsvg/pear-tree'
+Plug 'tpope/vim-obsession'
+Plug 'kana/vim-operator-replace'
+Plug 'kana/vim-operator-user'
+Plug 'tommcdo/vim-exchange'
+Plug 'dhruvasagar/vim-prosession'
+Plug 'rhysd/vim-grammarous'
+Plug 'mechatroner/rainbow_csv'
+autocmd BufNewFile,BufRead *.csv   set filetype=csv_semicolon
+Plug 'swekaj/php-foldexpr.vim'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -120,22 +130,11 @@ Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
 Plug 'dansomething/vim-hackernews', {'on': 'HackerNews'}
-Plug 'w0rp/ale'
-    let g:ale_lint_on_text_changed = 'never'
-    let g:ale_lint_on_enter = 1
-    let g:ale_lint_on_insert_leave = 1
-    let g:ale_sign_error = '✘'
-    let g:ale_sign_warning = ':('
-    let g:ale_php_phpcs_standard = 'PSR2'
-    let g:ale_linters = { 'php': ['php','psalm'] }
-    let g:ale_echo_msg_format = '<%linter%> %code: %%s'
-    " autocmd BufEnter *.min.js ALEDisableBuffer
-    " autocmd BufEnter *.sql ALEDisableBuffer
-    let g:ale_pattern_options = {
-        \   '.*\.json$': {'ale_enabled': 0},
-        \   '.*\.min\.*$': {'ale_enabled': 0},
-        \   '.*\.sql': {'ale_enabled': 0},
-        \}
+Plug 'neomake/neomake'
+    let g:neomake_php_phpcs_args_standard = '~/rules.xml'
+    let g:neomake_php_enabled_makers = ['php', 'phpcs', 'psalm']
+Plug 'rhysd/git-messenger.vim'
+
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
@@ -343,7 +342,6 @@ Plug 'rakr/vim-one'
 " VCS
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
-Plug 'dhruvasagar/vim-table-mode'
 " Languages
 if has('nvim')
     Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'| Plug 'ncm2/ncm2-bufword' | Plug 'ncm2/ncm2-path' | Plug 'ncm2/ncm2-ultisnips' | Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'} | Plug 'phpactor/ncm2-phpactor', {'for': 'php'} | Plug 'pbogut/ncm2-alchemist'
@@ -378,6 +376,16 @@ Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer in
     let g:phpactorInputListStrategy = 'fzf'
 Plug 'slashmili/alchemist.vim', {'for': 'elixir'}
 call plug#end()
+"
+" When writing a buffer (no delay).
+call neomake#configure#automake('w')
+" When writing a buffer (no delay), and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
+" When reading a buffer (after 1s), and when writing (no delay).
+call neomake#configure#automake('rw', 1000)
+" Full config: when writing or reading a buffer, and on changes in insert and
+" normal mode (after 1s; no delay when writing).
+call neomake#configure#automake('nrwi', 500)
 
 if (has("termguicolors"))
     set termguicolors
