@@ -1,0 +1,29 @@
+extends php, html
+
+snippet shortt "Php Short Tags"
+<?php $1 ?>
+endsnippet
+
+snippet shortif "php short if"
+<?php if ($1) : ?>
+	$2
+<?php endif; ?>
+endsnippet
+
+snippet shortelse "php short if else"
+<?php if ($1) : ?>
+	$2
+<?php else : ?>
+	$3
+<?php endif; ?>
+endsnippet
+
+snippet shortelsif "php short if else"
+<?php if ($1) : ?>
+	$2
+<?php elseif : ?>
+	$3
+<?php else : ?>
+	$4
+<?php endif; ?>
+endsnippet

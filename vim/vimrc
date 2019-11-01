@@ -131,7 +131,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
 Plug 'dansomething/vim-hackernews', {'on': 'HackerNews'}
 Plug 'neomake/neomake'
-    let g:neomake_php_phpcs_args_standard = '~/rules.xml'
+    let g:neomake_php_phpcs_args_standard = 'src/vendor/magento/magento-coding-standard/Magento2/ruleset.xml'
     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'psalm']
 Plug 'rhysd/git-messenger.vim'
 
@@ -333,15 +333,19 @@ Plug 'itchyny/lightline.vim'
     endif
     return ''
     endfunction
+Plug 'troydm/zoomwintab.vim'
+Plug 'romainl/vim-qf'
+Plug 'AndrewRadev/splitjoin.vim'
+    let g:splitjoin_php_method_chain_full = 1
+Plug 'moll/vim-bbye'
+Plug 'yuttie/comfortable-motion.vim'
 "
 Plug 'rakr/vim-one'
-" Plug 'kristijanhusak/vim-hybrid-material'
-"     let g:enable_bold_font = 1
-"     let g:enable_italic_font = 1
-
+    let g:one_allow_italics = 1 
 " VCS
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
+
 " Languages
 if has('nvim')
     Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'| Plug 'ncm2/ncm2-bufword' | Plug 'ncm2/ncm2-path' | Plug 'ncm2/ncm2-ultisnips' | Plug 'ncm2/ncm2-tern',  {'for': 'js', 'do': 'npm install'} | Plug 'phpactor/ncm2-phpactor', {'for': 'php'} | Plug 'pbogut/ncm2-alchemist'
@@ -394,8 +398,9 @@ endif
 colorscheme one
 set background=dark
 
-nnoremap <silent> <leader>bc :bp<bar>sp<bar>bn<bar>bd<CR>
-nnoremap <silent> <leader>bd :bd<CR>
+" nnoremap <silent> <leader>bc :bp<bar>sp<bar>bn<bar>bd<CR>
+nnoremap <silent> <leader>bd :Bdelete<CR>
+nnoremap <silent> <leader>bw :Bwipeout<CR>
 nnoremap <silent> <leader>tn :tabnew<CR>
 " Switch back to normal mode from terminal mode
 if has('nvim')
@@ -469,11 +474,19 @@ imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " fugitive mappings
-nmap <leader>ga :Gwrite<CR>
-nmap <leader>gs :Gstatus<CR>
-nmap <leader>gd :Gdiff<CR>
-nmap <leader>gc :Gcommit -v -q<CR>
-nmap <leader>gb :Git branch<Space>
+function! ToggleGStatus()
+    if buflisted(bufname('.git/index'))
+        bd .git/index
+    else
+        Gstatus
+    endif
+endfunction
+command ToggleGStatus :call ToggleGStatus()
+nnoremap <leader>ga :Gwrite<CR>
+nnoremap <leader>gs :ToggleGStatus<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gc :Gcommit<CR>
+nnoremap <leader>gb :Git branch<Space>
 
 " Others
 autocmd FileType php nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
