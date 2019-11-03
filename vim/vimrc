@@ -40,8 +40,8 @@ set nostartofline
 set wildmenu
 set lazyredraw
 set shell=zsh
-set number
-set relativenumber
+" set number
+" set relativenumber
 set iskeyword+=_,$,@,%,#
 set splitbelow
 set splitright
@@ -166,7 +166,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
     let g:fzf_nvim_statusline = 0 " disable statusline overwriting
     let g:fzf_files_options =
-      \ '--preview "(highlight -O ansi {} || cat {}) 2> /dev/null | head -'.&lines.'"'
+      \ '--preview "(highlight -O ansi {} || cat {}) 2> /dev/null | head -'.&lines.'" --bind alt-j:preview-down,alt-k:preview-up'
 
     function! SearchWordWithRg()
         execute 'Rg' expand('<cword>')
