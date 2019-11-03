@@ -96,7 +96,7 @@ Plug 'tommcdo/vim-exchange'
 Plug 'dhruvasagar/vim-prosession'
 Plug 'rhysd/vim-grammarous'
 Plug 'mechatroner/rainbow_csv'
-autocmd BufNewFile,BufRead *.csv   set filetype=csv_semicolon
+    autocmd BufNewFile,BufRead *.csv   set filetype=csv_semicolon
 Plug 'swekaj/php-foldexpr.vim'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-surround'
@@ -168,15 +168,15 @@ Plug 'junegunn/fzf.vim'
     let g:fzf_files_options =
       \ '--preview "(highlight -O ansi {} || cat {}) 2> /dev/null | head -'.&lines.'"'
 
-    function! SearchWordWithAg()
-        execute 'Ag' expand('<cword>')
+    function! SearchWordWithRg()
+        execute 'Rg' expand('<cword>')
     endfunction
 
-    function! SearchWordWithAgi()
-        execute 'Agi' expand('<cword>')
+    function! SearchWordWithRgi()
+        execute 'Rgi' expand('<cword>')
     endfunction
 
-    function! SearchVisualSelectionWithAg() range
+    function! SearchVisualSelectionWithRg() range
         let old_reg = getreg('"')
         let old_regtype = getregtype('"')
         let old_clipboard = &clipboard
@@ -185,10 +185,10 @@ Plug 'junegunn/fzf.vim'
         let selection = getreg('"')
         call setreg('"', old_reg, old_regtype)
         let &clipboard = old_clipboard
-        execute 'Ag' selection
+        execute 'Rg' selection
     endfunction
 
-    function! SearchVisualSelectionWithAgi() range
+    function! SearchVisualSelectionWithRgi() range
         let old_reg = getreg('"')
         let old_regtype = getregtype('"')
         let old_clipboard = &clipboard
@@ -197,23 +197,23 @@ Plug 'junegunn/fzf.vim'
         let selection = getreg('"')
         call setreg('"', old_reg, old_regtype)
         let &clipboard = old_clipboard
-        execute 'Agj' selection
+        execute 'Rgj' selection
     endfunction
 
 
-    function! s:ag_to_qf(line)
+    function! s:rg_to_qf(line)
         let parts = split(a:line, ':')
         return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
         \ 'text': join(parts[3:], ':')}
     endfunction
 
-    function! s:ag_handler(lines)
+    function! s:rg_handler(lines)
         if len(a:lines) < 2 | return | endif
 
         let cmd = get({'ctrl-x': 'split',
         \ 'ctrl-v': 'vertical split',
         \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
-        let list = map(a:lines[1:], 's:ag_to_qf(v:val)')
+        let list = map(a:lines[1:], 's:rg_to_qf(v:val)')
 
         let first = list[0]
         execute cmd escape(first.filename, ' %#\')
@@ -226,19 +226,24 @@ Plug 'junegunn/fzf.vim'
         wincmd p endif
     endfunction
 
-    command! -nargs=* Ag call fzf#run({
-    \ 'source':  printf('rg --column --color always "%s"',
-    \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
-    \ 'sink*':    function('<sid>ag_handler'),
-    \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
-    \ })
+    command! -bang -nargs=* Rg
+        \ call fzf#vim#grep(
+        \       'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
+        \       {'options': '--no-hscroll --delimiter : --nth 4..'},
+        \       <bang>0)
+    command! -bang -nargs=* Rgi
+        \ call fzf#vim#grep(
+        \       'rg --column --no-ignore --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
+        \       {'options': '--no-hscroll --delimiter : --nth 4..'},
+        \       <bang>0)
 
-    command! -nargs=* Agi call fzf#run({
-    \ 'source':  printf('rg --no-ignore --column --color always "%s"',
-    \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
-    \ 'sink*':    function('<sid>ag_handler'),
-    \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
-    \ })
+
+    " command! -nargs=* Agi call fzf#run({
+    " \ 'source':  printf('rg --no-ignore --column --color always "%s"',
+    " \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
+    " \ 'sink*':    function('<sid>ag_handler'),
+    " \ 'options': "--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. "
+    " \ })
 
     let g:fzf_colors =
     \ { 'fg':      ['fg', 'Normal'],
@@ -436,6 +441,8 @@ xmap t <Plug>Sneak_t
 xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
+nmap <leader>lt <Plug>(qf_loc_toggle)
+nmap <leader>qt <Plug>(qf_qf_toggle)
 
 " neoterm
 xmap <leader>tr <plug>(neoterm-repl-send)
@@ -458,17 +465,17 @@ nnoremap <silent> <leader>. :Lines<CR>
 " nnoremap <silent> <leader>o :BTags<CR>
 " nnoremap <silent> <leader>O :Tags<CR>
 nnoremap <silent> <leader>h :History<CR>
-nnoremap <silent> <leader>, :execute 'Agi ' . input('Ag/')<CR>
-nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
-nnoremap <silent> K :call SearchWordWithAg()<CR>
-nnoremap <silent> Ki :call SearchWordWithAgi()<CR>
-vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
-vnoremap <silent> Ki :call SearchVisualSelectionWithAgi()<CR>
+nnoremap <silent> <leader>, :execute 'Rgi ' . input('Rgi/')<CR>
+nnoremap <silent> <leader>/ :execute 'Rg ' . input('Rg/')<CR>
+nnoremap <silent> K :call SearchWordWithRg()<CR>
+nnoremap <silent> Ki :call SearchWordWithRgi()<CR>
+vnoremap <silent> K :call SearchVisualSelectionWithRg()<CR>
+vnoremap <silent> Ki :call SearchVisualSelectionWithRgi()<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>w :Windows<CR>
 inoremap <silent> <C-s> <ESC>:Snippets<CR>
-nnoremap <silent> <leader>m :Mru<CR>
+nnoremap <silent> <leader>xm :call FindClass()<CR>
 
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 imap <C-x><C-l> <plug>(fzf-complete-line)
@@ -480,6 +487,14 @@ function! ToggleGStatus()
     else
         Gstatus
     endif
+endfunction
+function! FindClass()
+    :execute "normal! gg/namespace\<cr>w\"nyt;"
+    :execute "normal! gg/^class\<cr>w\"cyiw"
+    let @n = substitute(@n, '\\', '\\\\', 'g')
+    let @n .= '\\' . @c
+    :execute 'Rg ' . @n
+    let @c = ''
 endfunction
 command ToggleGStatus :call ToggleGStatus()
 nnoremap <leader>ga :Gwrite<CR>
