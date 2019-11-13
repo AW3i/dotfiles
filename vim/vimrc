@@ -382,7 +382,6 @@ Plug 'lervag/vimtex', {'for': 'tex'}
 Plug 'tobyS/pdv', {'for': 'php'} | Plug 'tobyS/vmustache', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
-    let g:phpactorInputListStrategy = 'fzf'
 Plug 'slashmili/alchemist.vim', {'for': 'elixir'}
 call plug#end()
 "
@@ -476,8 +475,6 @@ nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>w :Windows<CR>
 inoremap <silent> <C-s> <ESC>:Snippets<CR>
 nnoremap <silent> <leader>xm :call FindClass()<CR>
-
-imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " fugitive mappings
