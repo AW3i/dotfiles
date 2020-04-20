@@ -27,3 +27,207 @@ snippet shortelsif "php short if else"
 	$4
 <?php endif; ?>
 endsnippet
+snippet class "Class declaration template" b
+<?php
+/**
+ * Copyright (c) 2020 TechDivision GmbH
+ * All rights reserved
+ *
+ * This product includes proprietary software developed at TechDivision GmbH, Germany
+ * For more information see http://www.techdivision.com/
+ *
+ * To obtain a valid license for using this software please contact us at
+ * license@techdivision.com
+ */
+
+namespace `!v substitute(substitute(substitute(expand("%:p"), '\v(.*\/\U+)((\/\w+)+)\/\w+.php$', '\2', ''), '\/', '\\', 'g'), '\\', '', '')`;
+
+/**
+ * @copyright  Copyright (c) 2020 TechDivision GmbH (http://www.techdivision.com)
+ * @link       http://www.techdivision.com/
+ * @author     Team CSI <csi-kolbermoor@techdivision.com>
+ */
+
+class ${1:`!p snip.rv=snip.basename`}
+{
+	$2
+}
+endsnippet
+
+snippet interface "Interface declaration template" b
+<?php
+/**
+ * Copyright (c) 2020 TechDivision GmbH
+ * All rights reserved
+ *
+ * This product includes proprietary software developed at TechDivision GmbH, Germany
+ * For more information see http://www.techdivision.com/
+ *
+ * To obtain a valid license for using this software please contact us at
+ * license@techdivision.com
+ */
+
+
+namespace `!v substitute(substitute(substitute(expand("%:p"), '\v(.*\/\U+)((\/\w+)+)\/\w+.php$', '\2', ''), '\/', '\\', 'g'), '\\', '', '')`;
+relpath = os.path.relpath(path)
+m = re.search(r'[A-Z].+(?=/)', relpath)
+if m:
+	snip.rv = m.group().replace('/', '\\')
+`};
+
+/**
+ * @copyright  Copyright (c) 2020 TechDivision GmbH (http://www.techdivision.com)
+ * @link       http://www.techdivision.com/
+ * @author     Team CSI <csi-kolbermoor@techdivision.com>
+ */
+interface $1
+{
+	public function ${3:someFunction}();$4
+}
+endsnippet
+
+snippet trait "Trait declaration template" b
+<?php
+/**
+ * Copyright (c) 2020 TechDivision GmbH
+ * All rights reserved
+ *
+ * This product includes proprietary software developed at TechDivision GmbH, Germany
+ * For more information see http://www.techdivision.com/
+ *
+ * To obtain a valid license for using this software please contact us at
+ * license@techdivision.com
+ */
+
+
+namespace `!v substitute(substitute(substitute(expand("%:p"), '\v(.*\/\U+)((\/\w+)+)\/\w+.php$', '\2', ''), '\/', '\\', 'g'), '\\', '', '')`;
+relpath = os.path.relpath(path)
+m = re.search(r'[A-Z].+(?=/)', relpath)
+if m:
+	snip.rv = m.group().replace('/', '\\')
+`};
+
+/**
+ * @copyright  Copyright (c) 2020 TechDivision GmbH (http://www.techdivision.com)
+ * @link       http://www.techdivision.com/
+ * @author     Team CSI <csi-kolbermoor@techdivision.com>
+ */
+trait $1
+{
+}
+
+# PHPUnit snippets
+snippet testcase "class XYZTest extends \PHPUnit_Framework_TestCase { ... }"
+<?php
+/**
+ * Copyright (c) 2020 TechDivision GmbH
+ * All rights reserved
+ *
+ * This product includes proprietary software developed at TechDivision GmbH, Germany
+ * For more information see http://www.techdivision.com/
+ *
+ * To obtain a valid license for using this software please contact us at
+ * license@techdivision.com
+ */
+
+
+namespace `!v substitute(substitute(substitute(expand("%:p"), '\v(.*\/\U+)((\/\w+)+)\/\w+.php$', '\2', ''), '\/', '\\', 'g'), '\\', '', '')`;
+relpath = os.path.relpath(path)
+m = re.search(r'[A-Z].+(?=/)', relpath)
+if m:
+	snip.rv = m.group().replace('/', '\\')
+`;
+
+/**
+ * @copyright  Copyright (c) 2020 TechDivision GmbH (http://www.techdivision.com)
+ * @link       http://www.techdivision.com/
+ * @author     Team CSI <csi-kolbermoor@techdivision.com>
+ */
+class `!p
+snip.rv = re.match(r'.*(?=\.)', fn).group()
+` extends \PHPUnit_Framework_TestCase
+{
+	public function test$1()
+	{
+		${0:${VISUAL}}
+	}
+}
+endsnippet
+
+snippet pub "Public function" b
+/**
+ * ${3:undocumented function}
+ *
+ * @return ${4:void}
+ */
+public function ${1:name}(${2:$param})
+{
+	${VISUAL}${5:return null;}
+}
+$0
+endsnippet
+
+snippet pro "Protected function" b
+/**
+ * ${3:undocumented function}
+ *
+ * @return ${4:void}
+ */
+protected function ${1:name}(${2:$param})
+{
+	${VISUAL}${5:return null;}
+}
+$0
+endsnippet
+
+snippet pri "Private function" b
+/**
+ * ${3:undocumented function}
+ *
+ * @return ${4:void}
+ */
+private function ${1:name}(${2:$param})
+{
+	${VISUAL}${5:return null;}
+}
+$0
+endsnippet
+
+snippet pubs "Public static function" b
+/**
+ * ${3:undocumented function}
+ *
+ * @return ${4:void}
+ */
+public static function ${1:name}(${2:$param})
+{
+	${VISUAL}${5:return null;}
+}
+$0
+endsnippet
+
+snippet pros "Protected static function" b
+/**
+ * ${3:undocumented function}
+ *
+ * @return ${4:void}
+ */
+protected static function ${1:name}(${2:$param})
+{
+	${VISUAL}${5:return null;}
+}
+$0
+endsnippet
+
+snippet pris "Private static function" b
+/**
+ * ${3:undocumented function}
+ *
+ * @return ${4:void}
+ */
+private static function ${1:name}(${2:$param})
+{
+	${VISUAL}${5:return null;}
+}
+$0
+endsnippet

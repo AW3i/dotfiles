@@ -514,13 +514,13 @@ hi! link TagListFileName Directory
 call s:X("PreciseJumpTarget","B9ED67","405026","","White","Green")
 
 if !exists("g:jellybeans_background_color_256")
-  let g:jellybeans_background_color_256=233
+  let g:jellybeans_background_color_256=234
 end
 " Manual overrides for 256-color terminals. Dark colors auto-map badly.
 if !s:low_color
   hi StatusLineNC ctermbg=235
   hi Folded ctermbg=236
-  hi FoldColumn ctermbg=234
+  hi FoldColumn ctermbg=235
   hi SignColumn ctermbg=236
   hi CursorColumn ctermbg=234
   hi CursorLine ctermbg=234
@@ -568,3 +568,7 @@ delf s:grey_color
 delf s:grey_level
 delf s:grey_number
 " }}}
+hi SneakPluginTarget guifg=black guibg=red ctermfg=black ctermbg=red
+hi SneakPluginScope  guifg=black guibg=yellow ctermfg=black ctermbg=yellow
+hi SneakStreakTarget guifg=black guibg=red ctermfg=black ctermbg=blue
+hi SneakStreakMask  guifg=black guibg=yellow ctermfg=blue ctermbg=blue
