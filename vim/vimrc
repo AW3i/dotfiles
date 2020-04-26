@@ -113,6 +113,8 @@ Plug 'kana/vim-operator-user'
 Plug 'tommcdo/vim-exchange'
 Plug 'rhysd/vim-grammarous'
 Plug 'mechatroner/rainbow_csv'
+nnoremap ' `
+nnoremap Y y$
     autocmd BufNewFile,BufRead *.csv   set filetype=csv_semicolon
     augroup html_pairs
         autocmd!
@@ -389,6 +391,11 @@ Plug 'rhysd/git-messenger.vim'
 
 " tagerino vista
 " Languages
+Plug 'liuchengxu/vista.vim'
+Plug 'arcseldon/vim-elixirConceal'
+Plug 'tpope/vim-projectionist'
+Plug 'c-brenn/fuzzy-projectionist.vim'
+Plug 'andyl/vim-projectionist-elixir'
 Plug 'Shougo/echodoc.vim'
     let g:echodoc_enable_at_startup = 1
 if exists('g:started_by_firenvim')
@@ -726,3 +733,15 @@ nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
