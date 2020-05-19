@@ -55,7 +55,6 @@ set encoding=utf-8
 scriptencoding utf-8
 set complete+=i,kspell
 " set spellang=en_gb,de_de
-set omnifunc=syntaxcomplete#Complete
 set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
 set wildignore+=*.swp,*.tmp
 if executable('rg')
@@ -66,19 +65,16 @@ let &showbreak='↪ '
 let mapleader = " "
 let maplocalleader = "\\"
 set title
-set noequalalways
+set equalalways
 if exists('&inccommand')
   set inccommand=split
 endif
 set foldmethod=syntax
 set foldlevel=1
-autocmd FileType php setlocal foldmethod=expr
 set viewoptions=cursor,folds,slash,unix
 set conceallevel=2
-
 set nomodeline
 set tags=tags
-
 filetype plugin indent  on
 filetype off
 
@@ -97,6 +93,7 @@ call plug#begin(vimpath. 'plugged')
 "     let delimitMate_expand_cr = 2
 "     let delimitMate_expand_space = 0
 Plug 'tmsvg/pear-tree'
+    let g:pear_tree_ft_disabled = ['c', 'python', 'markdown']
     " let g:pear_tree_pairs = {
     "   \ '<*>': { 'closer': '</*>',
     "   \          'not_if': ['br', 'hr', 'img', 'input', 'link', 'meta',
@@ -112,17 +109,6 @@ Plug 'kana/vim-operator-replace'
 Plug 'kana/vim-operator-user'
 Plug 'tommcdo/vim-exchange'
 Plug 'rhysd/vim-grammarous'
-Plug 'mechatroner/rainbow_csv'
-nnoremap ' `
-nnoremap Y y$
-    autocmd BufNewFile,BufRead *.csv   set filetype=csv_semicolon
-    augroup html_pairs
-        autocmd!
-        autocmd FileType html let b:pear_tree_pairs = {
-                    \'<*>': {'closer': '</*>'}
-                    \ }
-    augroup END
-    let g:pear_tree_ft_disabled = ['c', 'python', 'markdown']
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -156,7 +142,6 @@ Plug 'dansomething/vim-hackernews', {'on': 'HackerNews'}
 Plug 'neomake/neomake'
     let g:neomake_php_phpcs_args_standard = 'src/vendor/magento/magento-coding-standard/Magento2/ruleset.xml'
     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
-Plug 'rhysd/git-messenger.vim'
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
@@ -184,23 +169,11 @@ Plug 'kassio/neoterm'
     let g:neoterm_use_relative_path = 1
     let g:neoterm_autoscroll = 1
     let g:neoterm_always_open_to_exec = 0
-Plug 'ryanoasis/vim-devicons'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
     command! -bang -nargs=? -complete=dir Files
         \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline','--preview-window', 'down', '--preview', '~/.config/nvim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
-    " command! -bang -nargs=* Rg
-    "     \ call fzf#vim#grep('rg --no-heading --line-number '.shellescape(<q-args>),
-    "     \ 1,
-    "     \ fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2> /dev/null')[:-2]}),
-    "     \ <bang>0)
-    " command! -bang -nargs=* Rgi
-    "     \ call fzf#vim#grep('rg --no-ignore --no-heading --line-number '.shellescape(<q-args>),
-    "     \ 1,
-    "     \ fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2> /dev/null')[:-2]}),
-" \ })<CR>
 
     command! -bang -nargs=* Rg
         \ call fzf#vim#grep(
@@ -212,64 +185,6 @@ Plug 'junegunn/fzf.vim'
         \       'rg --column --no-ignore --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
         \       {'options': '--no-hscroll --delimiter : --nth 4..'},
         \       <bang>0)
-" floating fzf window with borders
-function! CreateCenteredFloatingWindow()
-    let width = min([&columns - 4, max([80, &columns - 20])])
-    let height = min([&lines - 4, max([20, &lines - 10])])
-    let top = ((&lines - height) / 2) - 1
-    let left = (&columns - width) / 2
-    let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
-
-    let top = "╭" . repeat("─", width - 2) . "╮"
-    let mid = "│" . repeat(" ", width - 2) . "│"
-    let bot = "╰" . repeat("─", width - 2) . "╯"
-    let lines = [top] + repeat([mid], height - 2) + [bot]
-    let s:buf = nvim_create_buf(v:false, v:true)
-    call nvim_buf_set_lines(s:buf, 0, -1, v:true, lines)
-    call nvim_open_win(s:buf, v:true, opts)
-    set winhl=Normal:Floating
-    let opts.row += 1
-    let opts.height -= 2
-    let opts.col += 2
-    let opts.width -= 4
-    call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-    au BufWipeout <buffer> exe 'bw '.s:buf
-endfunction
-
-" Files + devicons + floating fzf
-function! Fzf_dev()
-  let l:fzf_files_options = '--preview-window down --preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
-  function! s:files()
-    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
-    return s:prepend_icon(l:files)
-  endfunction
-
-  function! s:prepend_icon(candidates)
-    let l:result = []
-    for l:candidate in a:candidates
-      let l:filename = fnamemodify(l:candidate, ':p:t')
-      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
-      call add(l:result, printf('%s %s', l:icon, l:candidate))
-    endfor
-
-    return l:result
-  endfunction
-
-  function! s:edit_file(item)
-    let l:pos = stridx(a:item, ' ')
-    let l:file_path = a:item[pos+1:-1]
-    execute 'silent e' l:file_path
-  endfunction
-
-  call fzf#run({
-        \ 'source': <sid>files(),
-        \ 'sink':   function('s:edit_file'),
-        \ 'options': '-m --reverse ' . l:fzf_files_options,
-        \ 'down':    '40%',
-        \ 'window': 'call CreateCenteredFloatingWindow()'})
-
-    endfunction
-
 Plug 'Konfekt/Fastfold'
     nmap zuz <Plug>(FastFoldUpdate)
     let g:fastfold_savehook = 1
@@ -283,7 +198,6 @@ Plug 'Konfekt/Fastfold'
     let g:php_folding = 1
     let g:elixir_folding = 2
     let g:org_folding = 1
-"     let g:org_folding = 1
 Plug 'AndrewRadev/tagalong.vim'
     let g:tagalong_additional_filetypes = ['phtml', 'twig', 'dhtml']
 Plug 'tommcdo/vim-exchange'
@@ -374,7 +288,10 @@ Plug 'rakr/vim-one'
     let g:one_allow_italics = 1 
 Plug 'tpope/vim-fugitive'
 " VCS
-Plug 'mhinz/vim-signify'
+" Plug 'mhinz/vim-signify'
+Plug 'airblade/vim-gitgutter'
+Plug 'dhruvasagar/vim-table-mode'
+let g:table_mode_map_prefix = '<leader>r'
 
 
 Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
@@ -385,32 +302,22 @@ Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
 
 " VCS
 Plug 'tpope/vim-fugitive'
-Plug 'rhysd/git-messenger.vim'
-    let g:git_messenger_include_diff = 0
-    let g:git_messenger_always_into_popup = v:true
 
-" tagerino vista
 " Languages
 Plug 'liuchengxu/vista.vim'
-Plug 'arcseldon/vim-elixirConceal'
 Plug 'tpope/vim-projectionist'
 Plug 'c-brenn/fuzzy-projectionist.vim'
 Plug 'andyl/vim-projectionist-elixir'
-Plug 'Shougo/echodoc.vim'
-    let g:echodoc_enable_at_startup = 1
-if exists('g:started_by_firenvim')
-else
-    Plug 'vim-vdebug/vdebug'
-        if !exists('g:vdebug_options')
-        let g:vdebug_options = {}
-        endif
-        let g:vdebug_options.break_on_open = 0
-        let g:vdebug_options['max_children'] = 128
-        let g:vdebug_options.ide_key = 'PHPSTORM'
+Plug 'vim-vdebug/vdebug'
+if !exists('g:vdebug_options')
+    let g:vdebug_options = {}
+endif
+    let g:vdebug_options.break_on_open = 0
+    let g:vdebug_options['max_children'] = 128
     let g:vdebug_options.ide_key = 'PHPSTORM'
+let g:vdebug_options.ide_key = 'PHPSTORM'
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
-endif
     let g:prosession_default_session = 0
 Plug 'sheerun/vim-polyglot'
     let g:polyglot_disabled = ['latex', 'csv']
@@ -418,28 +325,14 @@ Plug 'sgur/vim-editorconfig'
 Plug 'andymass/vim-matchup'
 " Plug 'lervag/vimtex', {'for': 'tex'}
 if has('nvim')
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'neoclide/coc-lists', {'do': 'yarn install --frozen-lockfile'}
-    " Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
-    Plug 'neoclide/coc-emmet', {'do': 'yarn install --frozen-lockfile'}
-    " Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
-    " Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-    Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-    Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
-    Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-    Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
-    " Plug 'aw3i/coc-phpls', {'do': 'yarn install --frozen-lockfile'}
-    " install npm i intelephense -g
+    Plug 'neovim/nvim-lsp'
 endif
 Plug 'mechatroner/rainbow_csv'
-" Plug 'mechatroner/rainbow_csv'
 Plug 'tobyS/pdv', {'for': 'php'} | Plug 'tobyS/vmustache', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
-"     let g:phpactorOmniAutoClassImport = v:true
 Plug 'swekaj/php-foldexpr.vim'
     let b:phpfold_text_right_lines = 1
-"     let b:phpfold_text_right_lines = 1
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
     let g:mkdp_refresh_slow=1
 Plug 'junegunn/limelight.vim'
@@ -448,11 +341,9 @@ Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
     let g:mkdp_markdown_css='/usr/local/lib/node_modules/github-markdown-css/github-markdown.css'
 Plug 'plasticboy/vim-markdown'
-        let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'php=php', 'json=json', 'js=javascript', 'css=css', 'less=less', 'html=html']
+    let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'php=php', 'json=json', 'js=javascript', 'css=css', 'less=less', 'html=html']
 call plug#end()
-" When writing a buffer (no delay).
 " When writing a buffer (no delay), and on normal mode changes (after 750ms).
-" When writing a buff
 call neomake#configure#automake('nw', 750)
 " When reading a buffer (after 1s), and when writing (no delay).
 call neomake#configure#automake('rw', 1000)
@@ -471,7 +362,8 @@ colorscheme one
   set background=dark
 " endif
 
-nnoremap <silent> <leader>bd :Bdelete<CR>
+nnoremap <silent> <leader>bd :bdelete<CR>
+nnoremap <silent> <leader>Bd :Bdelete<CR>
 nnoremap <silent> <leader>bw :Bwipeout<CR>
 nnoremap <silent> <leader>tn :tabnew<CR>
 " Switch back to normal mode from terminal mode
@@ -501,7 +393,6 @@ func! ZettelEdit(...)
     exec "normal ggO\<c-r>=strftime('%Y-%m-%d %H:%M')\<cr>\<cr>\<esc>G"
   endif
 endfunc
-
 
 " Keep search results at the center of screen
 nmap n nzz
@@ -598,7 +489,7 @@ cnoremap <c-p>  <up>
 " diff w !diff -au "%" - > changes.patch
 
 " Include use statement
-autocmd FileType php nmap <Leader>u :call phpactor#UseAdd()<CR>
+" autocmd FileType php nmap <Leader>u :call phpactor#UseAdd()<CR>
 " Invoke the context menu
 autocmd FileType php nmap <Leader>mm :call phpactor#ContextMenu()<CR>
 " Goto definition of class or class member under the cursor
@@ -625,11 +516,18 @@ autocmd FileType php vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 autocmd BufNewFile,BufRead *.csv set nowrap
+autocmd BufRead,BufNewFile .git/NOTES_EDITMSG set filetype=gitnotes
 
 function! PhpSyntaxOverride()
   hi! def link phpDocTags  phpDefine
   hi! def link phpDocParam phpType
 endfunction
+
+function! AddUsages()
+    normal gg}}}k
+    put =v:completed_item['menu'] . ';'
+endfunction
+autocmd FileType php nmap <Leader>u :call AddUsages()<CR>
 
 augroup phpSyntaxOverride
   autocmd!
@@ -639,109 +537,67 @@ autocmd BufWritePost *.exs,*.ex silent :!mix format %
 autocmd BufNewFile,BufRead *.phtml setf php
 autocmd BufNewFile,BufRead *.dhtml setf php
 autocmd FileType mail set spell
-"Coc test
+" Check how to fire the event correctly but onyl for classes without the
+" variables parts etc temporarily making a keybinding
+" autocmd CompleteDone php call AddUsages()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+lua << EOF
+local nvim_lsp = require 'nvim_lsp';
 
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+local function get_pass(key) 
+    local handle = io.popen("pass show " .. key);
+    local result = handle:read("*l");
+    handle:close();
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+    return vim.trim(result);
+end
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nvim_lsp.tsserver.setup({});
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+nvim_lsp.intelephense.setup({
+    init_options = {
+        licenceKey = get_pass("Software/Intelephense");
+    };
+    settings = {
+        intelephense = {
+            files = {
+                maxSize = 5000000;
+            };
+            diagnostics = {
+              undefinedTypes = false;
+            };
+        };
+    };
+});
 
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+nvim_lsp.sumneko_lua.setup({});
+EOF
 
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-
-" Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
-
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-" xmap <leader>a  <Plug>(coc-codeaction-selected)
-" nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-nmap <leader>Ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-
-" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-" nmap <silent> <C-d> <Plug>(coc-range-select)
-" xmap <silent> <C-d> <Plug>(coc-range-select)
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Using CocList
-" Show all diagnostics
-" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-let g:coc_snippet_next = '<tab>'
+" autocmd Filetype javascript setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype php setlocal omnifunc=v:lua.vim.lsp.omnifunc
+" autocmd FileType php setlocal foldmethod=expr
+"
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> <leader>rn <cmd>lua vim.lsp.buf.rename()<CR>
+" nnoremap <silent> <leader>ph  <cmd>lua vim.lsp.buf.peek_definition()<CR>
+nnoremap <silent> <leader>ff  <cmd>lua vim.lsp.buf.formatting()<CR>
+let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+autocmd FileType gitcommit,gitrebase,gitconfig,gitnotes set bufhidden=delete
+"format xml
+au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+nnoremap ' `
+nnoremap Y y$
+autocmd BufNewFile,BufRead *.csv   set filetype=csv_semicolon
+augroup html_pairs
+    autocmd!
+    autocmd FileType html let b:pear_tree_pairs = {
+                \'<*>': {'closer': '</*>'}
+                \ }
+augroup END
