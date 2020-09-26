@@ -104,8 +104,6 @@ Plug 'tmsvg/pear-tree'
     "   \          'not_in': ['String']
     "   \        }
     "   \ }
-Plug 'kana/vim-operator-replace'
-Plug 'kana/vim-operator-user'
 Plug 'tommcdo/vim-exchange'
 Plug 'rhysd/vim-grammarous'
 Plug 'tommcdo/vim-lion'
@@ -142,6 +140,9 @@ Plug 'neomake/neomake'
     " Write function to search between project/ and src
     let g:neomake_php_phpcs_args_standard = 'src/vendor/magento/magento-coding-standard/Magento2/ruleset.xml'
     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
+    let g:neomake_place_signs = 1
+    let g:neomake_logfile = "/tmp/neomake.log"
+    let g:neomake_postprocess = 'neomake#postprocess#compress_whitespace'
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
@@ -169,6 +170,7 @@ Plug 'kassio/neoterm'
     let g:neoterm_use_relative_path = 1
     let g:neoterm_autoscroll = 1
     let g:neoterm_always_open_to_exec = 0
+    let g:neoterm_repl_php = 'psysh'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
     command! -bang -nargs=? -complete=dir Files
@@ -310,7 +312,6 @@ endif
     let g:vdebug_options.break_on_open = 0
     let g:vdebug_options['max_children'] = 128
     let g:vdebug_options.ide_key = 'PHPSTORM'
-let g:vdebug_options.ide_key = 'PHPSTORM'
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
     let g:prosession_default_session = 0
@@ -332,27 +333,20 @@ Plug 'swekaj/php-foldexpr.vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
     let g:mkdp_refresh_slow=1
     let g:mkdp_markdown_css='/usr/local/lib/node_modules/github-markdown-css/github-markdown.css'
-Plug 'junegunn/limelight.vim'
-    autocmd! User GoyoEnter Limelight
-    autocmd! User GoyoLeave Limelight!
-Plug 'junegunn/goyo.vim'
 Plug 'vim-test/vim-test'
-Plug 'tpope/vim-dispatch'
-  let g:dispatch_compilers = {}
-  let g:dispatch_compilers['./src/vendor/bin/'] = ''
-  let g:dispatch_compilers['phpunit'] = 'phpunit'
+  let g:test#strategy = 'neoterm'
   let g:test#php#phpunit#options = '--verbose -c phpunit.static.xml'
 
 Plug 'plasticboy/vim-markdown'
     let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'php=php', 'json=json', 'js=javascript', 'css=css', 'less=less', 'html=html']
 call plug#end()
 " When writing a buffer (no delay), and on normal mode changes (after 750ms).
-call neomake#configure#automake('nw', 750)
+" call neomake#configure#automake('nw', 750)
 " When reading a buffer (after 1s), and when writing (no delay).
-call neomake#configure#automake('rw', 1000)
+" call neomake#configure#automake('rw', 1000)
 " Full config: when writing or reading a buffer, and on changes in insert and
 " normal mode (after 1s; no delay when writing).
-call neomake#configure#automake('nrwi', 500)
+" call neomake#configure#automake('nrwi', 500)
 
 if (has("termguicolors"))
     set termguicolors
@@ -370,8 +364,6 @@ nnoremap <silent> <leader>tn :tabnew<CR>
 " Switch back to normal mode from terminal mode
 if has('nvim')
     tnoremap <esc><esc> <C-\><C-n>
-    nnoremap  <leader>tv :vs +te<CR>
-    nnoremap  <leader>ts :sp +te<CR>
 endif
 
 command! -nargs=* Zet call ZettelEdit(<f-args>)
@@ -429,13 +421,15 @@ nmap <leader>qt <Plug>(qf_qf_toggle)
 xmap <leader>tr <plug>(neoterm-repl-send)
 nmap <leader>trl <plug>(neoterm-repl-send-line)
 
+nnoremap <leader>tn :TestNearest
+nnoremap <leader>tf :TestFile
+nnoremap <leader>tv :TestVisit
 nnoremap <leader>tr :T 
 nnoremap <leader>bmcc :Tnew bin/magento cache:clean && bin/magento && exit;<CR>
 function! PipelineTerminals()
-    :execute "tabnew"
-    :execute "Tnew bin/magento pipeline:status -w2"
-    :execute "Tnew bin/magento queue:consumers:start pipelineRunner"
-    :execute "Tnew"
+    :tabnew
+    :3T bin/magento pipeline:status -w2
+    :4T bin/magento queue:consumers:start pipelineRunner
 endfunction
 nnoremap <leader>bmpl :call PipelineTerminals()<CR>
 " Rerun last command
