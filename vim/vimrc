@@ -9,6 +9,7 @@ if empty(glob(vimpath . 'autoload/plug.vim'))
     silent !curl -fLo vimpath . 'autoload/plug.vim' --create-dirs
     autocmd VimEnter * PlugInstall
 endif
+set exrc
 set pumblend=20
 set backspace=indent,eol,start
 set history=1000
@@ -40,8 +41,6 @@ set nostartofline
 set wildmenu
 set lazyredraw
 set shell=zsh
-" set number
-" set relativenumber
 set iskeyword+=_,$,@,%,#
 set splitbelow
 set splitright
@@ -54,10 +53,14 @@ set list listchars=tab:»·,trail:·,extends:»,precedes:«
 set encoding=utf-8
 scriptencoding utf-8
 set complete+=i,kspell
+set completeopt-=preview
 " set spellang=en_gb,de_de
 set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
-set wildignore+=*.swp,*.tmp
+set wildignore+=*.swp,*.tmp,*.zip,*.exe,*.so,*.o
+" TODO Doesn't work find alternative
+set wildignore+=*/node_modules/*
 if executable('rg')
+    " TODO Sometimes rg exits randomly check that
     set grepprg=rg\ --vimgrep\ --no-ignore\ --no-heading\ --smart-case
 endif
 
@@ -88,10 +91,6 @@ set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr
 set mouse=a
 
 call plug#begin(vimpath. 'plugged')
-" Plug 'Raimondi/delimitMate'
-"     let delimitMate_jump_expansion = 1
-"     let delimitMate_expand_cr = 2
-"     let delimitMate_expand_space = 0
 Plug 'tmsvg/pear-tree'
     let g:pear_tree_ft_disabled = ['c', 'python', 'markdown']
     " let g:pear_tree_pairs = {
@@ -140,6 +139,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
 Plug 'dansomething/vim-hackernews', {'on': 'HackerNews'}
 Plug 'neomake/neomake'
+    " Write function to search between project/ and src
     let g:neomake_php_phpcs_args_standard = 'src/vendor/magento/magento-coding-standard/Magento2/ruleset.xml'
     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
 Plug 'justinmk/vim-sneak'
@@ -174,12 +174,7 @@ Plug 'junegunn/fzf.vim'
     command! -bang -nargs=? -complete=dir Files
         \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline','--preview-window', 'down', '--preview', '~/.config/nvim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
-
-    command! -bang -nargs=* Rg
-        \ call fzf#vim#grep(
-        \       'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
-        \       {'options': '--no-hscroll --delimiter : --nth 4..'},
-        \       <bang>0)
+    command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
     command! -bang -nargs=* Rgi
         \ call fzf#vim#grep(
         \       'rg --column --no-ignore --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
@@ -305,9 +300,9 @@ Plug 'tpope/vim-fugitive'
 
 " Languages
 Plug 'liuchengxu/vista.vim'
-Plug 'tpope/vim-projectionist'
-Plug 'c-brenn/fuzzy-projectionist.vim'
-Plug 'andyl/vim-projectionist-elixir'
+" Wanted to test this sometime
+" Plug 'tpope/vim-projectionist'
+" Plug 'andyl/vim-projectionist-elixir'
 Plug 'vim-vdebug/vdebug'
 if !exists('g:vdebug_options')
     let g:vdebug_options = {}
@@ -328,6 +323,7 @@ if has('nvim')
     Plug 'neovim/nvim-lsp'
 endif
 Plug 'mechatroner/rainbow_csv'
+autocmd BufNewFile,BufRead *.csv set nowrap
 Plug 'tobyS/pdv', {'for': 'php'} | Plug 'tobyS/vmustache', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
@@ -335,11 +331,18 @@ Plug 'swekaj/php-foldexpr.vim'
     let b:phpfold_text_right_lines = 1
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
     let g:mkdp_refresh_slow=1
+    let g:mkdp_markdown_css='/usr/local/lib/node_modules/github-markdown-css/github-markdown.css'
 Plug 'junegunn/limelight.vim'
     autocmd! User GoyoEnter Limelight
     autocmd! User GoyoLeave Limelight!
 Plug 'junegunn/goyo.vim'
-    let g:mkdp_markdown_css='/usr/local/lib/node_modules/github-markdown-css/github-markdown.css'
+Plug 'vim-test/vim-test'
+Plug 'tpope/vim-dispatch'
+  let g:dispatch_compilers = {}
+  let g:dispatch_compilers['./src/vendor/bin/'] = ''
+  let g:dispatch_compilers['phpunit'] = 'phpunit'
+  let g:test#php#phpunit#options = '--verbose -c phpunit.static.xml'
+
 Plug 'plasticboy/vim-markdown'
     let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'php=php', 'json=json', 'js=javascript', 'css=css', 'less=less', 'html=html']
 call plug#end()
@@ -357,14 +360,12 @@ endif
 " colorscheme hybrid_reverse
 colorscheme one
 " if strftime("%H") > 8 && strftime("%H") < 17
-"   set background=light
+  " set background=light
 " else
   set background=dark
 " endif
 
-nnoremap <silent> <leader>bd :bdelete<CR>
-nnoremap <silent> <leader>Bd :Bdelete<CR>
-nnoremap <silent> <leader>bw :Bwipeout<CR>
+nnoremap <silent> <leader>bd :Bdelete<CR>
 nnoremap <silent> <leader>tn :tabnew<CR>
 " Switch back to normal mode from terminal mode
 if has('nvim')
@@ -429,6 +430,14 @@ xmap <leader>tr <plug>(neoterm-repl-send)
 nmap <leader>trl <plug>(neoterm-repl-send-line)
 
 nnoremap <leader>tr :T 
+nnoremap <leader>bmcc :Tnew bin/magento cache:clean && bin/magento && exit;<CR>
+function! PipelineTerminals()
+    :execute "tabnew"
+    :execute "Tnew bin/magento pipeline:status -w2"
+    :execute "Tnew bin/magento queue:consumers:start pipelineRunner"
+    :execute "Tnew"
+endfunction
+nnoremap <leader>bmpl :call PipelineTerminals()<CR>
 " Rerun last command
 nnoremap <silent> <leader>tR :<c-u>exec printf("%sTexec !! \<lt>cr>", v:count)<cr>
 nnoremap <silent> <leader>tt :<c-u>exec printf('%sTtoggle', v:count)<cr>
@@ -437,7 +446,6 @@ nnoremap <silent> <leader>te :<c-u>exec printf('%sT exit', v:count)<cr>
 nnoremap <silent> <leader>tl :<c-u>exec printf('%sTclear', v:count)<cr>
 nnoremap <silent> <leader>tk :<c-u>exec printf('%sTkill', v:count)<cr>
 
-nnoremap <silent> <leader><space> :Files<CR>
 nnoremap <silent> <leader><space> :Files<CR>
 nnoremap <silent> <leader>a :Buffers<CR>
 nnoremap <silent> <leader>; :BLines<CR>
@@ -489,7 +497,7 @@ cnoremap <c-p>  <up>
 " diff w !diff -au "%" - > changes.patch
 
 " Include use statement
-" autocmd FileType php nmap <Leader>u :call phpactor#UseAdd()<CR>
+autocmd FileType php nmap <Leader>u :call phpactor#UseAdd()<CR>
 " Invoke the context menu
 autocmd FileType php nmap <Leader>mm :call phpactor#ContextMenu()<CR>
 " Goto definition of class or class member under the cursor
@@ -512,22 +520,12 @@ autocmd FileType php nmap <Leader>ei :call phpactor#ClassInflect()<CR>
 autocmd FileType php nmap <Leader>fr :call phpactor#FindReferences()<CR>
 " Extract method from selection
 autocmd FileType php vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
-" Ale
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-autocmd BufNewFile,BufRead *.csv set nowrap
 autocmd BufRead,BufNewFile .git/NOTES_EDITMSG set filetype=gitnotes
 
 function! PhpSyntaxOverride()
   hi! def link phpDocTags  phpDefine
   hi! def link phpDocParam phpType
 endfunction
-
-function! AddUsages()
-    normal gg}}}k
-    put =v:completed_item['menu'] . ';'
-endfunction
-autocmd FileType php nmap <Leader>u :call AddUsages()<CR>
 
 augroup phpSyntaxOverride
   autocmd!
@@ -588,13 +586,20 @@ nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> <leader>rn <cmd>lua vim.lsp.buf.rename()<CR>
 " nnoremap <silent> <leader>ph  <cmd>lua vim.lsp.buf.peek_definition()<CR>
 nnoremap <silent> <leader>ff  <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <leader>ca  <cmd>lua vim.lsp.buf.code_action()<CR>
+
+	" map('n','gs','<cmd>lua vim.lsp.buf.signature_help()<CR>')
+	" map('n','<leader>gW','<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
+	" map('n','<leader>af','<cmd>lua vim.lsp.buf.code_action()<CR>')
+	" map('n','<leader>ee','<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>')
+	" map('n','<leader>ai','<cmd>lua vim.lsp.buf.incoming_calls()<CR>')
+	" map('n','<leader>ao','<cmd>lua vim.lsp.buf.outgoing_calls()<CR>')
 let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 autocmd FileType gitcommit,gitrebase,gitconfig,gitnotes set bufhidden=delete
 "format xml
 au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 nnoremap ' `
 nnoremap Y y$
-autocmd BufNewFile,BufRead *.csv   set filetype=csv_semicolon
 augroup html_pairs
     autocmd!
     autocmd FileType html let b:pear_tree_pairs = {
