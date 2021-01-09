@@ -53,16 +53,20 @@ set list listchars=tab:»·,trail:·,extends:»,precedes:«
 set encoding=utf-8
 scriptencoding utf-8
 set complete+=i,kspell
-set completeopt-=preview
+" set completeopt-=preview
+" 
+" Avoid showing message extra message when using completion
+set shortmess+=c
+set completeopt=menuone,noinsert,noselect
 " set spellang=en_gb,de_de
 set wildignore+=*.bmp,*.gif,*.jpg,*.png,*.ico
 set wildignore+=*.swp,*.tmp,*.zip,*.exe,*.so,*.o
 " TODO Doesn't work find alternative
 set wildignore+=*/node_modules/*
-if executable('rg')
-    " TODO Sometimes rg exits randomly check that
-    set grepprg=rg\ --vimgrep\ --no-ignore\ --no-heading\ --smart-case
-endif
+" if executable('rg')
+"     " TODO Sometimes rg exits randomly check that
+"     set grepprg=rg\ --vimgrep\ --no-ignore\ --no-heading\ --smart-case
+" endif
 
 let &showbreak='↪ '
 let mapleader = " "
@@ -110,6 +114,7 @@ Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tomtom/tcomment_vim'
+    let  g:tcomment#filetype#guess_php = 'php'
 Plug 'tpope/vim-abolish'
 if has('python')
     Plug 'SirVer/UltiSnips' | Plug 'honza/vim-snippets'
@@ -140,9 +145,12 @@ Plug 'neomake/neomake'
     " Write function to search between project/ and src
     let g:neomake_php_phpcs_args_standard = 'src/vendor/magento/magento-coding-standard/Magento2/ruleset.xml'
     let g:neomake_php_enabled_makers = ['php', 'phpcs', 'phpmd']
+    let g:neomake_javascript_enabled_makers = ['eslint']
+    " autocmd FileType javascript set formatprg=prettier-eslint\ --stdin
     let g:neomake_place_signs = 1
     let g:neomake_logfile = "/tmp/neomake.log"
     let g:neomake_postprocess = 'neomake#postprocess#compress_whitespace'
+Plug 'sbdchd/neoformat'
 Plug 'justinmk/vim-sneak'
     let g:sneak#label = 1
 Plug 'justinmk/vim-dirvish'
@@ -173,15 +181,21 @@ Plug 'kassio/neoterm'
     let g:neoterm_repl_php = 'psysh'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-    command! -bang -nargs=? -complete=dir Files
-        \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
-    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline','--preview-window', 'down', '--preview', '~/.config/nvim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
-    command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
-    command! -bang -nargs=* Rgi
-        \ call fzf#vim#grep(
-        \       'rg --column --no-ignore --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
-        \       {'options': '--no-hscroll --delimiter : --nth 4..'},
-        \       <bang>0)
+Plug 'jesseleite/vim-agriculture'
+nmap <Leader>/ <Plug>RgRawSearch
+vmap <Leader>/ <Plug>RgRawVisualSelection
+nmap <Leader>* <Plug>RgRawWordUnderCursor
+Plug 'RishabhRD/popfix'
+Plug 'RishabhRD/nvim-cheat.sh'
+    " command! -bang -nargs=? -complete=dir Files
+    "     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
+    " \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline','--preview-window', 'down', '--preview', '~/.config/nvim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
+    " command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0 || true)
+    " command! -bang -nargs=* Rgi
+    "     \ call fzf#vim#grep(
+    "     \       'rg --column --no-ignore --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
+    "     \       {'options': '--no-hscroll --delimiter : --nth 4..'},
+    "     \       <bang>0)
 Plug 'Konfekt/Fastfold'
     nmap zuz <Plug>(FastFoldUpdate)
     let g:fastfold_savehook = 1
@@ -285,33 +299,30 @@ Plug 'rakr/vim-one'
     let g:one_allow_italics = 1 
 Plug 'tpope/vim-fugitive'
 " VCS
-" Plug 'mhinz/vim-signify'
 Plug 'airblade/vim-gitgutter'
 Plug 'dhruvasagar/vim-table-mode'
+let g:table_mode_eval_formula_map = '<Leader>tfe'
 let g:table_mode_map_prefix = '<leader>r'
-
-
-Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
-"" Check it out again with german language didn't work earlier
-    let g:grammarous#use_vim_spelllang = 0
-    let g:grammarous#enable_spell_check = 1
-    let g:grammarous#use_location_list = 1
-
-" VCS
 Plug 'tpope/vim-fugitive'
-
 " Languages
 Plug 'liuchengxu/vista.vim'
 " Wanted to test this sometime
 " Plug 'tpope/vim-projectionist'
 " Plug 'andyl/vim-projectionist-elixir'
-Plug 'vim-vdebug/vdebug'
-if !exists('g:vdebug_options')
-    let g:vdebug_options = {}
-endif
-    let g:vdebug_options.break_on_open = 0
-    let g:vdebug_options['max_children'] = 128
-    let g:vdebug_options.ide_key = 'PHPSTORM'
+Plug 'puremourning/vimspector'
+    let g:vimspector_install_gadgets = [ 'vscode-php-debug']
+    let g:vimspector_enable_mappings = 'HUMAN'
+    " call vimspector#LaunchWithSettings(#{ configuration: 'Listen for XDebug'})
+" nnoremap shift+F8 <Plug>VimspectorStepOut
+" nnoremap ALT+SHIF+F9 <Plug>VimspectorRunToCursor
+
+" Plug 'vim-vdebug/vdebug'
+" if !exists('g:vdebug_options')
+"     let g:vdebug_options = {}
+" endif
+"     let g:vdebug_options.break_on_open = 0
+"     let g:vdebug_options['max_children'] = 128
+"     let g:vdebug_options.ide_key = 'PHPSTORM'
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
     let g:prosession_default_session = 0
@@ -322,31 +333,53 @@ Plug 'andymass/vim-matchup'
 " Plug 'lervag/vimtex', {'for': 'tex'}
 if has('nvim')
     Plug 'neovim/nvim-lsp'
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'nvim-lua/completion-nvim'
+        let g:completion_enable_snippet = 'UltiSnips'
+        let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+        let g:completion_trigger_character = []
+        let g:completion_enable_snippet = 'snippets.nvim'
+        autocmd BufEnter * lua require'completion'.on_attach()
+        autocmd FileType sql let g:completion_trigger_character = ['.', '"']
+    Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'nvim-treesitter/completion-treesitter'
+    Plug 'norcalli/snippets.nvim'
+    Plug 'RishabhRD/popfix'
+    Plug 'RishabhRD/nvim-lsputils'
+    let g:completion_chain_complete_list = {
+            \ 'php' : {
+            \   'default': [
+            \       {'complete_items': ['lsp', 'snippet']},
+            \       {'mode': '<c-p>'},
+            \       {'mode': '<c-n>'}],
+            \   },
+            \   'sql': [
+            \    {'complete_items': ['vim-dadbod-completion']},
+            \   ],
+            \  }
+     let g:completion_trigger_character = ['*']
+     let g:completion_matching_ignore_case = 1
+     Plug 'kristijanhusak/vim-dadbod-completion'
+     autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni
 endif
 Plug 'mechatroner/rainbow_csv'
 autocmd BufNewFile,BufRead *.csv set nowrap
 Plug 'tobyS/pdv', {'for': 'php'} | Plug 'tobyS/vmustache', {'for': 'php'}
     let g:pdv_template_dir = $HOME . "/Documents/git/dotfiles/vim/plugged/pdv/templates_snip"
 Plug 'phpactor/phpactor', {'branch': 'develop', 'for': 'php', 'do': 'composer install'}
-Plug 'swekaj/php-foldexpr.vim'
-    let b:phpfold_text_right_lines = 1
+" Plug 'swekaj/php-foldexpr.vim'
+"     let b:phpfold_text_right_lines = 1
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
     let g:mkdp_refresh_slow=1
     let g:mkdp_markdown_css='/usr/local/lib/node_modules/github-markdown-css/github-markdown.css'
 Plug 'vim-test/vim-test'
   let g:test#strategy = 'neoterm'
   let g:test#php#phpunit#options = '--verbose -c phpunit.static.xml'
-
 Plug 'plasticboy/vim-markdown'
     let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'php=php', 'json=json', 'js=javascript', 'css=css', 'less=less', 'html=html']
 call plug#end()
-" When writing a buffer (no delay), and on normal mode changes (after 750ms).
-" call neomake#configure#automake('nw', 750)
-" When reading a buffer (after 1s), and when writing (no delay).
-" call neomake#configure#automake('rw', 1000)
 " Full config: when writing or reading a buffer, and on changes in insert and
-" normal mode (after 1s; no delay when writing).
-" call neomake#configure#automake('nrwi', 500)
+call neomake#configure#automake('nrwi', 500)
 
 if (has("termguicolors"))
     set termguicolors
@@ -354,7 +387,7 @@ endif
 " colorscheme hybrid_reverse
 colorscheme one
 " if strftime("%H") > 8 && strftime("%H") < 17
-  " set background=light
+"   set background=light
 " else
   set background=dark
 " endif
@@ -421,17 +454,12 @@ nmap <leader>qt <Plug>(qf_qf_toggle)
 xmap <leader>tr <plug>(neoterm-repl-send)
 nmap <leader>trl <plug>(neoterm-repl-send-line)
 
-nnoremap <leader>tn :TestNearest
-nnoremap <leader>tf :TestFile
-nnoremap <leader>tv :TestVisit
+nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>trn :TestNearest<CR>
+nnoremap <leader>tf :TestFile<CR>
+nnoremap <leader>tv :TestVisit<CR>
 nnoremap <leader>tr :T 
-nnoremap <leader>bmcc :Tnew bin/magento cache:clean && bin/magento && exit;<CR>
-function! PipelineTerminals()
-    :tabnew
-    :3T bin/magento pipeline:status -w2
-    :4T bin/magento queue:consumers:start pipelineRunner
-endfunction
-nnoremap <leader>bmpl :call PipelineTerminals()<CR>
+nnoremap <leader>bmcc :T bin/magento cache:clean && bin/magento<CR>
 " Rerun last command
 nnoremap <silent> <leader>tR :<c-u>exec printf("%sTexec !! \<lt>cr>", v:count)<cr>
 nnoremap <silent> <leader>tt :<c-u>exec printf('%sTtoggle', v:count)<cr>
@@ -448,8 +476,8 @@ nnoremap <silent> <leader>. :Lines<CR>
 nnoremap <silent> <leader>o :Vista finder<CR>
 " nnoremap <silent> <leader>O :Tags<CR>
 nnoremap <silent> <leader>h :History<CR>
-nnoremap <silent> <leader>, :execute 'Rgi ' . input('Rgi/')<CR>
-nnoremap <silent> <leader>/ :execute 'Rg ' . input('Rg/')<CR>
+" nnoremap <silent> <leader>, :execute 'Rgi ' . input('Rgi/')<CR>
+" nnoremap <silent> <leader>/ :execute 'Rg ' . input('Rg/')<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>w :Windows<CR>
@@ -465,14 +493,14 @@ function! ToggleGStatus()
         Gstatus
     endif
 endfunction
-function! FindClass()
-    :execute "normal! gg/namespace\<cr>w\"nyt;"
-    :execute "normal! gg/^class\<cr>w\"cyiw"
-    let @n = substitute(@n, '\\', '\\\\', 'g')
-    let @n .= '\\' . @c
-    :execute 'Rg ' . @n
-    let @c = ''
-endfunction
+" function! FindClass()
+"     :execute "normal! gg/namespace\<cr>w\"nyt;"
+"     :execute "normal! gg/^class\<cr>w\"cyiw"
+"     let @n = substitute(@n, '\\', '\\\\', 'g')
+"     let @n .= '\\' . @c
+"     :execute 'Rg ' . @n
+"     let @c = ''
+" endfunction
 command ToggleGStatus :call ToggleGStatus()
 nnoremap <leader>ga :Gwrite<CR>
 nnoremap <leader>gs :ToggleGStatus<CR>
@@ -488,7 +516,6 @@ nnoremap <silent> <F2>  :Vista!!<CR>
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 cnoremap <c-n>  <down>
 cnoremap <c-p>  <up>
-" diff w !diff -au "%" - > changes.patch
 
 " Include use statement
 autocmd FileType php nmap <Leader>u :call phpactor#UseAdd()<CR>
@@ -532,9 +559,30 @@ autocmd FileType mail set spell
 " Check how to fire the event correctly but onyl for classes without the
 " variables parts etc temporarily making a keybinding
 " autocmd CompleteDone php call AddUsages()
+        " licenceKey = get_pass("Software/Intelephense");
 
 lua << EOF
-local nvim_lsp = require 'nvim_lsp';
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "all",     -- one of "all", "language", or a list of languages
+  indent = {
+    enable = true
+  },
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    disable = { "c", "rust" },  -- list of language that will be disabled
+  },
+  incremental_selection = {
+     enable = true,
+     keymaps = {
+       init_selection = "gnn",
+       node_incremental = "grn",
+       scope_incremental = "grc",
+       node_decremental = "grm",
+     },
+  },
+  textobjects = { enable = true },
+}
+local nvim_lsp = require 'lspconfig';
 
 local function get_pass(key) 
     local handle = io.popen("pass show " .. key);
@@ -544,11 +592,9 @@ local function get_pass(key)
     return vim.trim(result);
 end
 
-nvim_lsp.tsserver.setup({});
-
 nvim_lsp.intelephense.setup({
     init_options = {
-        licenceKey = get_pass("Software/Intelephense");
+        licenceKey = "00OLK3E08UVDLEI"
     };
     settings = {
         intelephense = {
@@ -563,10 +609,19 @@ nvim_lsp.intelephense.setup({
 });
 
 nvim_lsp.sumneko_lua.setup({});
+nvim_lsp.tsserver.setup({});
+vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
+vim.lsp.handlers['textDocument/references'] = require'lsputil.locations'.references_handler
+vim.lsp.handlers['textDocument/definition'] = require'lsputil.locations'.definition_handler
+vim.lsp.handlers['textDocument/declaration'] = require'lsputil.locations'.declaration_handler
+vim.lsp.handlers['textDocument/typeDefinition'] = require'lsputil.locations'.typeDefinition_handler
+vim.lsp.handlers['textDocument/implementation'] = require'lsputil.locations'.implementation_handler
+vim.lsp.handlers['textDocument/documentSymbol'] = require'lsputil.symbols'.document_handler
+vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handler
 EOF
 
 " autocmd Filetype javascript setlocal omnifunc=v:lua.vim.lsp.omnifunc
-autocmd Filetype php setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype php,javascript,typescript,tsx,phtml setlocal omnifunc=v:lua.vim.lsp.omnifunc
 " autocmd FileType php setlocal foldmethod=expr
 "
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
@@ -582,12 +637,6 @@ nnoremap <silent> <leader>rn <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> <leader>ff  <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <leader>ca  <cmd>lua vim.lsp.buf.code_action()<CR>
 
-	" map('n','gs','<cmd>lua vim.lsp.buf.signature_help()<CR>')
-	" map('n','<leader>gW','<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
-	" map('n','<leader>af','<cmd>lua vim.lsp.buf.code_action()<CR>')
-	" map('n','<leader>ee','<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>')
-	" map('n','<leader>ai','<cmd>lua vim.lsp.buf.incoming_calls()<CR>')
-	" map('n','<leader>ao','<cmd>lua vim.lsp.buf.outgoing_calls()<CR>')
 let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 autocmd FileType gitcommit,gitrebase,gitconfig,gitnotes set bufhidden=delete
 "format xml

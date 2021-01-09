@@ -1,3 +1,12 @@
 [submodule "zsh/zsh-interactive-cd"]
 	path = zsh/zsh-interactive-cd
 	url = https://github.com/changyuheng/zsh-interactive-cd
+[submodule "alien-minimal"]
+	path = alien-minimal
+	url = https://github.com/eendroroy/alien-minimal
+[submodule "zsh/--recursive"]
+	path = zsh/--recursive
+	url = https://github.com/eendroroy/alien-minimal
+[submodule "zsh/alien-minimal"]
+	path = zsh/alien-minimal
+	url = https://github.com/eendroroy/alien-minimal
